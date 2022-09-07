@@ -59,7 +59,7 @@
                             name="email"
                             class="form-control @error('email') is-invalid @enderror"
                             placeholder="{{ __('Email') }}"
-                            value="{{ old('email') }}"
+                            value="{{ Request::old('email') }}"
                         >
                         <div class="input-group-append">
                             <div class="input-group-text">
