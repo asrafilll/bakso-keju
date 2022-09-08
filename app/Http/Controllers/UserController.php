@@ -70,4 +70,13 @@ class UserController extends Controller
         return Response::redirectTo('/users/create')
             ->with('success', __('crud.created', ['resource' => 'user']));
     }
+
+    /**
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function show(User $user)
+    {
+        return Response::view('user.show', ['user' => $user]);
+    }
 }

@@ -135,4 +135,47 @@ class UserFeatureTest extends TestCase
 
         $response->assertSessionHasErrors($expectedErrors);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowUserDetailPage()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($this->user)
+            ->get("/users/{$user->id}");
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldContainsUserDataOnUserDetailPage()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($this->user)
+            ->get("/users/{$user->id}");
+
+        $response->assertSee($user->email);
+        $response->assertSee($user->name);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldErrorShowUserDetailPageWhenUserNotFound()
+    {
+        $response = $this->actingAs($this->user)
+            ->get('/users/some-user-id');
+
+        $response->assertStatus(404);
+    }
 }

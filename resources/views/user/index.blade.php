@@ -113,19 +113,32 @@
                                         <th>{{ __('Email') }}</th>
                                         <th>{{ __('Name') }}</th>
                                         <th>{{ __('Date created') }}</th>
+                                        <th width="10"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($users as $user)
                                         <tr>
-                                            <td>{{ $user->email }}</td>
-                                            <td>{{ $user->name }}</td>
-                                            <td>{{ $user->created_at }}</td>
+                                            <td class="align-middle">{{ $user->email }}</td>
+                                            <td class="align-middle">{{ $user->name }}</td>
+                                            <td class="align-middle">{{ $user->created_at }}</td>
+                                            <td class="align-middle">
+                                                <div class="btn-group btn-group-sm">
+                                                    <a
+                                                        href="{{ url('/users/' . $user->id) }}"
+                                                        class="btn btn-default"
+                                                    >{{ __('Detail') }}</a>
+                                                    <a
+                                                        href="#"
+                                                        class="btn btn-danger"
+                                                    >{{ __('Delete') }}</a>
+                                                </div>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="3"
+                                                colspan="4"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>
