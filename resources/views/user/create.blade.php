@@ -12,8 +12,6 @@
 
     <!-- Content Header (Page header) -->
     <div class="content-header">
-        <div class="d-flex mb-2">
-        </div>
         <div class="container">
             <div class="row mb-2">
                 <div class="col-auto">
@@ -101,13 +99,11 @@
                                     />
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary"
-                                >{{ __('Save') }}</button>
-                            </div>
                         </div>
+                        <button
+                            type="submit"
+                            class="btn btn-primary"
+                        >{{ __('Save') }}</button>
                     </form>
                 </div>
             </div>
