@@ -60,4 +60,16 @@ class AuthFeatureTest extends TestCase
 
         $response->assertSessionHasErrors(['email']);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldSuccessLogout()
+    {
+        $this->actingAs($this->user)
+            ->post('/auth/signout');
+
+        $this->assertGuest();
+    }
 }

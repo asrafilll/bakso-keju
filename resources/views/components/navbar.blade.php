@@ -70,7 +70,7 @@
                 />
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <span class="dropdown-item">Admin</span>
+                <span class="dropdown-item">{{ Auth::user()->name }}</span>
                 <div class="dropdown-divider"></div>
                 <a
                     href="#"
@@ -84,7 +84,16 @@
                 <a
                     href="#"
                     class="dropdown-item"
-                >Sign out</a>
+                    onclick="document.getElementById('signout').click()"
+                >{{ __('Sign out') }}</a>
+                <form
+                    action="{{ url('/auth/signout') }}"
+                    method="POST"
+                    style="display: none;"
+                >
+                    @csrf
+                    <button type="submit" id="signout"></button>
+                </form>
             </div>
         </li>
     </ul>

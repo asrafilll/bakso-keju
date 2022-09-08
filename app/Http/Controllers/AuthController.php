@@ -28,4 +28,17 @@ class AuthController
 
         return Response::redirectTo('/');
     }
+
+    /**
+     * @param \Illuminate\Http\Request
+     * @return \Illuminate\Http\Response
+     */
+    public function signout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Response::redirectTo('/');
+    }
 }
