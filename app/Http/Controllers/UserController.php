@@ -53,4 +53,12 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
+
+    /**
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return Response::view('user.create');
+    }
 }

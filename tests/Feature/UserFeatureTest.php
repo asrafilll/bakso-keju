@@ -49,4 +49,16 @@ class UserFeatureTest extends TestCase
 
         $response->assertSee($sampleUser->email);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowCreateUserPage()
+    {
+        $response = $this->actingAs($this->user)
+            ->get('/users/create');
+
+        $response->assertStatus(200);
+    }
 }

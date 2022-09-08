@@ -10,7 +10,7 @@
                 </div><!-- /.col -->
                 <div class="col-auto">
                     <a
-                        href="#"
+                        href="{{ url('/users/create') }}"
                         class="btn btn-primary"
                     >{{ __('Create user') }}</a>
                 </div><!-- /.col -->
