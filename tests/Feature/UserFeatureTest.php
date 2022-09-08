@@ -105,6 +105,16 @@ class UserFeatureTest extends TestCase
                     'password',
                 ],
             ],
+            'password_confirmation: null' => [
+                [
+                    'name' => 'John Doe',
+                    'email' => 'johndoe@example.com',
+                    'password' => 'secret',
+                ],
+                [
+                    'password',
+                ],
+            ],
             'email: not a email, password_confirmation: difference with password' => [
                 [
                     'name' => 'John Doe',
