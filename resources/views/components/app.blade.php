@@ -24,6 +24,11 @@
         rel="stylesheet"
         href="/plugins/icheck-bootstrap/icheck-bootstrap.min.css"
     >
+    <!-- toastr -->
+    <link
+        rel="stylesheet"
+        href="/plugins/toastr/toastr.min.css"
+    >
     <!-- Theme style -->
     <link
         rel="stylesheet"
@@ -57,8 +62,18 @@
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- overlayScrollbars -->
     <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- jQuery -->
+    <script src="/plugins/toastr/toastr.min.js"></script>
+    <script>
+        toastr.options.closeButton = true;
+        toastr.options.progressBar = true;
+        toastr.options.positionClass = 'toast-top-center';
+        toastr.options.newestOnTop = true;
+    </script>
     <!-- AdminLTE App -->
     <script src="/js/adminlte.min.js"></script>
+
+    {!! $scripts ?? '' !!}
 </body>
 
 </html>

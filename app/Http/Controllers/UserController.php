@@ -67,7 +67,7 @@ class UserController extends Controller
     {
         User::create($userStoreRequest->validated());
 
-        return Response::redirectTo('/users')
+        return Response::redirectTo('/users/create')
             ->with('success', __('crud.created', ['resource' => 'user']));
     }
 }
