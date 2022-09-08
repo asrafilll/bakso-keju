@@ -23,5 +23,6 @@ Route::group([
     Route::view('/', 'welcome');
     Route::view('/dashboard', 'welcome');
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
+    Route::post('/users', [\App\Http\Controllers\UserController::class, 'store']);
     Route::get('/users/create', [\App\Http\Controllers\UserController::class, 'create']);
 });

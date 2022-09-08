@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserStoreRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -60,5 +61,13 @@ class UserController extends Controller
     public function create()
     {
         return Response::view('user.create');
+    }
+
+    public function store(UserStoreRequest $userStoreRequest)
+    {
+        User::create($userStoreRequest->validated());
+
+        return Response::redirectTo('/users')
+            ->with('success', __('crud.created', ['resource' => 'user']));
     }
 }

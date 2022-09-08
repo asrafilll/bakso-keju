@@ -61,4 +61,78 @@ class UserFeatureTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldCreateUser()
+    {
+        $this->actingAs($this->user)
+            ->post('/users', [
+                'name' => 'John Doe',
+                'email' => 'johndoe@example.com',
+                'password' => 'secret',
+                'password_confirmation' => 'secret',
+            ]);
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+        ]);
+    }
+
+    public function invalidDataForCreateUser(): array
+    {
+        return [
+            'Null data' => [
+                [],
+                [
+                    'name',
+                    'email',
+                    'password',
+                ],
+            ],
+            'name: null, email: null, password: null, password_confirmation: null' => [
+                [
+                    'name' => null,
+                    'email' => null,
+                    'password' => null,
+                    'password_confirmation' => null,
+                ],
+                [
+                    'name',
+                    'email',
+                    'password',
+                ],
+            ],
+            'email: not a email, password_confirmation: difference with password' => [
+                [
+                    'name' => 'John Doe',
+                    'email' => 'john doe',
+                    'password' => 'secret',
+                    'password_confirmation' => 'password',
+                ],
+                [
+                    'email',
+                    'password',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidDataForCreateUser
+     * @param array $data
+     * @param array $expectedErrors
+     * @return void
+     */
+    public function shouldFailedToCreateUserBecauseValidationError($data, $expectedErrors)
+    {
+        $response = $this->actingAs($this->user)
+            ->post('/users', $data);
+
+        $response->assertSessionHasErrors($expectedErrors);
+    }
 }
