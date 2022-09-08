@@ -48,7 +48,7 @@
                 <p class="login-box-msg">{{ __('Sign in to start your session') }}</p>
 
                 <form
-                    action="{{ url('/auth/login') }}"
+                    action="{{ url('/auth/signin') }}"
                     method="POST"
                     novalidate
                 >

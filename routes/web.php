@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::view('/auth/login', 'auth.login')->middleware('guest');
-Route::post('/auth/login', [\App\Http\Controllers\AuthController::class, 'login'])->middleware('guest');
+Route::view('/auth/signin', 'auth.signin')->middleware('guest');
+Route::post('/auth/signin', [\App\Http\Controllers\AuthController::class, 'signin'])->middleware('guest');
 Route::post('/auth/signout', [\App\Http\Controllers\AuthController::class, 'signout'])->middleware('auth');
 
 Route::group([

@@ -26,9 +26,9 @@ class AuthFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldShowLoginPage()
+    public function shouldShowSigninPage()
     {
-        $response = $this->get('/auth/login');
+        $response = $this->get('/auth/signin');
 
         $response->assertStatus(200);
     }
@@ -37,9 +37,9 @@ class AuthFeatureTest extends TestCase
      * @test
      * @return boolean
      */
-    public function shouldLoginUsingValidCredential()
+    public function shouldSigninUsingValidCredential()
     {
-        $this->post('/auth/login', [
+        $this->post('/auth/signin', [
             'email' => $this->user->email,
             'password' => 'secret',
         ]);
@@ -51,9 +51,9 @@ class AuthFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldFailedToLoginUsingInvalidCredential()
+    public function shouldFailedToSigninUsingInvalidCredential()
     {
-        $response = $this->post('/auth/login', [
+        $response = $this->post('/auth/signin', [
             'email' => 'johndoe@example.com',
             'password' => 'password',
         ]);

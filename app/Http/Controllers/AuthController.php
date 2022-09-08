@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AuthLoginRequest;
+use App\Http\Requests\AuthSigninRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -13,14 +13,14 @@ class AuthController
     /**
      * Undocumented function
      *
-     * @param AuthLoginRequest $authLoginRequest
+     * @param AuthSigninRequest $authSigninRequest
      * @return \Illuminate\Http\Response
      */
-    public function login(AuthLoginRequest $authLoginRequest)
+    public function signin(AuthSigninRequest $authSigninRequest)
     {
-        $credential = $authLoginRequest->only(['email', 'password']);
+        $credential = $authSigninRequest->only(['email', 'password']);
 
-        if (!Auth::attempt($credential, $authLoginRequest->get('remember'))) {
+        if (!Auth::attempt($credential, $authSigninRequest->get('remember'))) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
