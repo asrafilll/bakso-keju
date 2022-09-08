@@ -27,4 +27,5 @@ Route::group([
     Route::get('/users/create', [\App\Http\Controllers\UserController::class, 'create']);
     Route::get('/users/{user}', [\App\Http\Controllers\UserController::class, 'show']);
     Route::put('/users/{user}', [\App\Http\Controllers\UserController::class, 'update']);
+    Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy']);
 });

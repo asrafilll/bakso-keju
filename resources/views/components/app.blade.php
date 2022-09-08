@@ -39,22 +39,6 @@
         rel="stylesheet"
         href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css"
     >
-</head>
-
-<body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        <x-preloader />
-        <x-navbar />
-        <x-sidebar />
-
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            {!! $slot !!}
-        </div>
-
-        <x-footer />
-    </div>
-    <!-- ./wrapper -->
 
     <!-- jQuery -->
     <script src="/plugins/jquery/jquery.min.js"></script>
@@ -72,8 +56,24 @@
     </script>
     <!-- AdminLTE App -->
     <script src="/js/adminlte.min.js"></script>
+</head>
 
-    {!! $scripts ?? '' !!}
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <x-preloader />
+        <x-navbar />
+        <x-sidebar />
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            {!! $slot !!}
+        </div>
+
+        <x-footer />
+    </div>
+    <!-- ./wrapper -->
+
+    <x-modal-delete />
 </body>
 
 </html>

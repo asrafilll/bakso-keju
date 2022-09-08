@@ -97,4 +97,18 @@ class UserController extends Controller
                 'resource' => 'user',
             ]));
     }
+
+    /**
+     * @param User $user
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(User $user)
+    {
+        $user->delete();
+
+        return Response::redirectTo('/users')
+            ->with('success', __('crud.deleted', [
+                'resource' => 'user',
+            ]));
+    }
 }

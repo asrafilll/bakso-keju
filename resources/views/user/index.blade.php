@@ -1,4 +1,10 @@
 <x-app>
+    @if (Session::has('success'))
+        <script>
+            toastr.success('{{ Session::get('success') }}');
+        </script>
+    @endif
+
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="d-flex mb-2">
@@ -128,10 +134,13 @@
                                                         href="{{ url('/users/' . $user->id) }}"
                                                         class="btn btn-default"
                                                     >{{ __('Detail') }}</a>
-                                                    <a
-                                                        href="#"
+                                                    <button
+                                                        type="button"
                                                         class="btn btn-danger"
-                                                    >{{ __('Delete') }}</a>
+                                                        data-toggle="modal"
+                                                        data-target="#modal-delete"
+                                                        data-action="{{ url('/users/' . $user->id) }}"
+                                                    >{{ __('Delete') }}</button>
                                                 </div>
                                             </td>
                                         </tr>

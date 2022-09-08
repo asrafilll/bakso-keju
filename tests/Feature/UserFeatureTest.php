@@ -319,4 +319,33 @@ class UserFeatureTest extends TestCase
 
         $response->assertSessionHasErrors(['email']);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldDeleteUser()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($this->user)
+            ->delete("/users/{$user->id}");
+
+        $this->assertDatabaseMissing('users', [
+            'id' => $user->id,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedToDeleteUserWhenUserNotFound()
+    {
+        $response = $this->actingAs($this->user)
+            ->delete('/users/some-id');
+
+        $response->assertStatus(404);
+    }
 }
