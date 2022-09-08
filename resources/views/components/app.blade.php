@@ -56,6 +56,8 @@
     </script>
     <!-- AdminLTE App -->
     <script src="/js/adminlte.min.js"></script>
+    <!-- Form -->
+    <script src="/js/form.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
