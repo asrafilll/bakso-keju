@@ -28,9 +28,9 @@
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </x-nav-item>
-                <x-nav-item :href="url('/dashboard')" activeHref="dashboard/*">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>Dashboard 2</p>
+                <x-nav-item :href="url('/users')" activeHref="users/*">
+                    <i class="nav-icon fas fa-users"></i>
+                    <p>{{ __('Users') }}</p>
                 </x-nav-item>
             </ul>
         </nav>

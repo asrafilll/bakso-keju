@@ -22,4 +22,5 @@ Route::group([
 ], function () {
     Route::view('/', 'welcome');
     Route::view('/dashboard', 'welcome');
+    Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
 });
