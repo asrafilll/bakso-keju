@@ -21,7 +21,6 @@ class UserFeatureTest extends TestCase
         $this->user = User::factory()->create();
     }
 
-
     /**
      * @test
      * @return void
@@ -177,5 +176,137 @@ class UserFeatureTest extends TestCase
             ->get('/users/some-user-id');
 
         $response->assertStatus(404);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldUpdateUserWithoutUpdatingPassword()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($this->user)
+            ->put("/users/{$user->id}", [
+                'name' => 'John Doe',
+                'email' => 'johndoe@example.com',
+            ]);
+
+        $updatedUser = User::find($user->id);
+
+        $this->assertEquals('John Doe', $updatedUser->name);
+        $this->assertEquals('johndoe@example.com', $updatedUser->email);
+        $this->assertEquals($user->password, $updatedUser->password);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldUpdateUserWithUpdatingPassword()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($this->user)
+            ->put("/users/{$user->id}", [
+                'name' => 'John Doe',
+                'email' => 'johndoe@example.com',
+                'password' => 'secret',
+                'password_confirmation' => 'secret',
+            ]);
+
+        $updatedUser = User::find($user->id);
+
+        $this->assertEquals('John Doe', $updatedUser->name);
+        $this->assertEquals('johndoe@example.com', $updatedUser->email);
+        $this->assertNotEquals($user->password, $updatedUser->password);
+    }
+
+    /**
+     * @dataProvider invalidDataForUpdateUser
+     * @param array $data
+     * @param array $expectedErrors
+     * @return void
+     */
+    public function shouldFailedToUpdateUserBecauseValidationError(array $data, array $expectedErrors)
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($this->user)
+            ->put("/users/{$user->id}", $data);
+
+        $response->assertSessionHasErrors($expectedErrors);
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidDataForUpdateUser()
+    {
+        return [
+            'Null data' => [
+                [],
+                [
+                    'name',
+                    'email',
+                ],
+            ],
+            'name: null, email: null' => [
+                [
+                    'name' => null,
+                    'email' => null,
+                ],
+                [
+                    'name',
+                    'email',
+                ],
+            ],
+            'email: not a email, password_confirmation: null' => [
+                [
+                    'name' => 'John Doe',
+                    'email' => 'john doe',
+                    'password' => 'secret',
+                ],
+                [
+                    'email',
+                    'password',
+                ],
+            ],
+            'email: not a email, password_confirmation: difference with password' => [
+                [
+                    'name' => 'John Doe',
+                    'email' => 'john doe',
+                    'password' => 'secret',
+                    'password_confirmation' => 'password',
+                ],
+                [
+                    'email',
+                    'password',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedToUpdateUserBecauseEmailAlreadyTaken()
+    {
+        /** @var User */
+        $previousUser = User::factory()->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($this->user)
+            ->put("/users/{$user->id}", [
+                'name' => 'John Doe',
+                'email' => $previousUser->email,
+            ]);
+
+        $response->assertSessionHasErrors(['email']);
     }
 }

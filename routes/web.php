@@ -26,4 +26,5 @@ Route::group([
     Route::post('/users', [\App\Http\Controllers\UserController::class, 'store']);
     Route::get('/users/create', [\App\Http\Controllers\UserController::class, 'create']);
     Route::get('/users/{user}', [\App\Http\Controllers\UserController::class, 'show']);
+    Route::put('/users/{user}', [\App\Http\Controllers\UserController::class, 'update']);
 });

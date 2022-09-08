@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -78,5 +79,22 @@ class UserController extends Controller
     public function show(User $user)
     {
         return Response::view('user.show', ['user' => $user]);
+    }
+
+    public function update(User $user, UserUpdateRequest $userUpdateRequest)
+    {
+        $user->email = $userUpdateRequest->get('email');
+        $user->name = $userUpdateRequest->get('name');
+
+        if ($userUpdateRequest->filled('password')) {
+            $user->password = $userUpdateRequest->get('password');
+        }
+
+        $user->save();
+
+        return Response::redirectTo("/users/{$user->id}")
+            ->with('success', __('crud.updated', [
+                'resource' => 'user',
+            ]));
     }
 }
