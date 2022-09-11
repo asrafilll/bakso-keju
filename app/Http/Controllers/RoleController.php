@@ -78,4 +78,18 @@ class RoleController extends Controller
                 'resource' => 'role',
             ]));
     }
+
+    /**
+     * @param Role $role
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Role $role)
+    {
+        $role->delete();
+
+        return Response::redirectTo('/roles')
+            ->with('success', __('crud.deleted', [
+                'resource' => 'role',
+            ]));
+    }
 }

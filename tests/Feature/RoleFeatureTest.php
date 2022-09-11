@@ -137,4 +137,22 @@ class RoleFeatureTest extends TestCase
 
         $this->assertEquals('admin', $role->name);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldDeleteRole()
+    {
+        /** @var Role */
+        $role = Role::create(['name' => 'super admin']);
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->delete("/roles/{$role->id}");
+
+        $this->assertDatabaseMissing('roles', [
+            'name' => $role->name,
+        ]);
+    }
 }

@@ -35,6 +35,7 @@ Route::group([
     Route::post('/roles', [\App\Http\Controllers\RoleController::class, 'store']);
     Route::get('/roles/{role}', [\App\Http\Controllers\RoleController::class, 'show']);
     Route::put('/roles/{role}', [\App\Http\Controllers\RoleController::class, 'update']);
+    Route::delete('/roles/{role}', [\App\Http\Controllers\RoleController::class, 'destroy']);
 
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index']);
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);
