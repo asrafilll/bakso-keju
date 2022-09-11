@@ -24,10 +24,14 @@ class RoleFeatureTest extends TestCase
         $response->assertStatus(200);
     }
 
+    /**
+     * @test
+     * @return void
+     */
     public function shouldContainsRoleOnRoleIndexPage()
     {
         /** @var Role */
-        $role = Role::create(['super admin']);
+        $role = Role::create(['name' => 'super admin']);
         /** @var User */
         $user = User::factory()->create();
 
