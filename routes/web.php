@@ -32,6 +32,7 @@ Route::group([
 
     Route::get('/roles', [\App\Http\Controllers\RoleController::class, 'index']);
     Route::get('/roles/create', [\App\Http\Controllers\RoleController::class, 'create']);
+    Route::post('/roles', [\App\Http\Controllers\RoleController::class, 'store']);
 
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index']);
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);

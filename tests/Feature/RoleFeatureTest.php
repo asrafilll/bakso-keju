@@ -53,4 +53,22 @@ class RoleFeatureTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldCreateRole()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post('/roles', [
+            'name' => 'example role',
+        ]);
+
+        $this->assertDatabaseHas('roles', [
+            'name' => 'example role',
+        ]);
+    }
 }
