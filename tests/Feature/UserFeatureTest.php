@@ -228,6 +228,35 @@ class UserFeatureTest extends TestCase
      * @test
      * @return void
      */
+    public function shouldContainsUserDataWithRolesOnUserDetailPage()
+    {
+        /** @var Role */
+        $role1 = Role::create(['name' => 'Role 1']);
+
+        /** @var Role */
+        $role2 = Role::create(['name' => 'Role 2']);
+
+        /** @var User */
+        $user = User::factory()->create();
+
+        $user->assignRole($role1, $role2);
+
+        $response = $this
+            ->actingAs($this->user)
+            ->get("/users/{$user->id}");
+
+        $response->assertSee([
+            $user->email,
+            $user->name,
+            $role1->name,
+            $role2->name,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function shouldErrorShowUserDetailPageWhenUserNotFound()
     {
         $response = $this->actingAs($this->user)

@@ -100,7 +100,13 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return Response::view('user.show', ['user' => $user]);
+        $roles = Role::all();
+        $user->load(['roles']);
+
+        return Response::view('user.show', [
+            'user' => $user,
+            'roles' => $roles,
+        ]);
     }
 
     public function update(User $user, UserUpdateRequest $userUpdateRequest)
