@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Response;
 
 class RoleController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $roleQuery = Role::query();
