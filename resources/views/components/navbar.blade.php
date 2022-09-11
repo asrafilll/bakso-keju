@@ -73,13 +73,13 @@
                 <span class="dropdown-item">{{ Auth::user()->name }}</span>
                 <div class="dropdown-divider"></div>
                 <a
-                    href="#"
+                    href="{{ url('/profile') }}"
                     class="dropdown-item"
-                >Your profile</a>
+                >{{ __('Your profile') }}</a>
                 <a
                     href="#"
                     class="dropdown-item"
-                >Change Password</a>
+                >{{ __('Change Password') }}</a>
                 <div class="dropdown-divider"></div>
                 <a
                     href="#"
@@ -92,7 +92,10 @@
                     style="display: none;"
                 >
                     @csrf
-                    <button type="submit" id="signout"></button>
+                    <button
+                        type="submit"
+                        id="signout"
+                    ></button>
                 </form>
             </div>
         </li>

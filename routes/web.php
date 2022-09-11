@@ -22,10 +22,13 @@ Route::group([
 ], function () {
     Route::view('/', 'welcome');
     Route::view('/dashboard', 'welcome');
+
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
     Route::post('/users', [\App\Http\Controllers\UserController::class, 'store']);
     Route::get('/users/create', [\App\Http\Controllers\UserController::class, 'create']);
     Route::get('/users/{user}', [\App\Http\Controllers\UserController::class, 'show']);
     Route::put('/users/{user}', [\App\Http\Controllers\UserController::class, 'update']);
     Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy']);
+
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index']);
 });
