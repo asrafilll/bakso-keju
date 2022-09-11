@@ -49,4 +49,15 @@ class RoleController extends Controller
                 'resource' => 'role',
             ]));
     }
+
+    /**
+     * @param Role $role
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Role $role)
+    {
+        return Response::view('role.show', [
+            'role' => $role,
+        ]);
+    }
 }

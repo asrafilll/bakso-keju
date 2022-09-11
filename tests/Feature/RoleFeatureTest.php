@@ -71,4 +71,49 @@ class RoleFeatureTest extends TestCase
             'name' => 'example role',
         ]);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowRoleDetailPage()
+    {
+        /** @var Role */
+        $role = Role::create(['name' => 'super admin']);
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get("/roles/{$role->id}");
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldContainsRoleDataOnRoleDetailPage()
+    {
+        $role = Role::create(['name' => 'super admin']);
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get("/roles/{$role->id}");
+
+        $response->assertSee($role->name);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedToShowRoleDetailPageWhenRoleNotFound()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get("/roles/stub-role-id");
+
+        $response->assertStatus(404);
+    }
 }
