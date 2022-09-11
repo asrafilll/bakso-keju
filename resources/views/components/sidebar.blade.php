@@ -7,11 +7,10 @@
     >
         <img
             src="https://via.placeholder.com/60"
-            alt="AdminLTE Logo"
             class="brand-image img-circle"
             style="opacity: .8"
         >
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
+        <span class="brand-text font-weight-light">{{ Config::get('app.name') }}</span>
     </a>
 
     <!-- Sidebar -->
