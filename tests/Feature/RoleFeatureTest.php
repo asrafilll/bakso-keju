@@ -94,6 +94,7 @@ class RoleFeatureTest extends TestCase
      */
     public function shouldContainsRoleDataOnRoleDetailPage()
     {
+        /** @var Role */
         $role = Role::create(['name' => 'super admin']);
         /** @var User */
         $user = User::factory()->create();
