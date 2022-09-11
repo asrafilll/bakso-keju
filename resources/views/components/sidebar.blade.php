@@ -32,6 +32,10 @@
                     <i class="nav-icon fas fa-users"></i>
                     <p>{{ __('Users') }}</p>
                 </x-nav-item>
+                <x-nav-item :href="url('/roles')" activeHref="roles/*">
+                    <i class="nav-icon fas fa-lock"></i>
+                    <p>{{ __('Roles') }}</p>
+                </x-nav-item>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
