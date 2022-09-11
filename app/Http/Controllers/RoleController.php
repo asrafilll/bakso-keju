@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleStoreRequest;
+use App\Http\Requests\RoleUpdateRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -59,5 +60,22 @@ class RoleController extends Controller
         return Response::view('role.show', [
             'role' => $role,
         ]);
+    }
+
+    /**
+     * @param Role $role
+     * @param RoleUpdateRequest $roleUpdateRequest
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Role $role, RoleUpdateRequest $roleUpdateRequest)
+    {
+        $role->update(
+            $roleUpdateRequest->validated()
+        );
+
+        return Response::redirectTo("/roles/{$role->id}")
+            ->with('success', __('crud.updated', [
+                'resource' => 'role',
+            ]));
     }
 }

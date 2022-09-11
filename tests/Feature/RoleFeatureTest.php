@@ -117,4 +117,24 @@ class RoleFeatureTest extends TestCase
 
         $response->assertStatus(404);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldUpdateRole()
+    {
+        /** @var Role */
+        $role = Role::create(['name' => 'super admin']);
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->put("/roles/{$role->id}", [
+            'name' => 'admin',
+        ]);
+
+        $role->refresh();
+
+        $this->assertEquals('admin', $role->name);
+    }
 }
