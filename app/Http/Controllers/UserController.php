@@ -120,6 +120,14 @@ class UserController extends Controller
 
         $user->save();
 
+        if ($userUpdateRequest->filled('roles')) {
+            $user->syncRoles(
+                Role::query()
+                    ->whereIn('id', $userUpdateRequest->get('roles'))
+                    ->get()
+            );
+        }
+
         return Response::redirectTo("/users/{$user->id}")
             ->with('success', __('crud.updated', [
                 'resource' => 'user',

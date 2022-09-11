@@ -312,6 +312,50 @@ class UserFeatureTest extends TestCase
     }
 
     /**
+     * @test
+     * @return void
+     */
+    public function shouldUpdateUserWithUpdatingRoles()
+    {
+        /** @var Role */
+        $role1 = Role::create(['name' => 'Role 1']);
+
+        /** @var Role */
+        $role2 = Role::create(['name' => 'Role 2']);
+
+        /** @var User */
+        $user = User::factory()->create();
+        $user->assignRole($role1);
+
+        $this->actingAs($this->user)
+            ->put("/users/{$user->id}", [
+                'name' => 'John Doe',
+                'email' => 'johndoe@example.com',
+                'roles' => [
+                    $role2->id
+                ],
+            ]);
+
+        $updatedUser = User::find($user->id);
+
+        $this->assertEquals('John Doe', $updatedUser->name);
+        $this->assertEquals('johndoe@example.com', $updatedUser->email);
+        $this->assertEquals($user->password, $updatedUser->password);
+
+        $this->assertDatabaseHas('model_has_roles', [
+            'model_id' => $user->id,
+            'model_type' => User::class,
+            'role_id' => $role2->id,
+        ]);
+
+        $this->assertDatabaseMissing('model_has_roles', [
+            'model_id' => $user->id,
+            'model_type' => User::class,
+            'role_id' => $role1->id,
+        ]);
+    }
+
+    /**
      * @dataProvider invalidDataForUpdateUser
      * @param array $data
      * @param array $expectedErrors
