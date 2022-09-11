@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Response;
 class ProfilePasswordController extends Controller
 {
     /**
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        return Response::view('profile.password', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
      * @param ProfilePasswordUpdateRequest $profilePasswordUpdateRequest
      * @return \Illuminate\Http\Response
      */

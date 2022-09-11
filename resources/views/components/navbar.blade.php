@@ -77,7 +77,7 @@
                     class="dropdown-item"
                 >{{ __('Your profile') }}</a>
                 <a
-                    href="#"
+                    href="{{ url('/profile/password') }}"
                     class="dropdown-item"
                 >{{ __('Change Password') }}</a>
                 <div class="dropdown-divider"></div>

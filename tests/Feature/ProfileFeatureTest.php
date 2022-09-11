@@ -28,7 +28,7 @@ class ProfileFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldContainProfileDataOnProfilePage()
+    public function shouldContainsProfileDataOnProfilePage()
     {
         /** @var User */
         $user = User::factory()->create();
@@ -54,7 +54,6 @@ class ProfileFeatureTest extends TestCase
                 'name' => 'John Doe',
                 'email' => 'johndoe@example.com',
             ]);
-        $user->refresh();
 
         $this->assertEquals('John Doe', $user->name);
         $this->assertEquals('johndoe@example.com', $user->email);
@@ -129,6 +128,38 @@ class ProfileFeatureTest extends TestCase
             ]);
 
         $response->assertSessionHasErrors(['email']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowProfileChangePasswordPage()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)
+            ->get('/profile/password');
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldContainsCurrentPasswordOnChangePasswordPage()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)
+            ->get('/profile/password');
+
+        $response->assertSee([
+            'current_password',
+            'password',
+            'password_confirmation',
+        ]);
     }
 
     /**
