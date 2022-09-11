@@ -30,6 +30,8 @@ Route::group([
     Route::put('/users/{user}', [\App\Http\Controllers\UserController::class, 'update']);
     Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy']);
 
+    Route::get('/roles', [\App\Http\Controllers\RoleController::class, 'index']);
+
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index']);
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);
     Route::get('/profile/password', [\App\Http\Controllers\ProfilePasswordController::class, 'index']);
