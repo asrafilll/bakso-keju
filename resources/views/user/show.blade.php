@@ -113,7 +113,7 @@
                                             value="{{ $role->id }}"
                                             @if ($user->roles->contains('id', $role->id)) checked @endif
                                         />
-                                        <label for="{{ $role->id }}">
+                                        <label for="role_{{ $role->id }}">
                                             {{ $role->name }}
                                         </label>
                                     </div>
