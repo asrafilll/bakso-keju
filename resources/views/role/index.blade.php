@@ -89,7 +89,7 @@
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="4"
+                                                colspan="3"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>
