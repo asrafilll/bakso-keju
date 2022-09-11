@@ -39,4 +39,18 @@ class RoleFeatureTest extends TestCase
 
         $response->assertSee($role->name);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowCreateRolePage()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/roles/create');
+
+        $response->assertStatus(200);
+    }
 }

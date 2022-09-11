@@ -31,6 +31,7 @@ Route::group([
     Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy']);
 
     Route::get('/roles', [\App\Http\Controllers\RoleController::class, 'index']);
+    Route::get('/roles/create', [\App\Http\Controllers\RoleController::class, 'create']);
 
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index']);
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);

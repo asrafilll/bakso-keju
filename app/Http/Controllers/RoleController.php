@@ -26,4 +26,12 @@ class RoleController extends Controller
             'roles' => $roles,
         ]);
     }
+
+    /**
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return Response::view('role.create');
+    }
 }
