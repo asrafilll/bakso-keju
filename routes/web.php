@@ -32,4 +32,5 @@ Route::group([
 
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index']);
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);
+    Route::put('/profile/password', [\App\Http\Controllers\ProfilePasswordController::class, 'update']);
 });

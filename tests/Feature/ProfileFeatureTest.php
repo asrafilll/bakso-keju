@@ -130,4 +130,84 @@ class ProfileFeatureTest extends TestCase
 
         $response->assertSessionHasErrors(['email']);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldUpdateCurrentPassword()
+    {
+        /** @var User */
+        $user = User::factory()
+            ->state([
+                'password' => 'secret',
+            ])
+            ->create();
+        $previousPassword = $user->password;
+
+        $this->actingAs($user)
+            ->put('/profile/password', [
+                'current_password' => 'secret',
+                'password' => 'password',
+                'password_confirmation' => 'password',
+            ]);
+
+
+        /** @var User */
+        $updatedUser = User::find($user->id);
+
+        $this->assertNotEquals($previousPassword, $updatedUser->password);
+    }
+
+    /**
+     * @dataProvider invalidDataForUpdateProfilePassword
+     * @param array $data
+     * @param array $expectedErrors
+     * @return void
+     */
+    public function shouldFailedToUpdateProfilePasswordUsingInvalidData(array $data, array $expectedErrors)
+    {
+        /** @var User */
+        $user = User::factory()
+            ->state([
+                'password' => 'secret',
+            ])
+            ->create();
+
+        $response = $this->actingAs($user)
+            ->put('/profile/password', $data);
+
+        $response->assertSessionHasErrors($expectedErrors);
+    }
+
+    public function invalidDataForUpdateProfilePassword()
+    {
+        return [
+            'Null data' => [
+                [],
+                [
+                    'current_password',
+                    'password',
+                ]
+            ],
+            'current_password: null, password: null, password_confirmation: null' => [
+                [
+                    'current_password' => null,
+                    'password' => null,
+                    'password_confirmation' => null,
+                ],
+                [
+                    'current_password',
+                    'password',
+                ]
+            ],
+            'current_password: different, password_confirmation: different' => [
+                [
+                    'current_password' => 'password',
+                    'password' => 'new_password',
+                    'password_confirmation' => 'new_password_confirmation',
+                ],
+            ],
+        ];
+    }
 }
