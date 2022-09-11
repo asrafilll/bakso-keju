@@ -100,6 +100,26 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">{{ __('Roles') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                @foreach ($roles as $role)
+                                    <div class="icheck-primary">
+                                        <input
+                                            type="checkbox"
+                                            id="role_{{ $role->id }}"
+                                            name="roles[]"
+                                            value="{{ $role->id }}"
+                                        />
+                                        <label for="role_{{ $role->id }}">
+                                            {{ $role->name }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                         <button
                             type="submit"
                             class="btn btn-primary"

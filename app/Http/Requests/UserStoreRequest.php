@@ -40,6 +40,15 @@ class UserStoreRequest extends FormRequest
                 'string',
                 'confirmed',
             ],
+            'roles' => [
+                'nullable',
+                'array',
+            ],
+            'roles.*' => [
+                'required',
+                'string',
+                Rule::exists('roles', 'id'),
+            ],
          ];
     }
 }

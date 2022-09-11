@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -61,12 +62,33 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Response::view('user.create');
+        $roles = Role::all();
+
+        return Response::view('user.create', [
+            'roles' => $roles,
+        ]);
     }
 
+    /**
+     * @param UserStoreRequest $userStoreRequest
+     * @return void
+     */
     public function store(UserStoreRequest $userStoreRequest)
     {
-        User::create($userStoreRequest->validated());
+        /** @var User */
+        $user = User::create($userStoreRequest->only([
+            'name',
+            'email',
+            'password',
+        ]));
+
+        if ($userStoreRequest->filled('roles')) {
+            $user->assignRole(
+                Role::query()
+                    ->whereIn('id', $userStoreRequest->get('roles'))
+                    ->get()
+            );
+        }
 
         return Response::redirectTo('/users/create')
             ->with('success', __('crud.created', ['resource' => 'user']));

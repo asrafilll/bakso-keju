@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
@@ -78,6 +79,53 @@ class UserFeatureTest extends TestCase
         $this->assertDatabaseHas('users', [
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldCreateUserWithRoles()
+    {
+        /** @var Role */
+        $role1 = Role::create(['name' => 'Role 1']);
+
+        /** @var Role */
+        $role2 = Role::create(['name' => 'Role 2']);
+
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post('/users', [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+            'password' => 'secret',
+            'password_confirmation' => 'secret',
+            'roles' => [
+                $role1->id,
+                $role2->id,
+            ],
+        ]);
+
+        /** @var User */
+        $createdUser = User::whereEmail('johndoe@example.com')->first();
+
+        $this->assertDatabaseHas('users', [
+            'name' => 'John Doe',
+            'email' => 'johndoe@example.com',
+        ]);
+
+        $this->assertDatabaseHas('model_has_roles', [
+            'model_id' => $createdUser->id,
+            'model_type' => User::class,
+            'role_id' => $role1->id,
+        ]);
+
+        $this->assertDatabaseHas('model_has_roles', [
+            'model_id' => $createdUser->id,
+            'model_type' => User::class,
+            'role_id' => $role2->id,
         ]);
     }
 
