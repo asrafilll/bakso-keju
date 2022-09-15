@@ -43,4 +43,12 @@ class ProductController extends Controller
             'products' => $products,
         ]);
     }
+
+    /**
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return Response::view('product.create');
+    }
 }

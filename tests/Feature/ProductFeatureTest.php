@@ -43,4 +43,18 @@ class ProductFeatureTest extends TestCase
 
         $response->assertSee($sampleProduct->name);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowProductCreatePage()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get('/products/create');
+
+        $response->assertStatus(200);
+    }
 }
