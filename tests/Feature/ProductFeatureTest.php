@@ -118,4 +118,22 @@ class ProductFeatureTest extends TestCase
             'price' => 10000,
         ]);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldDeleteProduct()
+    {
+        /** @var Product */
+        $product = Product::factory()->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->delete("/products/{$product->id}");
+
+        $this->assertDatabaseMissing('products', [
+            'id' => $product->id,
+        ]);
+    }
 }

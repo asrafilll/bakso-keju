@@ -95,4 +95,18 @@ class ProductController extends Controller
                 'resource' => 'product',
             ]));
     }
+
+    /**
+     * @param Product $product
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Product $product)
+    {
+        $product->delete();
+
+        return Response::redirectTo('/products')
+            ->with('success', __('crud.deleted', [
+                'resource' => 'product',
+            ]));
+    }
 }

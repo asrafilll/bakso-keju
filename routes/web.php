@@ -47,4 +47,5 @@ Route::group([
     Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store']);
     Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show']);
     Route::put('/products/{product}', [\App\Http\Controllers\ProductController::class, 'update']);
+    Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy']);
 });
