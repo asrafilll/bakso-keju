@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductStoreRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -50,5 +51,19 @@ class ProductController extends Controller
     public function create()
     {
         return Response::view('product.create');
+    }
+
+    /**
+     * @param ProductStoreRequest $productStoreRequest
+     * @return \Illuminate\Http\Response
+     */
+    public function store(ProductStoreRequest $productStoreRequest)
+    {
+        Product::create($productStoreRequest->validated());
+
+        return Response::redirectTo('/products/create')
+            ->with('success', __('crud.created', [
+                'resource' => 'product',
+            ]));
     }
 }

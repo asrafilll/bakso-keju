@@ -57,4 +57,24 @@ class ProductFeatureTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldCreateProduct()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post('/products', [
+            'name' => 'Product 1',
+            'price' => 10000,
+        ]);
+
+        $this->assertDatabaseHas('products', [
+            'name' => 'Product 1',
+            'price' => 10000,
+        ]);
+    }
 }
