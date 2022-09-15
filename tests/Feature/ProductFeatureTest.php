@@ -77,4 +77,23 @@ class ProductFeatureTest extends TestCase
             'price' => 10000,
         ]);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowProductDetailPage()
+    {
+        /** @var Product */
+        $product = Product::factory()->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get("/products/{$product->id}");
+
+        $response->assertSee([
+            $product->name,
+            $product->price,
+        ]);
+    }
 }

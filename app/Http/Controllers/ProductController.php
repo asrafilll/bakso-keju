@@ -66,4 +66,15 @@ class ProductController extends Controller
                 'resource' => 'product',
             ]));
     }
+
+    /**
+     * @param Product $product
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Product $product)
+    {
+        return Response::view('product.show', [
+            'product' => $product,
+        ]);
+    }
 }
