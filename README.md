@@ -17,3 +17,53 @@
 1. Seed data for initial setup `php artisan db:seed`
 1. Run app with `php artisan serve`
 1. Open `http://127.0.0.1:8000` on your browser.
+
+# Entities
+
+- Category
+  - Name
+
+- Product
+  - Name
+  - Price
+  - Category
+
+- Media
+  - Name
+
+- Branch
+  - Name
+
+- Order
+  - Order Number
+  - Customer
+  - Media
+  - Branch
+  - Discount
+  - Quantity
+  - Total
+
+- Line Item
+  - Order
+  - Product
+  - Price
+  - Discount
+  - Quantity
+  - Total
+
+- Customer
+  - Name
+  - Discount
+
+- Stock
+  - Product
+  - Branch
+  - Media
+  - Quantity
+
+# Relationship
+
+- Product depends on Category
+- Stock depends on Product, Media, and Branch
+- Order depends on Customer, Media, and Branch
+- Line item depends on Order and Product
