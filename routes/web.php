@@ -46,4 +46,5 @@ Route::group([
     Route::get('/products/create', [\App\Http\Controllers\ProductController::class, 'create']);
     Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store']);
     Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show']);
+    Route::put('/products/{product}', [\App\Http\Controllers\ProductController::class, 'update']);
 });

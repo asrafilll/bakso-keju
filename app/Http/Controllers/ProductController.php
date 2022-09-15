@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -76,5 +77,22 @@ class ProductController extends Controller
         return Response::view('product.show', [
             'product' => $product,
         ]);
+    }
+
+    /**
+     * @param Product $product
+     * @param ProductUpdateRequest $productUpdateRequest
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Product $product, ProductUpdateRequest $productUpdateRequest)
+    {
+        $product->update(
+            $productUpdateRequest->validated()
+        );
+
+        return Response::redirectTo("/products/{$product->id}")
+            ->with('success', __('crud.updated', [
+                'resource' => 'product',
+            ]));
     }
 }
