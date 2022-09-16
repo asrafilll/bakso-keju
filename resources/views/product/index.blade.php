@@ -117,6 +117,7 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __('Name') }}</th>
+                                        <th>{{ __('Category') }}</th>
                                         <th>{{ __('Price') }}</th>
                                         <th>{{ __('Date created') }}</th>
                                         <th width="10"></th>
@@ -126,6 +127,7 @@
                                     @forelse ($products as $product)
                                         <tr>
                                             <td class="align-middle">{{ $product->name }}</td>
+                                            <td class="align-middle">{{ $product->productCategory->name }}</td>
                                             <td class="align-middle">{{ $product->idr_price }}</td>
                                             <td class="align-middle">{{ $product->created_at }}</td>
                                             <td class="align-middle">
@@ -147,7 +149,7 @@
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="4"
+                                                colspan="5"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>

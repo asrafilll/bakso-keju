@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -56,6 +57,7 @@ class ProductFeatureTest extends TestCase
         $response = $this->actingAs($user)->get('/products/create');
 
         $response->assertStatus(200);
+        $response->assertViewHas('productCategories');
     }
 
     /**
@@ -66,15 +68,19 @@ class ProductFeatureTest extends TestCase
     {
         /** @var User */
         $user = User::factory()->create();
+        /** @var ProductCategory */
+        $productCategory = ProductCategory::factory()->create();
 
         $this->actingAs($user)->post('/products', [
             'name' => 'Product 1',
             'price' => 10000,
+            'product_category_id' => $productCategory->id,
         ]);
 
         $this->assertDatabaseHas('products', [
             'name' => 'Product 1',
             'price' => 10000,
+            'product_category_id' => $productCategory->id,
         ]);
     }
 
@@ -84,8 +90,14 @@ class ProductFeatureTest extends TestCase
      */
     public function shouldShowProductDetailPage()
     {
+        /** @var ProductCategory */
+        $productCategory = ProductCategory::factory()->create();
         /** @var Product */
-        $product = Product::factory()->create();
+        $product = Product::factory()
+            ->state([
+                'product_category_id' => $productCategory->id,
+            ])
+            ->create();
         /** @var User */
         $user = User::factory()->create();
 
@@ -94,7 +106,9 @@ class ProductFeatureTest extends TestCase
         $response->assertSee([
             $product->name,
             $product->price,
+            $productCategory->id,
         ]);
+        $response->assertViewHas('productCategories');
     }
 
     /**
@@ -103,19 +117,27 @@ class ProductFeatureTest extends TestCase
      */
     public function shouldUpdateProduct()
     {
+        /** @var ProductCategory */
+        $productCategory = ProductCategory::factory()->create();
         /** @var Product */
-        $product = Product::factory()->create();
+        $product = Product::factory()
+            ->state([
+                'product_category_id' => $productCategory->id,
+            ])
+            ->create();
         /** @var User */
         $user = User::factory()->create();
 
         $this->actingAs($user)->put("/products/{$product->id}", [
             'name' => 'Product #1',
             'price' => 10000,
+            'product_category_id' => $productCategory->id,
         ]);
 
         $this->assertDatabaseHas('products', [
             'name' => 'Product #1',
             'price' => 10000,
+            'product_category_id' => $productCategory->id,
         ]);
     }
 

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
+use App\Models\ProductCategory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -16,7 +18,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $productQuery = Product::query();
+        $productQuery = Product::with(['productCategory']);
 
         if ($request->filled('filter')) {
             $productQuery->where('name', 'LIKE', "%{$request->get('filter')}%");
@@ -51,7 +53,12 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return Response::view('product.create');
+        /** @var Collection<ProductCategory> */
+        $productCategories = ProductCategory::query()->orderBy('name')->get();
+
+        return Response::view('product.create', [
+            'productCategories' => $productCategories,
+        ]);
     }
 
     /**
@@ -74,8 +81,12 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        /** @var Collection<ProductCategory> */
+        $productCategories = ProductCategory::query()->orderBy('name')->get();
+
         return Response::view('product.show', [
             'product' => $product,
+            'productCategories' => $productCategories,
         ]);
     }
 

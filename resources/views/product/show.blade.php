@@ -60,6 +60,28 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
+                                    <label for="product_category_id">
+                                        <span>{{ __('Category') }}</span>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select
+                                        name="product_category_id"
+                                        id="product_category_id"
+                                        class="form-control @error('product_category_id') is-invalid @enderror"
+                                    >
+                                        <option value="" hidden></option>
+                                        @foreach ($productCategories as $productCategory)
+                                            <option
+                                                value="{{ $productCategory->id }}"
+                                                @if ((Request::old('product_category_id') ?? $product->product_category_id) == $productCategory->id) selected @endif
+                                            >{{ $productCategory->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('product_category_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
                                     <label for="price">
                                         <span>{{ __('Price') }}</span>
                                         <span class="text-danger">*</span>

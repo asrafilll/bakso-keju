@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Product extends Model
 {
@@ -17,6 +18,7 @@ class Product extends Model
     protected $fillable = [
         'name',
         'price',
+        'product_category_id',
     ];
 
     /**
@@ -25,5 +27,15 @@ class Product extends Model
     public function getIdrPriceAttribute()
     {
         return number_format($this->price, 0, ',', '.');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function productCategory()
+    {
+        return $this->belongsTo(ProductCategory::class)->withDefault([
+            'name' => '-'
+        ]);
     }
 }
