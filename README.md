@@ -20,13 +20,13 @@
 
 # Entities
 
-- Category
+- Product category
   - Name
 
 - Product
   - Name
   - Price
-  - Category
+  - Product category
 
 - Media
   - Name
@@ -34,6 +34,7 @@
 - Branch
   - Name
   - Order number prefix
+  - Next order number
 
 - Order
   - Order Number
