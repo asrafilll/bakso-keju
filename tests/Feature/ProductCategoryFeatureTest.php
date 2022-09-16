@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Facade;
 use Tests\TestCase;
 
 class ProductCategoryFeatureTest extends TestCase
@@ -133,6 +135,26 @@ class ProductCategoryFeatureTest extends TestCase
     {
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->delete("/product-categories/{$productCategory->id}");
+
+        $this->assertDatabaseMissing('product_categories', [
+            'id' => $productCategory->id,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldDeleteProductCategoryWhichUsedByProducts()
+    {
+        /** @var ProductCategory */
+        $productCategory = ProductCategory::factory()
+            ->has(Product::factory())
+            ->create();
         /** @var User */
         $user = User::factory()->create();
 
