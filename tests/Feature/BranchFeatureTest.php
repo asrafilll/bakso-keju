@@ -31,13 +31,16 @@ class BranchFeatureTest extends TestCase
     public function shouldContainsBranchOnBranchIndexPage()
     {
         /** @var Branch */
-        $branch = Branch::create(['name' => 'Branch #1']);
+        $branch = Branch::factory()->create();;
         /** @var User */
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get('/branches');
 
-        $response->assertSee($branch->name);
+        $response->assertSee([
+            $branch->name,
+            $branch->order_number_prefix,
+        ]);
     }
 
     /**
@@ -65,10 +68,12 @@ class BranchFeatureTest extends TestCase
 
         $this->actingAs($user)->post('/branches', [
             'name' => 'Branch #1',
+            'order_number_prefix' => 'B',
         ]);
 
         $this->assertDatabaseHas('branches', [
             'name' => 'Branch #1',
+            'order_number_prefix' => 'B',
         ]);
     }
 
@@ -79,7 +84,7 @@ class BranchFeatureTest extends TestCase
     public function shouldShowBranchDetailPage()
     {
         /** @var Branch */
-        $branch = Branch::create(['name' => 'Branch #1']);
+        $branch = Branch::factory()->create();;
         /** @var User */
         $user = User::factory()->create();
 
@@ -95,13 +100,16 @@ class BranchFeatureTest extends TestCase
     public function shouldContainsBranchDataOnBranchDetailPage()
     {
         /** @var Branch */
-        $branch = Branch::create(['name' => 'Branch #1']);
+        $branch = Branch::factory()->create();
         /** @var User */
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)->get("/branches/{$branch->id}");
 
-        $response->assertSee($branch->name);
+        $response->assertSee([
+            $branch->name,
+            $branch->order_number_prefix,
+        ]);
     }
 
     /**
@@ -111,17 +119,19 @@ class BranchFeatureTest extends TestCase
     public function shouldUpdateBranch()
     {
         /** @var Branch */
-        $branch = Branch::create(['name' => 'Branch #1']);
+        $branch = Branch::factory()->create();
         /** @var User */
         $user = User::factory()->create();
 
         $this->actingAs($user)->put("/branches/{$branch->id}", [
             'name' => 'Branch #2',
+            'order_number_prefix' => 'B',
         ]);
 
         $this->assertDatabaseHas('branches', [
             'id' => $branch->id,
             'name' => 'Branch #2',
+            'order_number_prefix' => 'B',
         ]);
     }
 
@@ -132,7 +142,7 @@ class BranchFeatureTest extends TestCase
     public function shouldDeleteBranch()
     {
         /** @var Branch */
-        $branch = Branch::create(['name' => 'Branch #1']);
+        $branch = Branch::factory()->create();
         /** @var User */
         $user = User::factory()->create();
 

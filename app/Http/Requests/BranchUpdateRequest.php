@@ -28,6 +28,10 @@ class BranchUpdateRequest extends FormRequest
                 'required',
                 'string',
             ],
+            'order_number_prefix' => [
+                'required',
+                'alpha_num',
+            ],
         ];
     }
 }

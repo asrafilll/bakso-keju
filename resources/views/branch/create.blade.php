@@ -58,6 +58,21 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label for="order_number_prefix">
+                                        <span>{{ __('Order Number Prefix') }}</span>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="order_number_prefix"
+                                        class="form-control @error('order_number_prefix') is-invalid @enderror"
+                                        value="{{ Request::old('order_number_prefix') }}"
+                                    />
+                                    @error('order_number_prefix')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         <button

@@ -61,6 +61,7 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __('Name') }}</th>
+                                        <th>{{ __('Order Number Prefix') }}</th>
                                         <th>{{ __('Date created') }}</th>
                                         <th width="10"></th>
                                     </tr>
@@ -69,6 +70,7 @@
                                     @forelse ($branches as $branch)
                                         <tr>
                                             <td class="align-middle">{{ $branch->name }}</td>
+                                            <td class="align-middle">{{ $branch->order_number_prefix }}</td>
                                             <td class="align-middle">{{ $branch->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
@@ -89,7 +91,7 @@
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="3"
+                                                colspan="4"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>

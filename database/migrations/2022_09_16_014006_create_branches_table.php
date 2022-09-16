@@ -18,6 +18,7 @@ class CreateBranchesTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->string('name');
+            $table->string('order_number_prefix');
         });
     }
 

@@ -19,7 +19,16 @@ class BranchController extends Controller
         $branchQuery = Branch::query();
 
         if ($request->filled('filter')) {
-            $branchQuery->where('name', 'LIKE', "%{$request->get('filter')}%");
+            $branchQuery->where(function ($query) use ($request) {
+                $filterables = [
+                    'name',
+                    'order_number_prefix',
+                ];
+
+                foreach ($filterables as $filterable) {
+                    $query->orWhere($filterable, 'LIKE', "%{$request->get('filter')}%");
+                }
+            });
         }
 
         $branches = $branchQuery->latest()->paginate();
