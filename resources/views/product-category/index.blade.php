@@ -49,7 +49,7 @@
                                                 name="filter"
                                                 class="form-control"
                                                 value="{{ Request::get('filter') }}"
-                                                placeholder="{{ __('Filter product-categories') }}"
+                                                placeholder="{{ __('Filter product categories') }}"
                                             />
                                         </div>
                                     </form>
