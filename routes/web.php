@@ -55,4 +55,11 @@ Route::group([
     Route::get('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'show']);
     Route::put('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'update']);
     Route::delete('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'destroy']);
+
+    Route::get('/product-categories', [\App\Http\Controllers\ProductCategoryController::class, 'index']);
+    Route::get('/product-categories/create', [\App\Http\Controllers\ProductCategoryController::class, 'create']);
+    Route::post('/product-categories', [\App\Http\Controllers\ProductCategoryController::class, 'store']);
+    Route::get('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'show']);
+    Route::put('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'update']);
+    Route::delete('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'destroy']);
 });
