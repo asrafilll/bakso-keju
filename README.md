@@ -55,7 +55,7 @@
   - Name
   - Discount
 
-- Stock
+- Inventory
   - Product
   - Branch
   - Media
@@ -64,6 +64,6 @@
 # Relationship
 
 - Product depends on Category
-- Stock depends on Product, Media, and Branch
+- Inventory depends on Product, Media, and Branch
 - Order depends on Customer, Media, and Branch
 - Line item depends on Order and Product
