@@ -40,6 +40,7 @@ class BranchFeatureTest extends TestCase
         $response->assertSee([
             $branch->name,
             $branch->order_number_prefix,
+            $branch->next_order_number,
         ]);
     }
 
@@ -69,11 +70,13 @@ class BranchFeatureTest extends TestCase
         $this->actingAs($user)->post('/branches', [
             'name' => 'Branch #1',
             'order_number_prefix' => 'B',
+            'next_order_number' => 1,
         ]);
 
         $this->assertDatabaseHas('branches', [
             'name' => 'Branch #1',
             'order_number_prefix' => 'B',
+            'next_order_number' => 1,
         ]);
     }
 
@@ -109,6 +112,7 @@ class BranchFeatureTest extends TestCase
         $response->assertSee([
             $branch->name,
             $branch->order_number_prefix,
+            $branch->next_order_number,
         ]);
     }
 
@@ -126,12 +130,14 @@ class BranchFeatureTest extends TestCase
         $this->actingAs($user)->put("/branches/{$branch->id}", [
             'name' => 'Branch #2',
             'order_number_prefix' => 'B',
+            'next_order_number' => 1,
         ]);
 
         $this->assertDatabaseHas('branches', [
             'id' => $branch->id,
             'name' => 'Branch #2',
             'order_number_prefix' => 'B',
+            'next_order_number' => 1,
         ]);
     }
 

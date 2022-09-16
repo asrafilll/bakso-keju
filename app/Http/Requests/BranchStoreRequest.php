@@ -32,6 +32,11 @@ class BranchStoreRequest extends FormRequest
                 'required',
                 'alpha_num',
             ],
+            'next_order_number' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
         ];
     }
 }

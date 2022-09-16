@@ -17,5 +17,6 @@ class Branch extends Model
     protected $fillable = [
         'name',
         'order_number_prefix',
+        'next_order_number',
     ];
 }
