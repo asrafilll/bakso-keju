@@ -27,6 +27,10 @@
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </x-nav-item>
+                <x-nav-item :href="url('/order-sources')" activeHref="order-sources/*">
+                    <i class="nav-icon fas fa-network-wired"></i>
+                    <p>{{ __('Order Sources') }}</p>
+                </x-nav-item>
                 <x-nav-item :href="url('/products')" activeHref="products/*">
                     <i class="nav-icon fas fa-box"></i>
                     <p>{{ __('Products') }}</p>

@@ -62,4 +62,11 @@ Route::group([
     Route::get('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'show']);
     Route::put('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'update']);
     Route::delete('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'destroy']);
+
+    Route::get('/order-sources', [\App\Http\Controllers\OrderSourceController::class, 'index']);
+    Route::get('/order-sources/create', [\App\Http\Controllers\OrderSourceController::class, 'create']);
+    Route::post('/order-sources', [\App\Http\Controllers\OrderSourceController::class, 'store']);
+    Route::get('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'show']);
+    Route::put('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'update']);
+    Route::delete('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'destroy']);
 });
