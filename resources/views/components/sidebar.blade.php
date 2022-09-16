@@ -28,7 +28,7 @@
                     <p>Dashboard</p>
                 </x-nav-item>
                 <x-nav-item :href="url('/order-sources')" activeHref="order-sources/*">
-                    <i class="nav-icon fas fa-network-wired"></i>
+                    <i class="nav-icon fas fa-truck-loading"></i>
                     <p>{{ __('Order Sources') }}</p>
                 </x-nav-item>
                 <x-nav-item :href="url('/products')" activeHref="products/*">
