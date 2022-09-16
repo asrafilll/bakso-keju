@@ -14,7 +14,7 @@ class BranchFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => 'Branch #' . $this->faker->randomNumber(3, true),
         ];
     }
 }
