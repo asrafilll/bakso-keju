@@ -48,4 +48,11 @@ Route::group([
     Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show']);
     Route::put('/products/{product}', [\App\Http\Controllers\ProductController::class, 'update']);
     Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy']);
+
+    Route::get('/branches', [\App\Http\Controllers\BranchController::class, 'index']);
+    Route::get('/branches/create', [\App\Http\Controllers\BranchController::class, 'create']);
+    Route::post('/branches', [\App\Http\Controllers\BranchController::class, 'store']);
+    Route::get('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'show']);
+    Route::put('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'update']);
+    Route::delete('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'destroy']);
 });
