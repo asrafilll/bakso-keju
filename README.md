@@ -28,7 +28,7 @@
   - Price
   - Product category
 
-- Media
+- Order Source
   - Name
 
 - Branch
@@ -39,7 +39,7 @@
 - Order
   - Order Number
   - Customer
-  - Media
+  - Order Source
   - Branch
   - Discount
   - Quantity
@@ -60,12 +60,12 @@
 - Inventory
   - Product
   - Branch
-  - Media
+  - Order Source
   - Quantity
 
 # Relationship
 
 - Product depends on Category
-- Inventory depends on Product, Media, and Branch
-- Order depends on Customer, Media, and Branch
+- Inventory depends on Product, Order Source, and Branch
+- Order depends on Customer, Order Source, and Branch
 - Line item depends on Order and Product
