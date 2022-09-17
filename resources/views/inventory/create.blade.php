@@ -125,7 +125,6 @@
                                         type="number"
                                         name="quantity"
                                         class="form-control @error('quantity') is-invalid @enderror"
-                                        value="{{ Request::old('quantity') }}"
                                     />
                                     @error('percentage_discount')
                                         <div class="invalid-feedback">{{ $message }}</div>
