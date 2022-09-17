@@ -23,7 +23,7 @@
                     </a>
                 </div>
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('New inventory') }}</h1>
+                    <h1 class="m-0">{{ __('Add inventory') }}</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->

@@ -59,7 +59,20 @@ class InventoryController extends Controller
      */
     public function store(InventoryStoreRequest $inventoryStoreRequest)
     {
-        Inventory::create($inventoryStoreRequest->validated());
+        /** @var Inventory */
+        $inventory = Inventory::query()
+            ->where([
+                'branch_id' => $inventoryStoreRequest->get('branch_id'),
+                'product_id' => $inventoryStoreRequest->get('product_id'),
+            ])->first();
+
+        if ($inventory) {
+            $inventory->update([
+                'quantity' => $inventory->quantity + $inventoryStoreRequest->get('quantity'),
+            ]);
+        } else {
+            Inventory::create($inventoryStoreRequest->validated());
+        }
 
         return Response::redirectTo('/inventories/create')
             ->with('success', __('crud.created', [

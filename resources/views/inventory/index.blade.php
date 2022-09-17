@@ -64,6 +64,7 @@
                                         <th>{{ __('Branch') }}</th>
                                         <th>{{ __('Quantity') }}</th>
                                         <th>{{ __('Date created') }}</th>
+                                        <th>{{ __('Date updated') }}</th>
                                         <th width="10"></th>
                                     </tr>
                                 </thead>
@@ -74,6 +75,7 @@
                                             <td class="align-middle">{{ $inventory->branch_name }}</td>
                                             <td class="align-middle">{{ $inventory->quantity }}</td>
                                             <td class="align-middle">{{ $inventory->created_at }}</td>
+                                            <td class="align-middle">{{ $inventory->updated_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
                                                     <a
@@ -93,7 +95,7 @@
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="5"
+                                                colspan="6"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>

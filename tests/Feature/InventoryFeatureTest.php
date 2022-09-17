@@ -97,6 +97,39 @@ class InventoryFeatureTest extends TestCase
      * @test
      * @return void
      */
+    public function shouldIncreaseInventoryQuantityWhenCreateSameInventory()
+    {
+        /** @var Product */
+        $product = Product::factory()->create();
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var Inventory */
+        $inventory = Inventory::factory()
+            ->state(['quantity' => 1])
+            ->for($product)
+            ->for($branch)
+            ->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post('/inventories', [
+            'product_id' => $product->id,
+            'branch_id' => $branch->id,
+            'quantity' => 10,
+        ]);
+
+        $this->assertDatabaseHas('inventories', [
+            'id' => $inventory->id,
+            'product_id' => $product->id,
+            'branch_id' => $branch->id,
+            'quantity' => 11,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function shouldShowInventoryDetailPage()
     {
         /** @var Inventory */
