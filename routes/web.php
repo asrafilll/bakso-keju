@@ -76,4 +76,10 @@ Route::group([
     Route::get('/customers/{customer}', [\App\Http\Controllers\CustomerController::class, 'show']);
     Route::put('/customers/{customer}', [\App\Http\Controllers\CustomerController::class, 'update']);
     Route::delete('/customers/{customer}', [\App\Http\Controllers\CustomerController::class, 'destroy']);
+
+    Route::get('/inventories', [\App\Http\Controllers\InventoryController::class, 'index']);
+    Route::get('/inventories/create', [\App\Http\Controllers\InventoryController::class, 'create']);
+    Route::post('/inventories', [\App\Http\Controllers\InventoryController::class, 'store']);
+    Route::get('/inventories/{inventory}', [\App\Http\Controllers\InventoryController::class, 'show']);
+    Route::delete('/inventories/{inventory}', [\App\Http\Controllers\InventoryController::class, 'destroy']);
 });
