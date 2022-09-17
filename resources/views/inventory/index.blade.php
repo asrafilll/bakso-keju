@@ -18,7 +18,7 @@
                     <a
                         href="{{ url('/inventories/create') }}"
                         class="btn btn-primary"
-                    >{{ __('Create inventory') }}</a>
+                    >{{ __('Add inventory') }}</a>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
