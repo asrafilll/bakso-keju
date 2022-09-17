@@ -27,30 +27,33 @@
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </x-nav-item>
-                <x-nav-item :href="url('/order-sources')" activeHref="order-sources/*">
-                    <i class="nav-icon fas fa-truck-loading"></i>
-                    <p>{{ __('Order Sources') }}</p>
-                </x-nav-item>
-                <x-nav-item :href="url('/products')" activeHref="products/*">
-                    <i class="nav-icon fas fa-box"></i>
-                    <p>{{ __('Products') }}</p>
-                </x-nav-item>
                 <x-nav-item :href="url('/inventories')" activeHref="inventories/*">
                     <i class="nav-icon fas fa-exchange-alt"></i>
                     <p>{{ __('Inventories') }}</p>
+                </x-nav-item>
+                <li class="nav-header">{{ __('Catalog') }}</li>
+                <x-nav-item :href="url('/products')" activeHref="products/*">
+                    <i class="nav-icon fas fa-box"></i>
+                    <p>{{ __('Products') }}</p>
                 </x-nav-item>
                 <x-nav-item :href="url('/product-categories')" activeHref="product-categories/*">
                     <i class="nav-icon fas fa-boxes"></i>
                     <p>{{ __('Product Categories') }}</p>
                 </x-nav-item>
+                <li class="nav-header">{{ __('Master') }}</li>
                 <x-nav-item :href="url('/customers')" activeHref="customers/*">
                     <i class="nav-icon fas fa-user-tag"></i>
                     <p>{{ __('Customers') }}</p>
+                </x-nav-item>
+                <x-nav-item :href="url('/order-sources')" activeHref="order-sources/*">
+                    <i class="nav-icon fas fa-truck-loading"></i>
+                    <p>{{ __('Order Sources') }}</p>
                 </x-nav-item>
                 <x-nav-item :href="url('/branches')" activeHref="branches/*">
                     <i class="nav-icon fas fa-network-wired"></i>
                     <p>{{ __('Branches') }}</p>
                 </x-nav-item>
+                <li class="nav-header">{{ __('Security') }}</li>
                 <x-nav-item :href="url('/users')" activeHref="users/*">
                     <i class="nav-icon fas fa-users"></i>
                     <p>{{ __('Users') }}</p>
