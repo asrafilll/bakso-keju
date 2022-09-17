@@ -62,6 +62,13 @@
   - Branch
   - Quantity
 
+- Inventory Log
+  - Branch
+  - Product
+  - Quantity
+  - Note
+  - Date created
+
 # Relationship
 
 - Product depends on Category
