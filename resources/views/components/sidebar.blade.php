@@ -39,6 +39,10 @@
                     <i class="nav-icon fas fa-boxes"></i>
                     <p>{{ __('Product Categories') }}</p>
                 </x-nav-item>
+                <x-nav-item :href="url('/customers')" activeHref="customers/*">
+                    <i class="nav-icon fas fa-user-tag"></i>
+                    <p>{{ __('Customers') }}</p>
+                </x-nav-item>
                 <x-nav-item :href="url('/branches')" activeHref="branches/*">
                     <i class="nav-icon fas fa-network-wired"></i>
                     <p>{{ __('Branches') }}</p>

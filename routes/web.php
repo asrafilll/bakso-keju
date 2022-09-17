@@ -69,4 +69,11 @@ Route::group([
     Route::get('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'show']);
     Route::put('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'update']);
     Route::delete('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'destroy']);
+
+    Route::get('/customers', [\App\Http\Controllers\CustomerController::class, 'index']);
+    Route::get('/customers/create', [\App\Http\Controllers\CustomerController::class, 'create']);
+    Route::post('/customers', [\App\Http\Controllers\CustomerController::class, 'store']);
+    Route::get('/customers/{customer}', [\App\Http\Controllers\CustomerController::class, 'show']);
+    Route::put('/customers/{customer}', [\App\Http\Controllers\CustomerController::class, 'update']);
+    Route::delete('/customers/{customer}', [\App\Http\Controllers\CustomerController::class, 'destroy']);
 });
