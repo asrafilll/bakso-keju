@@ -44,21 +44,6 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-group">
-                                    <label for="product_id">
-                                        <span>{{ __('Product') }}</span>
-                                        <span class="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        name="product_id"
-                                        class="form-control @error('product_id') is-invalid @enderror"
-                                        value="{{ Request::old('product_id') }}"
-                                    />
-                                    @error('product_id')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-                                <div class="form-group">
                                     <label for="branch_id">
                                         <span>{{ __('Branch') }}</span>
                                         <span class="text-danger">*</span>
@@ -70,6 +55,21 @@
                                         value="{{ Request::old('branch_id') }}"
                                     />
                                     @error('branch_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="product_id">
+                                        <span>{{ __('Product') }}</span>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="product_id"
+                                        class="form-control @error('product_id') is-invalid @enderror"
+                                        value="{{ Request::old('product_id') }}"
+                                    />
+                                    @error('product_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

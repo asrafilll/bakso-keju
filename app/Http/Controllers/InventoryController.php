@@ -75,34 +75,7 @@ class InventoryController extends Controller
         }
 
         return Response::redirectTo('/inventories/create')
-            ->with('success', __('crud.created', [
-                'resource' => 'inventory',
-            ]));
-    }
-
-    /**
-     * @param Inventory $inventory
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Inventory $inventory)
-    {
-        $inventory->load(['product', 'branch']);
-
-        return Response::view('inventory.show', [
-            'inventory' => $inventory,
-        ]);
-    }
-
-    /**
-     * @param Inventory $inventory
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Inventory $inventory)
-    {
-        $inventory->delete();
-
-        return Response::redirectTo('/inventories')
-            ->with('success', __('crud.deleted', [
+            ->with('success', __('crud.added', [
                 'resource' => 'inventory',
             ]));
     }
