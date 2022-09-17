@@ -29,6 +29,15 @@
         rel="stylesheet"
         href="/plugins/toastr/toastr.min.css"
     >
+    <!-- Select2 -->
+    <link
+        rel="stylesheet"
+        href="/plugins/select2/css/select2.min.css"
+    >
+    <link
+        rel="stylesheet"
+        href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"
+    >
     <!-- Theme style -->
     <link
         rel="stylesheet"
@@ -44,6 +53,8 @@
     <script src="/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Select2 -->
+    <script src="/plugins/select2/js/select2.full.min.js"></script>
     <!-- overlayScrollbars -->
     <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- jQuery -->
