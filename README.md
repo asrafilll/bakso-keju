@@ -60,12 +60,11 @@
 - Inventory
   - Product
   - Branch
-  - Order Source
   - Quantity
 
 # Relationship
 
 - Product depends on Category
-- Inventory depends on Product, Order Source, and Branch
+- Inventory depends on Product and Branch
 - Order depends on Customer, Order Source, and Branch
 - Line item depends on Order and Product
