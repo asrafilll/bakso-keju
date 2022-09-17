@@ -48,31 +48,74 @@
                                         <span>{{ __('Branch') }}</span>
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <input
-                                        type="text"
+                                    <select
+                                        id="branch_id"
                                         name="branch_id"
                                         class="form-control @error('branch_id') is-invalid @enderror"
-                                        value="{{ Request::old('branch_id') }}"
-                                    />
+                                        style="width: 100%;"
+                                    ></select>
                                     @error('branch_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <script>
+                                    $(function() {
+                                        $('#branch_id').select2({
+                                            theme: 'bootstrap4',
+                                            ajax: {
+                                                url: '/inventories?action=fetch-branches',
+                                                dataType: 'json',
+                                                delay: 250,
+                                                processResults: function(branches) {
+                                                    return {
+                                                        results: branches.map(function(branch) {
+                                                            return {
+                                                                id: branch.id,
+                                                                text: branch.name,
+                                                            };
+                                                        }),
+                                                    };
+                                                },
+                                            },
+                                        });
+                                    });
+                                </script>
                                 <div class="form-group">
                                     <label for="product_id">
                                         <span>{{ __('Product') }}</span>
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <input
-                                        type="text"
+                                    <select
+                                        id="product_id"
                                         name="product_id"
                                         class="form-control @error('product_id') is-invalid @enderror"
-                                        value="{{ Request::old('product_id') }}"
-                                    />
+                                    ></select>
                                     @error('product_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <script>
+                                    $(function() {
+                                        $('#product_id').select2({
+                                            theme: 'bootstrap4',
+                                            ajax: {
+                                                url: '/inventories?action=fetch-products',
+                                                dataType: 'json',
+                                                delay: 250,
+                                                processResults: function(products) {
+                                                    return {
+                                                        results: products.map(function(product) {
+                                                            return {
+                                                                id: product.id,
+                                                                text: product.name,
+                                                            };
+                                                        }),
+                                                    };
+                                                },
+                                            },
+                                        });
+                                    });
+                                </script>
                                 <div class="form-group">
                                     <label for="quantity">
                                         <span>{{ __('Quantity') }}</span>

@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\InventoryStoreRequest;
 use App\Http\Requests\InventoryUpdateRequest;
+use App\Models\Branch;
 use App\Models\Inventory;
+use App\Models\Product;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -16,33 +19,52 @@ class InventoryController extends Controller
      */
     public function index(Request $request)
     {
-        $inventoryQuery = Inventory::query()
-            ->select([
-                'inventories.*',
-                'products.name as product_name',
-                'branches.name as branch_name',
-            ])
-            ->join('products', 'inventories.product_id', 'products.id')
-            ->join('branches', 'inventories.branch_id', 'branches.id');
+        switch ($request->get('action')) {
+            case 'fetch-branches':
+                $branches = Branch::query()
+                    ->where('name', 'LIKE', "%{$request->get('term')}%")
+                    ->orderBy('name')
+                    ->get();
 
-        if ($request->filled('filter')) {
-            $inventoryQuery->where(function ($query) use ($request) {
-                $filterables = [
-                    'product_name',
-                    'branch_name',
-                ];
+                return Response::json($branches);
 
-                foreach ($filterables as $filterable) {
-                    $query->orWhere($filterable, 'LIKE', "%{$request->get('filter')}%");
+            case 'fetch-products':
+                $products = Product::query()
+                    ->where('name', 'LIKE', "%{$request->get('term')}%")
+                    ->orderBy('name')
+                    ->get();
+
+                return Response::json($products);
+
+            default:
+                $inventoryQuery = Inventory::query()
+                    ->select([
+                        'inventories.*',
+                        'products.name as product_name',
+                        'branches.name as branch_name',
+                    ])
+                    ->join('products', 'inventories.product_id', 'products.id')
+                    ->join('branches', 'inventories.branch_id', 'branches.id');
+
+                if ($request->filled('filter')) {
+                    $inventoryQuery->where(function ($query) use ($request) {
+                        $filterables = [
+                            'product_name',
+                            'branch_name',
+                        ];
+
+                        foreach ($filterables as $filterable) {
+                            $query->orWhere($filterable, 'LIKE', "%{$request->get('filter')}%");
+                        }
+                    });
                 }
-            });
+
+                $inventories = $inventoryQuery->latest()->paginate();
+
+                return Response::view('inventory.index', [
+                    'inventories' => $inventories,
+                ]);
         }
-
-        $inventories = $inventoryQuery->latest()->paginate();
-
-        return Response::view('inventory.index', [
-            'inventories' => $inventories,
-        ]);
     }
 
     /**
