@@ -23,47 +23,84 @@
                 role="menu"
                 data-accordion="false"
             >
-                <x-nav-item :href="url('/')" activeHref="/">
+                <x-nav-item
+                    :href="url('/')"
+                    activeHref="/"
+                >
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </x-nav-item>
-                <x-nav-item :href="url('/inventories')" activeHref="inventories/*">
+                <x-nav-item
+                    :href="url('/orders')"
+                    activeHref="orders/*"
+                >
+                    <i class="nav-icon fas fa-dollar-sign"></i>
+                    <p>{{ __('Orders') }}</p>
+                </x-nav-item>
+                <x-nav-item
+                    :href="url('/inventories')"
+                    activeHref="inventories/*"
+                >
                     <i class="nav-icon fas fa-exchange-alt"></i>
                     <p>{{ __('Inventories') }}</p>
                 </x-nav-item>
                 <li class="nav-header">{{ __('Report') }}</li>
-                <x-nav-item :href="url('/product-inventories')" activeHref="product-inventories/*">
+                <x-nav-item
+                    :href="url('/product-inventories')"
+                    activeHref="product-inventories/*"
+                >
                     <i class="nav-icon fas fa-box-open"></i>
                     <p>{{ __('Product Inventories') }}</p>
                 </x-nav-item>
                 <li class="nav-header">{{ __('Catalog') }}</li>
-                <x-nav-item :href="url('/products')" activeHref="products/*">
+                <x-nav-item
+                    :href="url('/products')"
+                    activeHref="products/*"
+                >
                     <i class="nav-icon fas fa-box"></i>
                     <p>{{ __('Products') }}</p>
                 </x-nav-item>
-                <x-nav-item :href="url('/product-categories')" activeHref="product-categories/*">
+                <x-nav-item
+                    :href="url('/product-categories')"
+                    activeHref="product-categories/*"
+                >
                     <i class="nav-icon fas fa-boxes"></i>
                     <p>{{ __('Product Categories') }}</p>
                 </x-nav-item>
                 <li class="nav-header">{{ __('Master') }}</li>
-                <x-nav-item :href="url('/resellers')" activeHref="resellers/*">
+                <x-nav-item
+                    :href="url('/resellers')"
+                    activeHref="resellers/*"
+                >
                     <i class="nav-icon fas fa-user-tag"></i>
                     <p>{{ __('Resellers') }}</p>
                 </x-nav-item>
-                <x-nav-item :href="url('/order-sources')" activeHref="order-sources/*">
+                <x-nav-item
+                    :href="url('/order-sources')"
+                    activeHref="order-sources/*"
+                >
                     <i class="nav-icon fas fa-truck-loading"></i>
                     <p>{{ __('Order Sources') }}</p>
                 </x-nav-item>
-                <x-nav-item :href="url('/branches')" activeHref="branches/*">
+                <x-nav-item
+                    :href="url('/branches')"
+                    activeHref="branches/*"
+                >
                     <i class="nav-icon fas fa-network-wired"></i>
                     <p>{{ __('Branches') }}</p>
                 </x-nav-item>
                 <li class="nav-header">{{ __('Security') }}</li>
-                <x-nav-item :href="url('/users')" activeHref="users/*">
+                <x-nav-item
+                    :href="url('/users')"
+                    activeHref="users/*"
+                >
                     <i class="nav-icon fas fa-users"></i>
                     <p>{{ __('Users') }}</p>
                 </x-nav-item>
-                <x-nav-item :href="url('/roles')" activeHref="roles/*">
+                <x-nav-item
+                    :href="url('/roles')"
+                    activeHref="roles/*"
+                >
                     <i class="nav-icon fas fa-lock"></i>
                     <p>{{ __('Roles') }}</p>
                 </x-nav-item>

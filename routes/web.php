@@ -82,4 +82,6 @@ Route::group([
     Route::post('/inventories', [\App\Http\Controllers\InventoryController::class, 'store']);
 
     Route::get('/product-inventories', [\App\Http\Controllers\ProductInventoryController::class, 'index']);
+
+    Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index']);
 });
