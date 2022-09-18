@@ -12,13 +12,13 @@
         <div class="container">
             <div class="row justify-content-between mb-2">
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('Customers') }}</h1>
+                    <h1 class="m-0">{{ __('Resellers') }}</h1>
                 </div><!-- /.col -->
                 <div class="col-auto">
                     <a
-                        href="{{ url('/customers/create') }}"
+                        href="{{ url('/resellers/create') }}"
                         class="btn btn-primary"
-                    >{{ __('Create customer') }}</a>
+                    >{{ __('Create reseller') }}</a>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -49,7 +49,7 @@
                                                 name="filter"
                                                 class="form-control"
                                                 value="{{ Request::get('filter') }}"
-                                                placeholder="{{ __('Filter customers') }}"
+                                                placeholder="{{ __('Filter resellers') }}"
                                             />
                                         </div>
                                     </form>
@@ -67,15 +67,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($customers as $customer)
+                                    @forelse ($resellers as $reseller)
                                         <tr>
-                                            <td class="align-middle">{{ $customer->name }}</td>
-                                            <td class="align-middle">{{ $customer->percentage_discount }}</td>
-                                            <td class="align-middle">{{ $customer->created_at }}</td>
+                                            <td class="align-middle">{{ $reseller->name }}</td>
+                                            <td class="align-middle">{{ $reseller->percentage_discount }}</td>
+                                            <td class="align-middle">{{ $reseller->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
                                                     <a
-                                                        href="{{ url('/customers/' . $customer->id) }}"
+                                                        href="{{ url('/resellers/' . $reseller->id) }}"
                                                         class="btn btn-default"
                                                     >{{ __('Detail') }}</a>
                                                     <button
@@ -83,7 +83,7 @@
                                                         class="btn btn-danger"
                                                         data-toggle="modal"
                                                         data-target="#modal-delete"
-                                                        data-action="{{ url('/customers/' . $customer->id) }}"
+                                                        data-action="{{ url('/resellers/' . $reseller->id) }}"
                                                     >{{ __('Delete') }}</button>
                                                 </div>
                                             </td>
@@ -100,7 +100,7 @@
                             </table>
                         </div>
                         <div class="card-footer d-flex justify-content-center">
-                            {!! $customers->withQueryString()->links() !!}
+                            {!! $resellers->withQueryString()->links() !!}
                         </div>
                     </div>
                 </div>

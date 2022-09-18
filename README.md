@@ -38,7 +38,7 @@
 
 - Order
   - Order Number
-  - Customer
+  - Reseller
   - Order Source
   - Branch
   - Discount
@@ -53,7 +53,7 @@
   - Quantity
   - Total
 
-- Customer
+- Reseller
   - Name
   - Discount
 
@@ -73,10 +73,10 @@
 
 - Product depends on Category
 - Inventory depends on Product and Branch
-- Order depends on Customer, Order Source, and Branch
+- Order depends on Reseller, Order Source, and Branch
 - Line item depends on Order and Product
 - Inventory item depends on Product and Branch
 
 # Special permissions
 
-- Allow create inventories with negative quantity
+  - Allow create inventories with negative quantity

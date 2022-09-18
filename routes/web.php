@@ -70,12 +70,12 @@ Route::group([
     Route::put('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'update']);
     Route::delete('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'destroy']);
 
-    Route::get('/customers', [\App\Http\Controllers\CustomerController::class, 'index']);
-    Route::get('/customers/create', [\App\Http\Controllers\CustomerController::class, 'create']);
-    Route::post('/customers', [\App\Http\Controllers\CustomerController::class, 'store']);
-    Route::get('/customers/{customer}', [\App\Http\Controllers\CustomerController::class, 'show']);
-    Route::put('/customers/{customer}', [\App\Http\Controllers\CustomerController::class, 'update']);
-    Route::delete('/customers/{customer}', [\App\Http\Controllers\CustomerController::class, 'destroy']);
+    Route::get('/resellers', [\App\Http\Controllers\ResellerController::class, 'index']);
+    Route::get('/resellers/create', [\App\Http\Controllers\ResellerController::class, 'create']);
+    Route::post('/resellers', [\App\Http\Controllers\ResellerController::class, 'store']);
+    Route::get('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'show']);
+    Route::put('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'update']);
+    Route::delete('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'destroy']);
 
     Route::get('/inventories', [\App\Http\Controllers\InventoryController::class, 'index']);
     Route::get('/inventories/create', [\App\Http\Controllers\InventoryController::class, 'create']);

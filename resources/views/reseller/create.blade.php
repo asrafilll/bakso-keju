@@ -16,14 +16,14 @@
             <div class="row mb-2">
                 <div class="col-auto">
                     <a
-                        href="{{ url('/customers') }}"
+                        href="{{ url('/resellers') }}"
                         class="btn btn-default"
                     >
                         <i class="fas fa-arrow-left"></i>
                     </a>
                 </div>
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('New customer') }}</h1>
+                    <h1 class="m-0">{{ __('New reseller') }}</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -36,7 +36,7 @@
             <div class="row">
                 <div class="col-12">
                     <form
-                        action="{{ url('/customers') }}"
+                        action="{{ url('/resellers') }}"
                         method="POST"
                         novalidate
                     >

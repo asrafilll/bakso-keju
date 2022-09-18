@@ -46,9 +46,9 @@
                     <p>{{ __('Product Categories') }}</p>
                 </x-nav-item>
                 <li class="nav-header">{{ __('Master') }}</li>
-                <x-nav-item :href="url('/customers')" activeHref="customers/*">
+                <x-nav-item :href="url('/resellers')" activeHref="resellers/*">
                     <i class="nav-icon fas fa-user-tag"></i>
-                    <p>{{ __('Customers') }}</p>
+                    <p>{{ __('Resellers') }}</p>
                 </x-nav-item>
                 <x-nav-item :href="url('/order-sources')" activeHref="order-sources/*">
                     <i class="nav-icon fas fa-truck-loading"></i>
