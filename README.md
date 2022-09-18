@@ -61,13 +61,12 @@
   - Product
   - Branch
   - Quantity
+  - Note
 
-- Inventory Log
+- Inventory Item
   - Branch
   - Product
   - Quantity
-  - Note
-  - Date created
 
 # Relationship
 
