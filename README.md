@@ -62,6 +62,7 @@
   - Branch
   - Quantity
   - Note
+  - Created by
 
 - Inventory Item
   - Branch
@@ -75,3 +76,7 @@
 - Order depends on Customer, Order Source, and Branch
 - Line item depends on Order and Product
 - Inventory item depends on Product and Branch
+
+# Special permissions
+
+- Allow create inventories with negative quantity
