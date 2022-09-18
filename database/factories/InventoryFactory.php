@@ -15,6 +15,7 @@ class InventoryFactory extends Factory
     {
         return [
             'quantity' => $this->faker->randomNumber(2),
+            'note' => $this->faker->text(),
         ];
     }
 }

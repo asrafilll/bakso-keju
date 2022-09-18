@@ -18,7 +18,7 @@
                     <a
                         href="{{ url('/inventories/create') }}"
                         class="btn btn-primary"
-                    >{{ __('Add inventory') }}</a>
+                    >{{ __('Create inventory') }}</a>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -63,7 +63,8 @@
                                         <th>{{ __('Branch') }}</th>
                                         <th>{{ __('Product') }}</th>
                                         <th>{{ __('Quantity') }}</th>
-                                        <th>{{ __('Date updated') }}</th>
+                                        <th>{{ __('Note') }}</th>
+                                        <th>{{ __('Date created') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -72,12 +73,13 @@
                                             <td class="align-middle">{{ $inventory->branch_name }}</td>
                                             <td class="align-middle">{{ $inventory->product_name }}</td>
                                             <td class="align-middle">{{ $inventory->quantity }}</td>
-                                            <td class="align-middle">{{ $inventory->updated_at }}</td>
+                                            <td class="align-middle">{{ $inventory->note }}</td>
+                                            <td class="align-middle">{{ $inventory->created_at }}</td>
                                         </tr>
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="4"
+                                                colspan="5"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>

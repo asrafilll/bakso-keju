@@ -38,7 +38,10 @@ class InventoryStoreRequest extends FormRequest
             'quantity' => [
                 'required',
                 'integer',
-                'min:1',
+            ],
+            'note' => [
+                'nullable',
+                'string',
             ],
         ];
     }

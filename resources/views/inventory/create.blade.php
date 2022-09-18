@@ -23,7 +23,7 @@
                     </a>
                 </div>
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('Add inventory') }}</h1>
+                    <h1 class="m-0">{{ __('Create inventory') }}</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -126,7 +126,20 @@
                                         name="quantity"
                                         class="form-control @error('quantity') is-invalid @enderror"
                                     />
-                                    @error('percentage_discount')
+                                    @error('quantity')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="note">
+                                        <span>{{ __('Note') }}</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="note"
+                                        class="form-control @error('note') is-invalid @enderror"
+                                    />
+                                    @error('note')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
