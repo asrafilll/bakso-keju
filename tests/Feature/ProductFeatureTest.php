@@ -194,4 +194,33 @@ class ProductFeatureTest extends TestCase
         ]);
         $response->assertViewHas('productCategories');
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedToDeleteProductWhenAlreadyHaveProductInventories()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var ProductCategory */
+        $productCategory = ProductCategory::factory()->create();
+        /** @var Product */
+        $product = Product::factory()
+            ->for($productCategory)
+            ->has(
+                ProductInventory::factory()
+                    ->state([
+                        'quantity' => 10,
+                    ])
+                    ->for($branch)
+            )
+            ->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->delete("/products/{$product->id}");
+
+        $response->assertSessionHas('failed');
+    }
 }

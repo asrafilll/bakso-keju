@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\ProductAlreadyHaveProductInventoriesException;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -115,6 +117,11 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        if ($product->productInventories()->count() > 0) {
+            return Response::redirectTo('/products')
+                ->with('failed', __('Product already have product inventories'));
+        }
+
         $product->delete();
 
         return Response::redirectTo('/products')
