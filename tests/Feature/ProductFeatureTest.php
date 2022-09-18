@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Branch;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductInventory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -94,9 +96,7 @@ class ProductFeatureTest extends TestCase
         $productCategory = ProductCategory::factory()->create();
         /** @var Product */
         $product = Product::factory()
-            ->state([
-                'product_category_id' => $productCategory->id,
-            ])
+            ->for($productCategory)
             ->create();
         /** @var User */
         $user = User::factory()->create();
@@ -157,5 +157,41 @@ class ProductFeatureTest extends TestCase
         $this->assertDatabaseMissing('products', [
             'id' => $product->id,
         ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowProductDetailPageWithProductInventoryData()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var ProductCategory */
+        $productCategory = ProductCategory::factory()->create();
+        /** @var Product */
+        $product = Product::factory()
+            ->for($productCategory)
+            ->has(
+                ProductInventory::factory()
+                    ->state([
+                        'quantity' => 10,
+                    ])
+                    ->for($branch)
+            )
+            ->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get("/products/{$product->id}");
+
+        $response->assertSee([
+            $product->name,
+            $product->price,
+            $productCategory->id,
+            $branch->name,
+            10,
+        ]);
+        $response->assertViewHas('productCategories');
     }
 }

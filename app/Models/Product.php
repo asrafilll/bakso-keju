@@ -6,6 +6,7 @@ use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -37,5 +38,13 @@ class Product extends Model
         return $this->belongsTo(ProductCategory::class)->withDefault([
             'name' => '-'
         ]);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function productInventories()
+    {
+        return $this->hasMany(ProductInventory::class);
     }
 }

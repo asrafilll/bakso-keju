@@ -81,6 +81,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product->load(['productInventories.branch']);
+
         /** @var Collection<ProductCategory> */
         $productCategories = ProductCategory::query()->orderBy('name')->get();
 

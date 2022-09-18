@@ -69,7 +69,10 @@
                                         id="product_category_id"
                                         class="form-control @error('product_category_id') is-invalid @enderror"
                                     >
-                                        <option value="" hidden></option>
+                                        <option
+                                            value=""
+                                            hidden
+                                        ></option>
                                         @foreach ($productCategories as $productCategory)
                                             <option
                                                 value="{{ $productCategory->id }}"
@@ -96,6 +99,23 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title font-weight-bold">{{ __('Inventory') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row py-3 font-weight-bold">
+                                    <div class="col">{{ __('Branch') }}</div>
+                                    <div class="col">{{ __('Quantity') }}</div>
+                                </div>
+                                @foreach ($product->productInventories as $productInventory)
+                                    <div class="row py-3 border-top align-items-center">
+                                        <div class="col">{{ $productInventory->branch->name }}</div>
+                                        <div class="col">{{ $productInventory->quantity }}</div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                         <button
