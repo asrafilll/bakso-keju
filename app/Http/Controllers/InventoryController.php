@@ -43,9 +43,11 @@ class InventoryController extends Controller
                         'inventories.*',
                         'products.name as product_name',
                         'branches.name as branch_name',
+                        'users.name as created_by_name'
                     ])
                     ->join('products', 'inventories.product_id', 'products.id')
-                    ->join('branches', 'inventories.branch_id', 'branches.id');
+                    ->join('branches', 'inventories.branch_id', 'branches.id')
+                    ->join('users', 'inventories.created_by', 'users.id');
 
                 if ($request->filled('filter')) {
                     $inventoryQuery->where(function ($query) use ($request) {
@@ -86,7 +88,9 @@ class InventoryController extends Controller
             DB::beginTransaction();
 
             /** @var Inventory */
-            $inventory = Inventory::create($inventoryStoreRequest->validated());
+            $inventory = Inventory::create($inventoryStoreRequest->validated() + [
+                'created_by' => $inventoryStoreRequest->user()->id,
+            ]);
             /** @var ProductInventory|null */
             $productInventory = ProductInventory::query()
                 ->where([

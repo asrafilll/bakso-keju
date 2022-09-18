@@ -64,6 +64,7 @@
                                         <th>{{ __('Product') }}</th>
                                         <th>{{ __('Quantity') }}</th>
                                         <th>{{ __('Note') }}</th>
+                                        <th>{{ __('Created by') }}</th>
                                         <th>{{ __('Date created') }}</th>
                                     </tr>
                                 </thead>
@@ -74,12 +75,13 @@
                                             <td class="align-middle">{{ $inventory->product_name }}</td>
                                             <td class="align-middle">{{ $inventory->quantity }}</td>
                                             <td class="align-middle">{{ $inventory->note }}</td>
+                                            <td class="align-middle">{{ $inventory->created_by_name }}</td>
                                             <td class="align-middle">{{ $inventory->created_at }}</td>
                                         </tr>
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="5"
+                                                colspan="6"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>

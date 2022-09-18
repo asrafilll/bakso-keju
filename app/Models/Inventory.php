@@ -20,6 +20,7 @@ class Inventory extends Model
         'branch_id',
         'quantity',
         'note',
+        'created_by',
     ];
 
     /**

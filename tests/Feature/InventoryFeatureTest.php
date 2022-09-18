@@ -37,13 +37,16 @@ class InventoryFeatureTest extends TestCase
         $product = Product::factory()->create();
         /** @var Branch */
         $branch = Branch::factory()->create();
-        /** @var Inventory */
-        $inventory = Inventory::factory()
-            ->for($product)
-            ->for($branch)
-            ->create();;
         /** @var User */
         $user = User::factory()->create();
+        /** @var Inventory */
+        $inventory = Inventory::factory()
+            ->state([
+                'created_by' => $user->id,
+            ])
+            ->for($product)
+            ->for($branch)
+            ->create();
 
         $response = $this->actingAs($user)->get('/inventories');
 
@@ -51,6 +54,7 @@ class InventoryFeatureTest extends TestCase
             $product->name,
             $branch->name,
             $inventory->quantity,
+            $user->name,
         ]);
     }
 
@@ -93,6 +97,7 @@ class InventoryFeatureTest extends TestCase
             'branch_id' => $branch->id,
             'quantity' => 10,
             'note' => 'example note',
+            'created_by' => $user->id,
         ]);
     }
 
