@@ -74,3 +74,4 @@
 - Inventory depends on Product and Branch
 - Order depends on Customer, Order Source, and Branch
 - Line item depends on Order and Product
+- Inventory item depends on Product and Branch
