@@ -20,62 +20,66 @@ class InventoryController extends Controller
      */
     public function index(Request $request)
     {
-        switch ($request->get('action')) {
-            case 'fetch-branches':
+        $inventoryQuery = Inventory::query()
+            ->select([
+                'inventories.*',
+                'products.name as product_name',
+                'branches.name as branch_name',
+                'users.name as created_by_name'
+            ])
+            ->join('products', 'inventories.product_id', 'products.id')
+            ->join('branches', 'inventories.branch_id', 'branches.id')
+            ->join('users', 'inventories.created_by', 'users.id');
+
+        if ($request->filled('filter')) {
+            $inventoryQuery->where(function ($query) use ($request) {
+                $filterables = [
+                    'product_name',
+                    'branch_name',
+                ];
+
+                foreach ($filterables as $filterable) {
+                    $query->orWhere($filterable, 'LIKE', "%{$request->get('filter')}%");
+                }
+            });
+        }
+
+        $inventories = $inventoryQuery->latest()->paginate();
+
+        return Response::view('inventory.index', [
+            'inventories' => $inventories,
+        ]);
+    }
+
+    /**
+     * @param Request
+     * @return \Illuminate\Http\Response
+     */
+    public function create(Request $request)
+    {
+        $actions = [
+            'fetch-branches' => function () use ($request) {
                 $branches = Branch::query()
                     ->where('name', 'LIKE', "%{$request->get('term')}%")
                     ->orderBy('name')
                     ->get();
 
                 return Response::json($branches);
-
-            case 'fetch-products':
+            },
+            'fetch-products' => function () use ($request) {
                 $products = Product::query()
                     ->where('name', 'LIKE', "%{$request->get('term')}%")
                     ->orderBy('name')
                     ->get();
 
                 return Response::json($products);
+            },
+            'default' => function () {
+                return Response::view('inventory.create');
+            },
+        ];
 
-            default:
-                $inventoryQuery = Inventory::query()
-                    ->select([
-                        'inventories.*',
-                        'products.name as product_name',
-                        'branches.name as branch_name',
-                        'users.name as created_by_name'
-                    ])
-                    ->join('products', 'inventories.product_id', 'products.id')
-                    ->join('branches', 'inventories.branch_id', 'branches.id')
-                    ->join('users', 'inventories.created_by', 'users.id');
-
-                if ($request->filled('filter')) {
-                    $inventoryQuery->where(function ($query) use ($request) {
-                        $filterables = [
-                            'product_name',
-                            'branch_name',
-                        ];
-
-                        foreach ($filterables as $filterable) {
-                            $query->orWhere($filterable, 'LIKE', "%{$request->get('filter')}%");
-                        }
-                    });
-                }
-
-                $inventories = $inventoryQuery->latest()->paginate();
-
-                return Response::view('inventory.index', [
-                    'inventories' => $inventories,
-                ]);
-        }
-    }
-
-    /**
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return Response::view('inventory.create');
+        return $actions[$request->get('action', 'default')]();
     }
 
     /**

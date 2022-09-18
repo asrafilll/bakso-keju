@@ -68,7 +68,7 @@
                                         $('#branch_id').select2({
                                             theme: 'bootstrap4',
                                             ajax: {
-                                                url: '/inventories?action=fetch-branches',
+                                                url: '/inventories/create?action=fetch-branches',
                                                 dataType: 'json',
                                                 delay: 250,
                                                 processResults: function(branches) {
@@ -104,7 +104,7 @@
                                         $('#product_id').select2({
                                             theme: 'bootstrap4',
                                             ajax: {
-                                                url: '/inventories?action=fetch-products',
+                                                url: '/inventories/create?action=fetch-products',
                                                 dataType: 'json',
                                                 delay: 250,
                                                 processResults: function(products) {
