@@ -6,7 +6,10 @@ use App\Http\Requests\InventoryStoreRequest;
 use App\Models\Branch;
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\ProductInventory;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class InventoryController extends Controller
@@ -79,11 +82,42 @@ class InventoryController extends Controller
      */
     public function store(InventoryStoreRequest $inventoryStoreRequest)
     {
-        Inventory::create($inventoryStoreRequest->validated());
+        try {
+            DB::beginTransaction();
 
-        return Response::redirectTo('/inventories/create')
-            ->with('success', __('crud.created', [
-                'resource' => 'inventory',
-            ]));
+            /** @var Inventory */
+            $inventory = Inventory::create($inventoryStoreRequest->validated());
+            /** @var ProductInventory|null */
+            $productInventory = ProductInventory::query()
+                ->where([
+                    'branch_id' => $inventory->branch_id,
+                    'product_id' => $inventory->product_id,
+                ])
+                ->first();
+
+            if ($productInventory) {
+                $productInventory->update([
+                    'quantity' => $productInventory->quantity + $inventory->quantity,
+                ]);
+            } else {
+                ProductInventory::create($inventoryStoreRequest->only([
+                    'branch_id',
+                    'product_id',
+                    'quantity',
+                ]));
+            }
+
+            DB::commit();
+
+            return Response::redirectTo('/inventories/create')
+                ->with('success', __('crud.created', [
+                    'resource' => 'inventory',
+                ]));
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return Response::redirectTo('/inventories/create')
+                ->with('failed', $e->getMessage());
+        }
     }
 }

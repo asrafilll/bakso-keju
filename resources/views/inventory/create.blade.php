@@ -9,6 +9,11 @@
             toastr.success('{{ Session::get('success') }}');
         </script>
     @endif
+    @if (Session::has('failed'))
+        <script>
+            toastr.error('{{ Session::get('failed') }}');
+        </script>
+    @endif
 
     <!-- Content Header (Page header) -->
     <div class="content-header">

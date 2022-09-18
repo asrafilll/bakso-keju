@@ -19,7 +19,7 @@ class CreateInventoriesTable extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->foreignUuid('product_id')->constrained();
             $table->foreignUuid('branch_id')->constrained();
-            $table->unsignedBigInteger('quantity');
+            $table->bigInteger('quantity');
         });
     }
 
