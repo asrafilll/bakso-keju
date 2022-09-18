@@ -31,6 +31,11 @@
                     <i class="nav-icon fas fa-exchange-alt"></i>
                     <p>{{ __('Inventories') }}</p>
                 </x-nav-item>
+                <li class="nav-header">{{ __('Report') }}</li>
+                <x-nav-item :href="url('/product-inventories')" activeHref="product-inventories/*">
+                    <i class="nav-icon fas fa-box-open"></i>
+                    <p>{{ __('Product Inventories') }}</p>
+                </x-nav-item>
                 <li class="nav-header">{{ __('Catalog') }}</li>
                 <x-nav-item :href="url('/products')" activeHref="products/*">
                     <i class="nav-icon fas fa-box"></i>

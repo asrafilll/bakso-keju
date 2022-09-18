@@ -80,4 +80,6 @@ Route::group([
     Route::get('/inventories', [\App\Http\Controllers\InventoryController::class, 'index']);
     Route::get('/inventories/create', [\App\Http\Controllers\InventoryController::class, 'create']);
     Route::post('/inventories', [\App\Http\Controllers\InventoryController::class, 'store']);
+
+    Route::get('/product-inventories', [\App\Http\Controllers\ProductInventoryController::class, 'index']);
 });
