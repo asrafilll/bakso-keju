@@ -84,4 +84,5 @@ Route::group([
     Route::get('/product-inventories', [\App\Http\Controllers\ProductInventoryController::class, 'index']);
 
     Route::get('/orders', [\App\Http\Controllers\OrderController::class, 'index']);
+    Route::get('/orders/create', [\App\Http\Controllers\OrderController::class, 'create']);
 });

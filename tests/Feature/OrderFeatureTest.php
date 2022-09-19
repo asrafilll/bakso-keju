@@ -57,4 +57,17 @@ class OrderFeatureTest extends TestCase
             $order->total_price,
         ]);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowCreateOrderPage()
+    {
+        /** @var User */
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->get('/orders/create');
+
+        $response->assertStatus(200);
+    }
 }

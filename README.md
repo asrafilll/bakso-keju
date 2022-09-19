@@ -49,7 +49,6 @@
   - Order
   - Product
   - Price
-  - Discount
   - Quantity
   - Total
 

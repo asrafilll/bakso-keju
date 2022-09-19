@@ -57,6 +57,8 @@
     <script src="/plugins/select2/js/select2.full.min.js"></script>
     <!-- overlayScrollbars -->
     <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- EJS -->
+    <script src="/plugins/ejs/ejs.min.js"></script>
     <!-- jQuery -->
     <script src="/plugins/toastr/toastr.min.js"></script>
     <script>
