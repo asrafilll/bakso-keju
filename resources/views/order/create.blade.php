@@ -71,6 +71,13 @@
                                         var $el = $('#branch-module');
                                         var $branchId = $el.find('#branch_id')
 
+                                        $branchId.on('select2:select', function (e) {
+                                            var branch = e.params.data.branch;
+
+                                            ProductModule.init(branch.id);
+                                            LineItemsModule.deleteAllLineItems();
+                                        });
+
                                         function init() {
                                             $branchId.select2({
                                                 theme: 'bootstrap4',
@@ -84,6 +91,7 @@
                                                                 return {
                                                                     id: branch.id,
                                                                     text: branch.name,
+                                                                    branch: branch,
                                                                 };
                                                             }),
                                                         };
@@ -271,12 +279,16 @@
                                             LineItemsModule.addLineItem(product.id, product.name, product.price);
                                         });
 
-                                        function init() {
-                                            $productId.select2({
+                                        function init(branchId = null) {
+                                            var config = {
                                                 theme: 'bootstrap4',
                                                 placeholder: '{{ __('Search products') }}',
-                                                ajax: {
-                                                    url: '/orders/create?action=fetch-products',
+                                                ajax: null,
+                                            };
+
+                                            if (branchId) {
+                                                config.ajax = {
+                                                    url: '/orders/create?action=fetch-products&branch_id=' + branchId,
                                                     dataType: 'json',
                                                     delay: 250,
                                                     processResults: function(products) {
@@ -290,11 +302,17 @@
                                                             }),
                                                         };
                                                     },
-                                                },
-                                            });
+                                                };
+                                            }
+
+                                            $productId.select2(config);
                                         }
 
                                         init();
+
+                                        return {
+                                            init: init,
+                                        };
                                     })();
                                 </script>
                                 <div
@@ -426,6 +444,13 @@
                                             render();
                                         }
 
+                                        function deleteAllLineItems() {
+                                            lineItems.clear();
+
+                                            calculateTotal();
+                                            render();
+                                        }
+
                                         function calculateTotal() {
                                             totalLineItemsQuantity = 0;
                                             totalLineItemsPrice = 0;
@@ -436,10 +461,6 @@
                                             });
 
                                             OrderSummary.setTotalLineItemsPrice(totalLineItemsPrice);
-                                        }
-
-                                        function getTotalLineItemsPrice() {
-                                            return totalLineItemsPrice;
                                         }
 
                                         function render() {
@@ -460,6 +481,7 @@
 
                                         return {
                                             addLineItem: addLineItem,
+                                            deleteAllLineItems: deleteAllLineItems,
                                         };
                                     })();
                                 </script>

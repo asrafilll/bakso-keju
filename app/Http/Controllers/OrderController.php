@@ -88,8 +88,14 @@ class OrderController extends Controller
             },
             'fetch-products' => function () use ($request) {
                 $products = Product::query()
-                    ->where('name', 'LIKE', "%{$request->get('term')}%")
-                    ->orderBy('name')
+                    ->select([
+                        'products.*',
+                    ])
+                    ->join('product_inventories', 'products.id', 'product_inventories.product_id')
+                    ->where('product_inventories.branch_id', $request->get('branch_id'))
+                    ->where('product_inventories.quantity', '>', 0)
+                    ->where('products.name', 'LIKE', "%{$request->get('term')}%")
+                    ->orderBy('products.name')
                     ->get();
 
                 return Response::json($products);
