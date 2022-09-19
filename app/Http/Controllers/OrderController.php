@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\OrderLineItem;
 use App\Models\OrderSource;
 use App\Models\Product;
+use App\Models\ProductInventory;
 use App\Models\Reseller;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -159,7 +160,14 @@ class OrderController extends Controller
             $lineItemsProductIDs = $lineItems->pluck('product_id')->toArray();
             /** @var EloquentCollection<Product> */
             $products = Product::query()
-                ->whereIn('id', $lineItemsProductIDs)
+                ->select([
+                    'products.*',
+                    'product_inventories.quantity',
+                ])
+                ->join('product_inventories', 'product_inventories.product_id', 'products.id')
+                ->where('product_inventories.branch_id', $branch->id)
+                ->where('product_inventories.quantity', '>', 0)
+                ->whereIn('products.id', $lineItemsProductIDs)
                 ->get();
             /** @var Collection */
             $orderLineItems = new Collection();
@@ -168,10 +176,20 @@ class OrderController extends Controller
                 $product = $products->firstWhere('id', $lineItem['product_id']);
 
                 if (!$product) {
-                    continue;
+                    throw new Exception(
+                        __("Some product not found"),
+                        422
+                    );
                 }
 
                 $quantity = intval($lineItem['quantity']);
+
+                if ($product->quantity < $quantity) {
+                    throw new Exception(
+                        __("{$product->name} doesn't have enough quantity"),
+                        422
+                    );
+                }
 
                 $orderLineItems->push(new OrderLineItem([
                     'product_id' => $product->id,
@@ -219,7 +237,21 @@ class OrderController extends Controller
             ]);
 
             $order->save();
-            $order->orderLineItems()->createMany($orderLineItems->toArray());
+            $orderLineItems->each(function ($orderLineItem) use ($order) {
+                $orderLineItem->order_id = $order->id;
+                $orderLineItem->save();
+
+                /** @var ProductInventory */
+                $productInventory = ProductInventory::query()
+                    ->where([
+                        'branch_id' => $order->branch_id,
+                        'product_id' => $orderLineItem->product_id,
+                    ])
+                    ->first();
+
+                $productInventory->quantity -= $orderLineItem->quantity;
+                $productInventory->save();
+            });
             $branch->next_order_number++;
             $branch->save();
 

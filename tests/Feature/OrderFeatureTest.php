@@ -6,6 +6,7 @@ use App\Models\Branch;
 use App\Models\Order;
 use App\Models\OrderSource;
 use App\Models\Product;
+use App\Models\ProductInventory;
 use App\Models\Reseller;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -86,6 +87,14 @@ class OrderFeatureTest extends TestCase
         $orderSource = OrderSource::factory()->create();
         /** @var Product */
         $product = Product::factory()->create();
+        /** @var ProductInventory */
+        $productInventory = ProductInventory::factory()
+            ->state([
+                'quantity' => 10,
+            ])
+            ->for($branch)
+            ->for($product)
+            ->create();
         /** @var User */
         $user = User::factory()->create();
         $response = $this->actingAs($user)->post('/orders', [
@@ -127,6 +136,11 @@ class OrderFeatureTest extends TestCase
             'id' => $branch->id,
             'next_order_number' => $branch->next_order_number + 1,
         ]);
+
+        $this->assertDatabaseHas('product_inventories', [
+            'id' => $productInventory->id,
+            'quantity' => 8,
+        ]);
     }
 
     /**
@@ -141,6 +155,13 @@ class OrderFeatureTest extends TestCase
         $orderSource = OrderSource::factory()->create();
         /** @var Product */
         $product = Product::factory()->create();
+        ProductInventory::factory()
+            ->state([
+                'quantity' => 10,
+            ])
+            ->for($branch)
+            ->for($product)
+            ->create();
         /** @var Reseller */
         $reseller = Reseller::factory()
             ->state([
@@ -179,18 +200,48 @@ class OrderFeatureTest extends TestCase
             'total_line_items_price' => $totalLineItemsPrice,
             'total_price' => $totalLineItemsPrice - $totalDiscount,
         ]);
+    }
 
-        $this->assertDatabaseHas('order_line_items', [
-            'product_id' => $product->id,
-            'product_name' => $product->name,
-            'price' => $product->price,
-            'quantity' => 2,
-            'total' => $product->price * 2,
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedCreateOrderWhenProductInventoryQuantityLessThanOrderLineItemQuantity()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        /** @var Product */
+        $product = Product::factory()->create();
+        ProductInventory::factory()
+            ->state([
+                'quantity' => 1,
+            ])
+            ->for($branch)
+            ->for($product)
+            ->create();
+        /** @var Reseller */
+        $reseller = Reseller::factory()
+            ->state([
+                'percentage_discount' => 10,
+            ])
+            ->create();
+        /** @var User */
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->post('/orders', [
+            'branch_id' => $branch->id,
+            'order_source_id' => $orderSource->id,
+            'reseller_id' => $reseller->id,
+            'customer_name' => 'John Doe',
+            'line_items' => [
+                [
+                    'product_id' => $product->id,
+                    'quantity' => 2,
+                ],
+            ],
         ]);
 
-        $this->assertDatabaseHas('branches', [
-            'id' => $branch->id,
-            'next_order_number' => $branch->next_order_number + 1,
-        ]);
+        $response->assertSessionHas(['failed']);
     }
 }
