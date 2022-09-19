@@ -19,7 +19,8 @@ class OrderFactory extends Factory
             'customer_name' => $this->faker->lastName(),
             'percentage_discount' => 0,
             'total_discount' => 0,
-            'total_line_items' => 0,
+            'total_line_items_quantity' => 0,
+            'total_line_items_price' => 0,
             'total_price' => 0,
         ];
     }

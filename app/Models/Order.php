@@ -24,7 +24,8 @@ class Order extends Model
         'customer_name',
         'percentage_discount',
         'total_discount',
-        'total_line_items',
+        'total_line_items_quantity',
+        'total_line_items_price',
         'total_price',
     ];
 

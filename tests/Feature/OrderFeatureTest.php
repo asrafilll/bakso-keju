@@ -53,7 +53,8 @@ class OrderFeatureTest extends TestCase
             $order->customer_name,
             $order->percentage_discount,
             $order->total_discount,
-            $order->total_line_items,
+            $order->total_line_items_quantity,
+            $order->total_line_items_price,
             $order->total_price,
         ]);
     }

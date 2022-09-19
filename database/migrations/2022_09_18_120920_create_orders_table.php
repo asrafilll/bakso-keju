@@ -25,7 +25,8 @@ class CreateOrdersTable extends Migration
             $table->string('customer_name');
             $table->unsignedInteger('percentage_discount');
             $table->unsignedBigInteger('total_discount');
-            $table->unsignedBigInteger('total_line_items');
+            $table->unsignedBigInteger('total_line_items_quantity');
+            $table->unsignedBigInteger('total_line_items_price');
             $table->unsignedBigInteger('total_price');
         });
     }

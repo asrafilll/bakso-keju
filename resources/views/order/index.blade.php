@@ -67,7 +67,8 @@
                                         <th>{{ __('Customer name') }}</th>
                                         <th>{{ __('Percentage discount') }}</th>
                                         <th>{{ __('Total discount') }}</th>
-                                        <th>{{ __('Total line items') }}</th>
+                                        <th>{{ __('Total line items quantity') }}</th>
+                                        <th>{{ __('Total line items price') }}</th>
                                         <th>{{ __('Total price') }}</th>
                                     </tr>
                                 </thead>
@@ -81,13 +82,14 @@
                                             <td class="align-middle">{{ $order->customer_name }}</td>
                                             <td class="align-middle">{{ $order->percentage_discount }}</td>
                                             <td class="align-middle">{{ $order->total_discount }}</td>
-                                            <td class="align-middle">{{ $order->total_line_items }}</td>
+                                            <td class="align-middle">{{ $order->total_line_items_quantity }}</td>
+                                            <td class="align-middle">{{ $order->total_line_items_price }}</td>
                                             <td class="align-middle">{{ $order->total_price }}</td>
                                         </tr>
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="9"
+                                                colspan="10"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>
