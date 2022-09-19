@@ -31,4 +31,43 @@ class OrderLineItem extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    /**
+     * @return string
+     */
+    public function getIdrPriceAttribute()
+    {
+        return number_format(
+            $this->price,
+            0,
+            ',',
+            '.'
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdrQuantityAttribute()
+    {
+        return number_format(
+            $this->quantity,
+            0,
+            ',',
+            '.'
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdrTotalAttribute()
+    {
+        return number_format(
+            $this->total,
+            0,
+            ',',
+            '.'
+        );
+    }
 }

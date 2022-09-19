@@ -75,7 +75,11 @@
                                 <tbody>
                                     @forelse ($orders as $order)
                                         <tr>
-                                            <td class="align-middle">{{ $order->order_number }}</td>
+                                            <td class="align-middle">
+                                                <a href="{{ url('/orders/' . $order->id) }}">
+                                                    {{ $order->order_number }}
+                                                </a>
+                                            </td>
                                             <td class="align-middle">{{ $order->created_at }}</td>
                                             <td class="align-middle">{{ $order->branch_name }}</td>
                                             <td class="align-middle">{{ $order->order_source_name }}</td>

@@ -54,11 +54,6 @@ class OrderFeatureTest extends TestCase
             $branch->name,
             $orderSource->name,
             $order->customer_name,
-            $order->percentage_discount,
-            $order->total_discount,
-            $order->total_line_items_quantity,
-            $order->total_line_items_price,
-            $order->total_price,
         ]);
     }
 
@@ -243,5 +238,54 @@ class OrderFeatureTest extends TestCase
         ]);
 
         $response->assertSessionHas(['failed']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowOrderDetailPage()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        /** @var Order */
+        $order = Order::factory()
+            ->for($branch)
+            ->for($orderSource)
+            ->create();
+        /** @var User */
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->get("/orders/{$order->id}");
+
+        $response->assertStatus(200);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldContainsOrderDataWhenShowOrderDetailPage()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        /** @var Order */
+        $order = Order::factory()
+            ->for($branch)
+            ->for($orderSource)
+            ->create();
+        /** @var User */
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->get("/orders/{$order->id}");
+
+        $response->assertSee([
+            $order->order_number,
+            $branch->name,
+            $orderSource->name,
+            $order->customer_name,
+        ]);
     }
 }

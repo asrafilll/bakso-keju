@@ -268,4 +268,21 @@ class OrderController extends Controller
                 ->with('failed', $e->getMessage());
         }
     }
+
+    /**
+     * @param Order $order
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Order $order)
+    {
+        $order->load([
+            'branch',
+            'orderSource',
+            'orderLineItems',
+        ]);
+
+        return Response::view('order.show', [
+            'order' => $order,
+        ]);
+    }
 }
