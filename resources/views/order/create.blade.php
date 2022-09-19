@@ -205,14 +205,15 @@
                                         <thead>
                                             <tr>
                                                 <th>{{ __('Product') }}</th>
-                                                <th width="100px">{{ __('Quantity') }}</th>
+                                                <th width="100px" class="text-right">{{ __('Quantity') }}</th>
                                                 <th width="250px"class="text-right">{{ __('Total') }}</th>
                                                 <th width="10px"></th>
                                             </tr>
                                         </thead>
                                         <tbody id="line-items"></tbody>
+                                        <tfoot id="line-items-total"></tfoot>
                                     </table>
-                                    <script type="text/html" id="line-item-template">
+                                    <script type="text/html" id="line-items-template">
                                         <% lineItems.forEach(function (lineItem, index) { %>
                                             <tr>
                                                 <td>
@@ -224,11 +225,11 @@
                                                     <div><%= lineItem.product_name %></div>
                                                     <div><%= lineItem.product_price.toLocaleString('id') %></div>
                                                 </td>
-                                                <td>
+                                                <td class="text-right">
                                                     <input
                                                         type="number"
                                                         name="line_items[<%= index %>][quantity]"
-                                                        class="form-control line-item-quantity"
+                                                        class="form-control text-right line-item-quantity"
                                                         value="<%= lineItem.quantity %>"
                                                         min="1"
                                                         style="width: 100px;"
@@ -239,13 +240,22 @@
                                                 <td>
                                                     <button
                                                         type="button"
-                                                        class="btn btn-default btn-sm"
+                                                        class="btn btn-default btn-sm line-item-delete"
+                                                        data-product-id="<%= lineItem.product_id %>"
                                                     >
                                                         <i class="fas fa-times"></i>
                                                     </button>
                                                 </td>
                                             </tr>
                                         <% }); %>
+                                    </script>
+                                    <script type="text/html" id="line-items-total-template">
+                                        <tr>
+                                            <th>{{ __('Total') }}</th>
+                                            <th class="text-right"><%= totalLineItemsQuantity.toLocaleString('id') %></th>
+                                            <th class="text-right"><%= totalLineItemsPrice.toLocaleString('id') %></th>
+                                            <th></th>
+                                        </tr>
                                     </script>
                                 </div>
                             </div>
@@ -254,8 +264,12 @@
                             $(function() {
                                 var $productId = $('#product_id');
                                 var $lineItems = $('#line-items');
-                                var lineItemTemplate = $('#line-item-template').html();
+                                var lineItemsTemplate = $('#line-items-template').html();
                                 var lineItems = new Map();
+                                var $lineItemsTotal = $('#line-items-total');
+                                var lineItemsTotalTemplate = $('#line-items-total-template').html();
+                                var totalLineItemsQuantity = 0;
+                                var totalLineItemsPrice = 0;
 
                                 $productId.select2({
                                     theme: 'bootstrap4',
@@ -283,12 +297,19 @@
                                     $productId.val(null).trigger('change');
                                 });
 
-                                $('body').on('change', '.line-item-quantity', function (e) {
+                                $('body').on('change', '.line-item-quantity', function() {
                                     var $this = $(this);
                                     var quantity = $this.val();
                                     var productId = $this.data('product-id');
 
                                     updateLineItemQuantityByProductId(productId, +quantity);
+                                });
+
+                                $('body').on('click', '.line-item-delete', function () {
+                                    var $this = $(this);
+                                    var productId = $(this).data('product-id');
+
+                                    deleteLineItemByProductId(productId);
                                 });
 
                                 function createLineItem(product_id, product_name, product_price) {
@@ -303,6 +324,7 @@
                                         total: product_price * quantity,
                                     });
 
+                                    calculateTotalLineItems();
                                     render();
                                 }
 
@@ -316,16 +338,42 @@
                                         lineItems.set(product_id, lineItem);
                                     }
 
+                                    calculateTotalLineItems();
                                     render();
+                                }
+
+                                function deleteLineItemByProductId(product_id) {
+                                    lineItems.delete(product_id);
+
+                                    calculateTotalLineItems();
+                                    render();
+                                }
+
+                                function calculateTotalLineItems() {
+                                    totalLineItemsQuantity = 0;
+                                    totalLineItemsPrice = 0;
+
+                                    lineItems.forEach(function(lineItem) {
+                                        totalLineItemsQuantity += lineItem.quantity;
+                                        totalLineItemsPrice += lineItem.total;
+                                    });
                                 }
 
                                 function render() {
                                     $lineItems.html(
-                                        ejs.render(lineItemTemplate, {
+                                        ejs.render(lineItemsTemplate, {
                                             lineItems: lineItems,
                                         })
                                     );
+                                    $lineItemsTotal.html(
+                                        ejs.render(lineItemsTotalTemplate, {
+                                            totalLineItemsQuantity: totalLineItemsQuantity,
+                                            totalLineItemsPrice: totalLineItemsPrice,
+                                        })
+                                    );
                                 }
+
+                                render();
                             });
                         </script>
                         <button
