@@ -41,11 +41,13 @@
   - Reseller
   - Order Source
   - Branch
-  - Discount
-  - Quantity
-  - Total
+  - Percentage Discount
+  - Total Discount
+  - Total Line Items Quantity
+  - Total Line Items Price
+  - Total Price
 
-- Line Item
+- Order Line Item
   - Order
   - Product
   - Price
@@ -54,7 +56,7 @@
 
 - Reseller
   - Name
-  - Discount
+  - Percentage Discount
 
 - Inventory
   - Product
@@ -63,7 +65,7 @@
   - Note
   - Created by
 
-- Inventory Item
+- Product Inventory
   - Branch
   - Product
   - Quantity
@@ -78,4 +80,4 @@
 
 # Special permissions
 
-  - Allow create inventories with negative quantity
+- Allow create inventories with negative quantity
