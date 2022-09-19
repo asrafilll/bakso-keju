@@ -53,4 +53,56 @@ class Order extends Model
     {
         return $this->hasMany(OrderLineItem::class);
     }
+
+    /**
+     * @return string
+     */
+    public function getIdrTotalDiscountAttribute()
+    {
+        return number_format(
+            $this->total_discount,
+            0,
+            ',',
+            '.'
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdrTotalLineItemsQuantityAttribute()
+    {
+        return number_format(
+            $this->total_line_items_quantity,
+            0,
+            ',',
+            '.'
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdrTotalLineItemsPriceAttribute()
+    {
+        return number_format(
+            $this->total_line_items_price,
+            0,
+            ',',
+            '.'
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdrTotalPriceAttribute()
+    {
+        return number_format(
+            $this->total_price,
+            0,
+            ',',
+            '.'
+        );
+    }
 }

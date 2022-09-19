@@ -81,10 +81,10 @@
                                             <td class="align-middle">{{ $order->order_source_name }}</td>
                                             <td class="align-middle">{{ $order->customer_name }}</td>
                                             <td class="align-middle">{{ $order->percentage_discount }}</td>
-                                            <td class="align-middle">{{ $order->total_discount }}</td>
-                                            <td class="align-middle">{{ $order->total_line_items_quantity }}</td>
-                                            <td class="align-middle">{{ $order->total_line_items_price }}</td>
-                                            <td class="align-middle">{{ $order->total_price }}</td>
+                                            <td class="align-middle">{{ $order->idr_total_discount }}</td>
+                                            <td class="align-middle">{{ $order->idr_total_line_items_quantity }}</td>
+                                            <td class="align-middle">{{ $order->idr_total_line_items_price }}</td>
+                                            <td class="align-middle">{{ $order->idr_total_price }}</td>
                                         </tr>
                                     @empty
                                         <tr>
