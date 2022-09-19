@@ -23,11 +23,11 @@ class CreateOrdersTable extends Migration
             $table->boolean('reseller_order')->default(false);
             $table->foreignUuid('reseller_id')->nullable()->constrained();
             $table->string('customer_name');
-            $table->unsignedInteger('percentage_discount');
-            $table->unsignedBigInteger('total_discount');
-            $table->unsignedBigInteger('total_line_items_quantity');
-            $table->unsignedBigInteger('total_line_items_price');
-            $table->unsignedBigInteger('total_price');
+            $table->unsignedInteger('percentage_discount')->default(0);
+            $table->unsignedBigInteger('total_discount')->default(0);
+            $table->unsignedBigInteger('total_line_items_quantity')->default(0);
+            $table->unsignedBigInteger('total_line_items_price')->default(0);
+            $table->unsignedBigInteger('total_price')->default(0);
         });
     }
 
