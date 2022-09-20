@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Actions\CreateOrderAction;
 use App\Actions\DeleteOrderAction;
+use App\Actions\SearchBranchesAction;
+use App\Actions\SearchOrderSourcesAction;
 use App\Http\Requests\OrderStoreRequest;
 use App\Models\Branch;
 use App\Models\Order;
@@ -19,82 +21,114 @@ class OrderController extends Controller
 {
     /**
      * @param Request $request
+     * @param SearchBranchesAction $searchBranchesAction
+     * @param SearchOrderSourcesAction $searchOrderSourcesAction
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-        $orderQuery = Order::query()
-            ->select([
-                'orders.*',
-                'order_sources.name as order_source_name',
-                'branches.name as branch_name',
-            ])
-            ->join('order_sources', 'orders.order_source_id', 'order_sources.id')
-            ->join('branches', 'orders.branch_id', 'branches.id');
+    public function index(
+        Request $request,
+        SearchBranchesAction $searchBranchesAction,
+        SearchOrderSourcesAction $searchOrderSourcesAction
+    ) {
+        $actions = [
+            'fetch-branches' => function () use ($request, $searchBranchesAction) {
+                return Response::json(
+                    $searchBranchesAction->execute($request->get('term'))
+                );
+            },
+            'fetch-order-sources' => function () use ($request, $searchOrderSourcesAction) {
+                return Response::json(
+                    $searchOrderSourcesAction->execute($request->get('term'))
+                );
+            },
+            'default' => function () use ($request) {
+                $orderQuery = Order::query()
+                    ->select([
+                        'orders.*',
+                        'order_sources.name as order_source_name',
+                        'branches.name as branch_name',
+                    ])
+                    ->join('order_sources', 'orders.order_source_id', 'order_sources.id')
+                    ->join('branches', 'orders.branch_id', 'branches.id');
 
-        if ($request->filled('filter')) {
-            $orderQuery->where(function ($query) use ($request) {
+                if ($request->filled('term')) {
+                    $orderQuery->where(function ($query) use ($request) {
+                        $searchables = [
+                            'orders.order_number',
+                            'branches.name',
+                            'order_sources.name',
+                            'orders.customer_name',
+                        ];
+
+                        foreach ($searchables as $searchable) {
+                            $query->orWhere($searchable, 'LIKE', "%{$request->get('term')}%");
+                        }
+                    });
+                }
+
                 $filterables = [
-                    'product_name',
-                    'branch_name',
-                    'order_source_name',
+                    'branch_id',
+                    'order_source_id',
                 ];
 
                 foreach ($filterables as $filterable) {
-                    $query->orWhere($filterable, 'LIKE', "%{$request->get('filter')}%");
+                    if ($request->filled($filterable)) {
+                        $orderQuery->where($filterable, $request->get($filterable));
+                    }
                 }
-            });
-        }
 
-        $sortables = [
-            'order_number',
-            'created_at',
-            'percentage_discount',
-            'total_discount',
-            'total_line_items_quantity',
-            'total_line_items_price',
-            'total_price',
+                $sortables = [
+                    'order_number',
+                    'created_at',
+                    'percentage_discount',
+                    'total_discount',
+                    'total_line_items_quantity',
+                    'total_line_items_price',
+                    'total_price',
+                ];
+                $sort = 'created_at';
+                $direction = 'desc';
+
+                if ($request->filled('sort') && in_array($request->get('sort'), $sortables)) {
+                    $sort = $request->get('sort');
+                }
+
+                if ($request->filled('direction') && in_array($request->get('direction'), ['asc', 'desc'])) {
+                    $direction = $request->get('direction');
+                }
+
+                $orders = $orderQuery->orderBy($sort, $direction)->paginate();
+
+                return Response::view('order.index', [
+                    'orders' => $orders,
+                ]);
+            },
         ];
-        $sort = 'created_at';
-        $direction = 'desc';
 
-        if ($request->filled('sort') && in_array($request->get('sort'), $sortables)) {
-            $sort = $request->get('sort');
-        }
-
-        if ($request->filled('direction') && in_array($request->get('direction'), ['asc', 'desc'])) {
-            $direction = $request->get('direction');
-        }
-
-        $orders = $orderQuery->orderBy($sort, $direction)->paginate();
-
-        return Response::view('order.index', [
-            'orders' => $orders,
-        ]);
+        return $actions[$request->get('action', 'default')]();
     }
 
     /**
      * @param Request $request
+     * @param SearchBranchesAction $searchBranchesAction
+     * @param SearchOrderSourcesAction $searchOrderSourcesAction
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
+    public function create(
+        Request $request,
+        SearchBranchesAction $searchBranchesAction,
+        SearchOrderSourcesAction $searchOrderSourcesAction
+    ) {
         $actions = [
-            'fetch-branches' => function () use ($request) {
-                $branches = Branch::query()
-                    ->where('name', 'LIKE', "%{$request->get('term')}%")
-                    ->orderBy('name')
-                    ->get();
-
-                return Response::json($branches);
+            'fetch-branches' => function () use ($request, $searchBranchesAction) {
+                return Response::json(
+                    $searchBranchesAction->execute($request->get('term'))
+                );
             },
-            'fetch-order-sources' => function () use ($request) {
-                $orderSources = OrderSource::query()
-                    ->where('name', 'LIKE', "%{$request->get('term')}%")
-                    ->orderBy('name')
-                    ->get();
-
-                return Response::json($orderSources);
+            'fetch-order-sources' => function () use ($request, $searchOrderSourcesAction) {
+                return Response::json(
+                    $searchOrderSourcesAction->execute($request->get('term'))
+                );
             },
             'fetch-resellers' => function () use ($request) {
                 $resellers = Reseller::query()
