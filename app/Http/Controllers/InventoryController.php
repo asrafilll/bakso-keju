@@ -34,8 +34,10 @@ class InventoryController extends Controller
         if ($request->filled('filter')) {
             $inventoryQuery->where(function ($query) use ($request) {
                 $filterables = [
-                    'product_name',
-                    'branch_name',
+                    'products.name',
+                    'branches.name',
+                    'users.name',
+                    'inventories.quantity',
                 ];
 
                 foreach ($filterables as $filterable) {
