@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductCategoryStoreRequest extends FormRequest
 {
@@ -27,6 +28,11 @@ class ProductCategoryStoreRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
+            ],
+            'parent_id' => [
+                'nullable',
+                'string',
+                Rule::exists('product_categories', 'id')->whereNull('parent_id'),
             ],
         ];
     }

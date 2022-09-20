@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductCategory extends Model
@@ -17,6 +18,7 @@ class ProductCategory extends Model
      */
     protected $fillable = [
         'name',
+        'parent_id',
     ];
 
     /**
@@ -25,5 +27,21 @@ class ProductCategory extends Model
     public function products()
     {
         return $this->hasMany(Product::class);
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function subProductCategories()
+    {
+        return $this->hasMany(ProductCategory::class, 'parent_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function parentProductCategory()
+    {
+        return $this->belongsTo(ProductCategory::class, 'parent_id');
     }
 }

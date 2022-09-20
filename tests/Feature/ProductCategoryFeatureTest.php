@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\User;
+use Database\Factories\ProductFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Facade;
 use Tests\TestCase;
@@ -162,6 +163,54 @@ class ProductCategoryFeatureTest extends TestCase
 
         $this->assertDatabaseMissing('product_categories', [
             'id' => $productCategory->id,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldCreateSubProductCategory()
+    {
+        /** @var ProductCategory */
+        $productCategory = ProductCategory::factory()->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->post('/product-categories', [
+            'name' => 'Sub ProductCategory #1',
+            'parent_id' => $productCategory->id,
+        ]);
+
+        $this->assertDatabaseHas('product_categories', [
+            'name' => 'Sub ProductCategory #1',
+            'parent_id' => $productCategory->id,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldUpdateSubProductCategory()
+    {
+        /** @var ProductCategory */
+        $productCategory = ProductCategory::factory()->create();
+        /** @var ProductCategory */
+        $subProductCategory = ProductCategory::factory()
+            ->for($productCategory, 'parentProductCategory')
+            ->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $this->actingAs($user)->put('/product-categories/' . $subProductCategory->id, [
+            'name' => 'Sub ProductCategory #001',
+            'parent_id' => $productCategory->id,
+        ]);
+
+        $this->assertDatabaseHas('product_categories', [
+            'name' => 'Sub ProductCategory #001',
+            'parent_id' => $productCategory->id,
         ]);
     }
 }

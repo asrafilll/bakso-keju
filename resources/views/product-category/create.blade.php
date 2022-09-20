@@ -49,12 +49,34 @@
                                         <span class="text-danger">*</span>
                                     </label>
                                     <input
+                                        id="name"
                                         type="text"
                                         name="name"
                                         class="form-control @error('name') is-invalid @enderror"
                                         value="{{ Request::old('name') }}"
                                     />
                                     @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="parent_id">
+                                        <span>{{ __('Parent') }}</span>
+                                    </label>
+                                    <select
+                                        id="parent_id"
+                                        name="parent_id"
+                                        class="form-control @error('parent_id') is-invalid @enderror"
+                                    >
+                                        <option value=""></option>
+                                        @foreach ($parentProductCategories as $parentProductCategory)
+                                            <option
+                                                value="{{ $parentProductCategory->id }}"
+                                                @if (Request::old('parent_id') == $parentProductCategory->id) selected @endif
+                                            >{{ $parentProductCategory->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('parent_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

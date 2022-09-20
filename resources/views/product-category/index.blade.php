@@ -4,6 +4,11 @@
             toastr.success('{{ Session::get('success') }}');
         </script>
     @endif
+    @if (Session::has('failed'))
+        <script>
+            toastr.error('{{ Session::get('failed') }}');
+        </script>
+    @endif
 
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -61,6 +66,7 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __('Name') }}</th>
+                                        <th>{{ __('Parent') }}</th>
                                         <th>{{ __('Date created') }}</th>
                                         <th width="10"></th>
                                     </tr>
@@ -69,6 +75,7 @@
                                     @forelse ($productCategories as $productCategory)
                                         <tr>
                                             <td class="align-middle">{{ $productCategory->name }}</td>
+                                            <td class="align-middle">{{ $productCategory->parent_name }}</td>
                                             <td class="align-middle">{{ $productCategory->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
@@ -89,7 +96,7 @@
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="3"
+                                                colspan="4"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>
