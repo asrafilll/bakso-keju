@@ -2,7 +2,7 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container">
-            <div class="row mb-2">
+            <div class="row align-items-center mb-2">
                 <div class="col-auto">
                     <a
                         href="{{ url('/orders') }}"
@@ -13,7 +13,12 @@
                 </div>
                 <div class="col-auto">
                     <h1 class="m-0">{{ $order->order_number }}</h1>
-                </div><!-- /.col -->
+                </div>
+                @if ($order->deleted_at)
+                    <div class="col-auto">
+                        <span class="badge badge-danger">{{ __('Deleted at') }}: {{ $order->deleted_at }}</span>
+                    </div>
+                @endif
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -26,18 +31,26 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <dl>
-                                <dt>{{ __('Branch') }}</dt>
-                                <dd>{{ $order->branch->name }}</dd>
-                            </dl>
-                            <dl>
-                                <dt>{{ __('Order source') }}</dt>
-                                <dd>{{ $order->orderSource->name }}</dd>
-                            </dl>
-                            <dl>
-                                <dt>{{ __('Customer name') }}</dt>
-                                <dd>{{ $order->customer_name }}</dd>
-                            </dl>
+                            <div class="row">
+                                <div class="col">
+                                    <dl>
+                                        <dt>{{ __('Branch') }}</dt>
+                                        <dd>{{ $order->branch->name }}</dd>
+                                    </dl>
+                                </div>
+                                <div class="col">
+                                    <dl>
+                                        <dt>{{ __('Order source') }}</dt>
+                                        <dd>{{ $order->orderSource->name }}</dd>
+                                    </dl>
+                                </div>
+                                <div class="col">
+                                    <dl>
+                                        <dt>{{ __('Customer name') }}</dt>
+                                        <dd>{{ $order->customer_name }}</dd>
+                                    </dl>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="card">
@@ -107,6 +120,15 @@
                             </div>
                         </div>
                     </div>
+                    @if (is_null($order->deleted_at))
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            data-toggle="modal"
+                            data-target="#modal-delete"
+                            data-action="{{ url('/orders/' . $order->id) }}"
+                        >{{ __('Delete') }}</button>
+                    @endif
                 </div>
             </div>
         </div>

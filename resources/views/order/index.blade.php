@@ -70,6 +70,7 @@
                                         <th>{{ __('Total line items quantity') }}</th>
                                         <th>{{ __('Total line items price') }}</th>
                                         <th>{{ __('Total price') }}</th>
+                                        <th>{{ __('Deleted status') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -89,11 +90,16 @@
                                             <td class="align-middle">{{ $order->idr_total_line_items_quantity }}</td>
                                             <td class="align-middle">{{ $order->idr_total_line_items_price }}</td>
                                             <td class="align-middle">{{ $order->idr_total_price }}</td>
+                                            <td class="align-middle">
+                                                @if($order->deleted_at)
+                                                    <span class="badge badge-danger">{{ __('Deleted') }}</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="10"
+                                                colspan="11"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>
