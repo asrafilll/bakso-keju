@@ -40,13 +40,157 @@
                                             </div>
                                             <input
                                                 type="search"
-                                                name="filter"
+                                                name="term"
                                                 class="form-control"
-                                                value="{{ Request::get('filter') }}"
+                                                value="{{ Request::get('term') }}"
                                                 placeholder="{{ __('Filter product inventories') }}"
                                             />
                                         </div>
                                     </form>
+                                </div>
+                                <div class="col-auto">
+                                    <button
+                                        type="button"
+                                        class="btn btn-default"
+                                        data-toggle="modal"
+                                        data-target="#filterModal"
+                                    >
+                                        <i class="fas fa-filter"></i>
+                                        <span>{{ __('Filter') }}</span>
+                                    </button>
+                                    <div
+                                        class="modal fade"
+                                        id="filterModal"
+                                        tabindex="-1"
+                                        aria-labelledby="filterModalLabel"
+                                        aria-hidden="true"
+                                    >
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form
+                                                    action=""
+                                                    method="GET"
+                                                >
+                                                    <div class="modal-header">
+                                                        <h5
+                                                            class="modal-title"
+                                                            id="filterModalLabel"
+                                                        >{{ __('Filter') }}</h5>
+                                                        <button
+                                                            type="button"
+                                                            class="close"
+                                                            data-dismiss="modal"
+                                                            aria-label="Close"
+                                                        >
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="term">
+                                                                <span>{{ __('Filter product inventories') }}</span>
+                                                            </label>
+                                                            <input
+                                                                type="search"
+                                                                name="term"
+                                                                class="form-control"
+                                                                value="{{ Request::get('term') }}"
+                                                            />
+                                                        </div>
+                                                        <div
+                                                            class="form-group"
+                                                            id="branch-module"
+                                                        >
+                                                            <label for="branch_id">
+                                                                <span>{{ __('Branch') }}</span>
+                                                            </label>
+                                                            <select
+                                                                id="branch_id"
+                                                                name="branch_id"
+                                                                class="form-control @error('branch_id') is-invalid @enderror"
+                                                                style="width: 100%;"
+                                                            >
+                                                                <option></option>
+                                                                @if (Request::get('branch_id') && Request::get('branch_name'))
+                                                                    <option
+                                                                        value="{{ Request::get('branch_id') }}"
+                                                                        selected
+                                                                    >{{ Request::get('branch_name') }}</option>
+                                                                @endif
+                                                            </select>
+                                                            <input
+                                                                type="hidden"
+                                                                id="branch_name"
+                                                                name="branch_name"
+                                                                value="{{ Request::get('branch_name') }}"
+                                                            />
+                                                            @error('branch_id')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                        <script>
+                                                            var BranchModule = (function() {
+                                                                var $el = $('#branch-module');
+                                                                var $branchId = $el.find('#branch_id');
+                                                                var $branchName = $el.find('#branch_name');
+
+                                                                $branchId.on('select2:select', function(e) {
+                                                                    $branchName.val(e.params.data.text);
+                                                                });
+
+                                                                $branchId.on('select2:unselect', function() {
+                                                                    $branchName.val(null);
+                                                                });
+
+                                                                $branchId.on('select2:clear', function() {
+                                                                    setTimeout(function () {
+                                                                        $branchId.select2('close');
+                                                                    }, 0);
+                                                                });
+
+                                                                function init() {
+                                                                    $branchId.select2({
+                                                                        theme: 'bootstrap4',
+                                                                        placeholder: '',
+                                                                        allowClear: true,
+                                                                        ajax: {
+                                                                            url: '/product-inventories?action=fetch-branches',
+                                                                            dataType: 'json',
+                                                                            delay: 250,
+                                                                            processResults: function(branches) {
+                                                                                return {
+                                                                                    results: branches.map(function(branch) {
+                                                                                        return {
+                                                                                            id: branch.id,
+                                                                                            text: branch.name,
+                                                                                            branch: branch,
+                                                                                        };
+                                                                                    }),
+                                                                                };
+                                                                            },
+                                                                        },
+                                                                    });
+                                                                }
+
+                                                                init();
+                                                            })()
+                                                        </script>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-default"
+                                                            data-dismiss="modal"
+                                                        >{{ __('Close') }}</button>
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-primary"
+                                                        >{{ __('Save') }}</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
