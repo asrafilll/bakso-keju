@@ -29,7 +29,7 @@ class ProductCategoryController extends Controller
             $productCategoryQuery->where(function ($query) use ($request) {
                 $filterables = [
                     'product_categories.name',
-                    'parent_name',
+                    'parent_product_categories.name',
                 ];
 
                 foreach ($filterables as $filterable) {
