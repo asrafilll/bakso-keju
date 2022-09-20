@@ -120,6 +120,10 @@
                             </div>
                         </div>
                     </div>
+                    <a
+                        href="{{ Request::fullUrlWithQuery(['action' => 'print-invoice']) }}"
+                        class="btn btn-primary"
+                    >{{ __('Print invoice') }}</a>
                     @if (is_null($order->deleted_at))
                         <button
                             type="button"

@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderSource;
 use App\Models\Product;
 use App\Models\Reseller;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -128,9 +129,10 @@ class OrderController extends Controller
 
     /**
      * @param Order $order
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Order $order)
+    public function show(Order $order, Request $request)
     {
         $order->load([
             'branch',
@@ -138,9 +140,22 @@ class OrderController extends Controller
             'orderLineItems',
         ]);
 
-        return Response::view('order.show', [
-            'order' => $order,
-        ]);
+        $actions = [
+            'print-invoice' => function () use ($order) {
+                $pdf = Pdf::loadView('order.invoice', [
+                    'order' => $order,
+                ])->setPaper('a8');
+
+                return $pdf->stream();
+            },
+            'default' => function () use ($order) {
+                return Response::view('order.show', [
+                    'order' => $order,
+                ]);
+            }
+        ];
+
+        return $actions[$request->get('action', 'default')]();
     }
 
     public function destroy(
