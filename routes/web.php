@@ -87,4 +87,5 @@ Route::group([
     Route::get('/orders/create', [\App\Http\Controllers\OrderController::class, 'create']);
     Route::post('/orders', [\App\Http\Controllers\OrderController::class, 'store']);
     Route::get('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'show']);
+    Route::delete('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'destroy']);
 });

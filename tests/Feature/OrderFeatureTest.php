@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Actions\CreateOrderAction;
 use App\Models\Branch;
 use App\Models\Order;
 use App\Models\OrderSource;
@@ -10,6 +11,9 @@ use App\Models\ProductInventory;
 use App\Models\Reseller;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
+use Mockery;
+use Mockery\MockInterface;
 use Tests\TestCase;
 
 class OrderFeatureTest extends TestCase
@@ -286,6 +290,54 @@ class OrderFeatureTest extends TestCase
             $branch->name,
             $orderSource->name,
             $order->customer_name,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldDeleteOrder()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        /** @var Product */
+        $product = Product::factory()->create();
+        /** @var ProductInventory */
+        $productInventory = ProductInventory::factory()
+            ->state([
+                'quantity' => 10,
+            ])
+            ->for($branch)
+            ->for($product)
+            ->create();
+        $data = [
+            'branch_id' => $branch->id,
+            'order_source_id' => $orderSource->id,
+            'customer_name' => 'John Doe',
+            'line_items' => [
+                [
+                    'product_id' => $product->id,
+                    'quantity' => 2,
+                ],
+            ],
+        ];
+        $order = resolve(CreateOrderAction::class)->execute($data);
+        /** @var User */
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->delete("/orders/{$order->id}");
+        $response->assertSessionHas(['success']);
+
+        $this->assertDatabaseHas('orders', [
+            'id' => $order->id,
+            'deleted_at' => Carbon::now(),
+        ]);
+
+        $this->assertDatabaseHas('product_inventories', [
+            'id' => $productInventory->id,
+            'quantity' => 10,
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CreateOrderAction;
+use App\Actions\DeleteOrderAction;
 use App\Http\Requests\OrderStoreRequest;
 use App\Models\Branch;
 use App\Models\Order;
@@ -140,5 +141,22 @@ class OrderController extends Controller
         return Response::view('order.show', [
             'order' => $order,
         ]);
+    }
+
+    public function destroy(
+        Order $order,
+        DeleteOrderAction $deleteOrderAction
+    ) {
+        try {
+            $deleteOrderAction->execute($order);
+
+            return Response::redirectTo('/orders')
+                ->with('success', __('crud.deleted', [
+                    'resource' => 'order',
+                ]));
+        } catch (Exception $e) {
+            return Response::redirectTo('/orders')
+                ->with('failed', $e->getMessage());
+        }
     }
 }

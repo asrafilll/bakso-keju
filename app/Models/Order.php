@@ -28,6 +28,7 @@ class Order extends Model
         'total_line_items_quantity',
         'total_line_items_price',
         'total_price',
+        'deleted_at',
     ];
 
     /**
