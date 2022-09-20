@@ -70,7 +70,7 @@
                                         <th>{{ __('Total line items quantity') }}</th>
                                         <th>{{ __('Total line items price') }}</th>
                                         <th>{{ __('Total price') }}</th>
-                                        <th>{{ __('Deleted status') }}</th>
+                                        <th>{{ __('Status') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -93,6 +93,8 @@
                                             <td class="align-middle">
                                                 @if($order->deleted_at)
                                                     <span class="badge badge-danger">{{ __('Deleted') }}</span>
+                                                @else
+                                                    <span class="badge badge-primary">{{ __('Active') }}</span>
                                                 @endif
                                             </td>
                                         </tr>
