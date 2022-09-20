@@ -20,8 +20,18 @@ class ProductController extends Controller
     {
         $productQuery = Product::with(['productCategory']);
 
-        if ($request->filled('filter')) {
-            $productQuery->where('name', 'LIKE', "%{$request->get('filter')}%");
+        if ($request->filled('term')) {
+            $productQuery->where('name', 'LIKE', "%{$request->get('term')}%");
+        }
+
+        $filterables = [
+            'product_category_id',
+        ];
+
+        foreach ($filterables as $filterable) {
+            if ($request->filled($filterable)) {
+                $productQuery->where($filterable, $request->get($filterable));
+            }
         }
 
         $sortables = [
@@ -42,9 +52,15 @@ class ProductController extends Controller
 
         $products = $productQuery->orderBy($sort, $direction)->paginate();
 
+        /** @var Collection<ProductCategory> */
+        $productCategories = ProductCategory::query()
+            ->whereNotNull('parent_id')
+            ->orderBy('name')
+            ->get();
 
         return Response::view('product.index', [
             'products' => $products,
+            'productCategories' => $productCategories,
         ]);
     }
 
@@ -56,7 +72,8 @@ class ProductController extends Controller
         /** @var Collection<ProductCategory> */
         $productCategories = ProductCategory::query()
             ->whereNotNull('parent_id')
-            ->orderBy('name')->get();
+            ->orderBy('name')
+            ->get();
 
         return Response::view('product.create', [
             'productCategories' => $productCategories,

@@ -51,13 +51,104 @@
                                             </div>
                                             <input
                                                 type="search"
-                                                name="filter"
+                                                name="term"
                                                 class="form-control"
-                                                value="{{ Request::get('filter') }}"
+                                                value="{{ Request::get('term') }}"
                                                 placeholder="{{ __('Filter products') }}"
                                             />
                                         </div>
                                     </form>
+                                </div>
+                                <div class="col-auto">
+                                    <button
+                                        type="button"
+                                        class="btn btn-default"
+                                        data-toggle="modal"
+                                        data-target="#filterModal"
+                                    >
+                                        <i class="fas fa-filter"></i>
+                                        <span>{{ __('Filter') }}</span>
+                                    </button>
+                                    <div
+                                        class="modal fade"
+                                        id="filterModal"
+                                        tabindex="-1"
+                                        aria-labelledby="filterModalLabel"
+                                        aria-hidden="true"
+                                    >
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form
+                                                    action=""
+                                                    method="GET"
+                                                >
+                                                    <div class="modal-header">
+                                                        <h5
+                                                            class="modal-title"
+                                                            id="filterModalLabel"
+                                                        >{{ __('Filter') }}</h5>
+                                                        <button
+                                                            type="button"
+                                                            class="close"
+                                                            data-dismiss="modal"
+                                                            aria-label="Close"
+                                                        >
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="term">
+                                                                <span>{{ __('Filter products') }}</span>
+                                                            </label>
+                                                            <input
+                                                                type="search"
+                                                                name="term"
+                                                                class="form-control"
+                                                                value="{{ Request::get('term') }}"
+                                                            />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="product_category_id">
+                                                                <span>{{ __('Category') }}</span>
+                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <select
+                                                                name="product_category_id"
+                                                                id="product_category_id"
+                                                                class="form-control @error('product_category_id') is-invalid @enderror"
+                                                            >
+                                                                <option
+                                                                    value=""
+                                                                    hidden
+                                                                ></option>
+                                                                @foreach ($productCategories as $productCategory)
+                                                                    <option
+                                                                        value="{{ $productCategory->id }}"
+                                                                        @if (Request::old('product_category_id') == $productCategory->id) selected @endif
+                                                                    >{{ $productCategory->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            @error('product_category_id')
+                                                                <div class="invalid-feedback">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-default"
+                                                            data-dismiss="modal"
+                                                        >{{ __('Close') }}</button>
+                                                        <button
+                                                            type="submit"
+                                                            class="btn btn-primary"
+                                                        >{{ __('Save') }}</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-auto">
                                     <div class="dropdown">
