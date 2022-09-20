@@ -71,8 +71,9 @@ class ProductFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         /** @var ProductCategory */
-        $productCategory = ProductCategory::factory()->create();
-
+        $productCategory = ProductCategory::factory()
+            ->for(Product::factory(), 'parentProductCategory')
+            ->create();
         $this->actingAs($user)->post('/products', [
             'name' => 'Product 1',
             'price' => 10000,
@@ -93,7 +94,9 @@ class ProductFeatureTest extends TestCase
     public function shouldShowProductDetailPage()
     {
         /** @var ProductCategory */
-        $productCategory = ProductCategory::factory()->create();
+        $productCategory = ProductCategory::factory()
+            ->for(Product::factory(), 'parentProductCategory')
+            ->create();
         /** @var Product */
         $product = Product::factory()
             ->for($productCategory)
@@ -118,7 +121,9 @@ class ProductFeatureTest extends TestCase
     public function shouldUpdateProduct()
     {
         /** @var ProductCategory */
-        $productCategory = ProductCategory::factory()->create();
+        $productCategory = ProductCategory::factory()
+            ->for(Product::factory(), 'parentProductCategory')
+            ->create();
         /** @var Product */
         $product = Product::factory()
             ->state([
@@ -168,7 +173,9 @@ class ProductFeatureTest extends TestCase
         /** @var Branch */
         $branch = Branch::factory()->create();
         /** @var ProductCategory */
-        $productCategory = ProductCategory::factory()->create();
+        $productCategory = ProductCategory::factory()
+            ->for(Product::factory(), 'parentProductCategory')
+            ->create();
         /** @var Product */
         $product = Product::factory()
             ->for($productCategory)
@@ -204,7 +211,9 @@ class ProductFeatureTest extends TestCase
         /** @var Branch */
         $branch = Branch::factory()->create();
         /** @var ProductCategory */
-        $productCategory = ProductCategory::factory()->create();
+        $productCategory = ProductCategory::factory()
+            ->for(Product::factory(), 'parentProductCategory')
+            ->create();
         /** @var Product */
         $product = Product::factory()
             ->for($productCategory)

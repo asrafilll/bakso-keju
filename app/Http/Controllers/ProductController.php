@@ -56,7 +56,9 @@ class ProductController extends Controller
     public function create()
     {
         /** @var Collection<ProductCategory> */
-        $productCategories = ProductCategory::query()->orderBy('name')->get();
+        $productCategories = ProductCategory::query()
+            ->whereNotNull('parent_id')
+            ->orderBy('name')->get();
 
         return Response::view('product.create', [
             'productCategories' => $productCategories,
@@ -86,7 +88,10 @@ class ProductController extends Controller
         $product->load(['productInventories.branch']);
 
         /** @var Collection<ProductCategory> */
-        $productCategories = ProductCategory::query()->orderBy('name')->get();
+        $productCategories = ProductCategory::query()
+            ->whereNotNull('parent_id')
+            ->orderBy('name')
+            ->get();
 
         return Response::view('product.show', [
             'product' => $product,
