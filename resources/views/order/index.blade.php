@@ -54,6 +54,118 @@
                                         </div>
                                     </form>
                                 </div>
+                                <div class="col-auto">
+                                    <div class="dropdown">
+                                        <button
+                                            type="button"
+                                            class="btn btn-default"
+                                            data-toggle="dropdown"
+                                        >
+                                            <i class="fas fa-sort"></i>
+                                            <span>{{ __('Sort') }}</span>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'order_number',
+                                                    'direction' => 'asc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'order_number' && Request::get('direction') == 'asc' ? 'active' : '' }}"
+                                            >{{ __('Order number ascending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'order_number',
+                                                    'direction' => 'desc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'order_number' && Request::get('direction') == 'desc' ? 'active' : '' }}"
+                                            >{{ __('Order number descending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'created_at',
+                                                    'direction' => 'asc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'created_at' && Request::get('direction') == 'asc' ? 'active' : '' }}"
+                                            >{{ __('Date created ascending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'created_at',
+                                                    'direction' => 'desc',
+                                                ]) }}"
+                                                class="dropdown-item {{ (Request::get('sort') == 'created_at' && Request::get('direction') == 'desc') || (!Request::filled('sort') && !Request::filled('direction')) ? 'active' : '' }}"
+                                            >{{ __('Date created descending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'percentage_discount',
+                                                    'direction' => 'asc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'percentage_discount' && Request::get('direction') == 'asc' ? 'active' : '' }}"
+                                            >{{ __('Percentage discount ascending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'percentage_discount',
+                                                    'direction' => 'desc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'percentage_discount' && Request::get('direction') == 'desc' ? 'active' : '' }}"
+                                            >{{ __('Percentage discount descending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'total_discount',
+                                                    'direction' => 'asc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_discount' && Request::get('direction') == 'asc' ? 'active' : '' }}"
+                                            >{{ __('Total discount ascending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'total_discount',
+                                                    'direction' => 'desc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_discount' && Request::get('direction') == 'desc' ? 'active' : '' }}"
+                                            >{{ __('Total discount descending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'total_line_items_quantity',
+                                                    'direction' => 'asc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_quantity' && Request::get('direction') == 'asc' ? 'active' : '' }}"
+                                            >{{ __('Total line items quantity ascending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'total_line_items_quantity',
+                                                    'direction' => 'desc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_quantity' && Request::get('direction') == 'desc' ? 'active' : '' }}"
+                                            >{{ __('Total line items quantity descending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'total_line_items_price',
+                                                    'direction' => 'asc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_price' && Request::get('direction') == 'asc' ? 'active' : '' }}"
+                                            >{{ __('Total line items price ascending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'total_line_items_price',
+                                                    'direction' => 'desc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_price' && Request::get('direction') == 'desc' ? 'active' : '' }}"
+                                            >{{ __('Total line items price descending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'total_price',
+                                                    'direction' => 'asc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_price' && Request::get('direction') == 'asc' ? 'active' : '' }}"
+                                            >{{ __('Total price ascending') }}</a>
+                                            <a
+                                                href="{{ Request::fullUrlWithQuery([
+                                                    'sort' => 'total_price',
+                                                    'direction' => 'desc',
+                                                ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_price' && Request::get('direction') == 'desc' ? 'active' : '' }}"
+                                            >{{ __('Total price descending') }}</a>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">

@@ -37,6 +37,7 @@ class OrderController extends Controller
                 $filterables = [
                     'product_name',
                     'branch_name',
+                    'order_source_name',
                 ];
 
                 foreach ($filterables as $filterable) {
@@ -45,7 +46,27 @@ class OrderController extends Controller
             });
         }
 
-        $orders = $orderQuery->latest()->paginate();
+        $sortables = [
+            'order_number',
+            'created_at',
+            'percentage_discount',
+            'total_discount',
+            'total_line_items_quantity',
+            'total_line_items_price',
+            'total_price',
+        ];
+        $sort = 'created_at';
+        $direction = 'desc';
+
+        if ($request->filled('sort') && in_array($request->get('sort'), $sortables)) {
+            $sort = $request->get('sort');
+        }
+
+        if ($request->filled('direction') && in_array($request->get('direction'), ['asc', 'desc'])) {
+            $direction = $request->get('direction');
+        }
+
+        $orders = $orderQuery->orderBy($sort, $direction)->paginate();
 
         return Response::view('order.index', [
             'orders' => $orders,
