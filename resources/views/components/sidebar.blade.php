@@ -52,7 +52,7 @@
                     <i class="nav-icon fas fa-box-open"></i>
                     <p>{{ __('Product Inventories') }}</p>
                 </x-nav-item>
-                <li class="nav-header">{{ __('Catalog') }}</li>
+                <li class="nav-header">{{ __('Product Catalog') }}</li>
                 <x-nav-item
                     :href="url('/products')"
                     activeHref="products"
@@ -66,6 +66,21 @@
                 >
                     <i class="nav-icon fas fa-boxes"></i>
                     <p>{{ __('Product Categories') }}</p>
+                </x-nav-item>
+                <li class="nav-header">{{ __('Item Catalog') }}</li>
+                <x-nav-item
+                    :href="url('/items')"
+                    activeHref="items"
+                >
+                    <i class="nav-icon fas fa-box"></i>
+                    <p>{{ __('Items') }}</p>
+                </x-nav-item>
+                <x-nav-item
+                    :href="url('/item-categories')"
+                    activeHref="item-categories"
+                >
+                    <i class="nav-icon fas fa-boxes"></i>
+                    <p>{{ __('Item Categories') }}</p>
                 </x-nav-item>
                 <li class="nav-header">{{ __('Master') }}</li>
                 <x-nav-item

@@ -88,4 +88,11 @@ Route::group([
     Route::post('/orders', [\App\Http\Controllers\OrderController::class, 'store']);
     Route::get('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'show']);
     Route::delete('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'destroy']);
+
+    Route::get('/item-categories', [\App\Http\Controllers\ItemCategoryController::class, 'index']);
+    Route::get('/item-categories/create', [\App\Http\Controllers\ItemCategoryController::class, 'create']);
+    Route::post('/item-categories', [\App\Http\Controllers\ItemCategoryController::class, 'store']);
+    Route::get('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'show']);
+    Route::put('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'update']);
+    Route::delete('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'destroy']);
 });
