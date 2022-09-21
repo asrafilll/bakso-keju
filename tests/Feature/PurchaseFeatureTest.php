@@ -107,10 +107,10 @@ class PurchaseFeatureTest extends TestCase
             'total' => $item->price * 2,
         ]);
 
-        // $this->assertDatabaseHas('branches', [
-        //     'id' => $branch->id,
-        //     'next_purchase_number' => $branch->next_purchase_number + 1,
-        // ]);
+        $this->assertDatabaseHas('branches', [
+            'id' => $branch->id,
+            'next_purchase_number' => $branch->next_purchase_number + 1,
+        ]);
 
         $this->assertDatabaseHas('item_inventories', [
             'branch_id' => $branch->id,

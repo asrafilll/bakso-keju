@@ -67,18 +67,17 @@ class CreatePurchaseAction
             ]));
         }
 
-        // $purchaseNumber = implode('', [
-        //     $branch->purchase_number_prefix,
-        //     '-',
-        //     Carbon::now()->format('Ym'),
-        //     str_pad(
-        //         $branch->next_purchase_number,
-        //         4,
-        //         '0',
-        //         STR_PAD_LEFT
-        //     )
-        // ]);
-        $purchaseNumber = Carbon::now()->format('Ymd');
+        $purchaseNumber = implode('', [
+            $branch->purchase_number_prefix,
+            '-',
+            Carbon::now()->format('Ym'),
+            str_pad(
+                $branch->next_purchase_number,
+                4,
+                '0',
+                STR_PAD_LEFT
+            )
+        ]);
 
         $totalLineItemsQuantity = $purchaseLineItems->sum('quantity');
         $totalLineItemsPrice = $purchaseLineItems->sum('total');
@@ -118,8 +117,8 @@ class CreatePurchaseAction
                 ]);
             }
         });
-        // $branch->next_purchase_number++;
-        // $branch->save();
+        $branch->next_purchase_number++;
+        $branch->save();
 
         DB::commit();
 
