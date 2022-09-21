@@ -392,7 +392,7 @@
                                         var totalLineItemsQuantity = 0;
                                         var totalLineItemsPrice = 0;
 
-                                        $('body').on('change', '.line-item-quantity', function() {
+                                        $('body').on('blur', '.line-item-quantity', function() {
                                             var $this = $(this);
                                             var quantity = $this.val();
                                             var productId = $this.data('product-id');
