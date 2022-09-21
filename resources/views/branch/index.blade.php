@@ -63,6 +63,8 @@
                                         <th>{{ __('Name') }}</th>
                                         <th>{{ __('Order Number Prefix') }}</th>
                                         <th>{{ __('Next Order Number') }}</th>
+                                        <th>{{ __('Purchase Number Prefix') }}</th>
+                                        <th>{{ __('Next Purchase Number') }}</th>
                                         <th>{{ __('Date created') }}</th>
                                         <th width="10"></th>
                                     </tr>
@@ -73,6 +75,8 @@
                                             <td class="align-middle">{{ $branch->name }}</td>
                                             <td class="align-middle">{{ $branch->order_number_prefix }}</td>
                                             <td class="align-middle">{{ $branch->next_order_number }}</td>
+                                            <td class="align-middle">{{ $branch->purchase_number_prefix }}</td>
+                                            <td class="align-middle">{{ $branch->next_purchase_number }}</td>
                                             <td class="align-middle">{{ $branch->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
@@ -93,7 +97,7 @@
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="5"
+                                                colspan="7"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>

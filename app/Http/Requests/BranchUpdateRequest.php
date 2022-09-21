@@ -37,6 +37,15 @@ class BranchUpdateRequest extends FormRequest
                 'integer',
                 'min:1',
             ],
+            'purchase_number_prefix' => [
+                'required',
+                'alpha_num',
+            ],
+            'next_purchase_number' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
         ];
     }
 }

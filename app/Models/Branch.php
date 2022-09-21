@@ -18,5 +18,7 @@ class Branch extends Model
         'name',
         'order_number_prefix',
         'next_order_number',
+        'purchase_number_prefix',
+        'next_purchase_number',
     ];
 }

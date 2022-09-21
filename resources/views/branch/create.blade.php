@@ -88,6 +88,36 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <label for="purchase_number_prefix">
+                                        <span>{{ __('Purchase Number Prefix') }}</span>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="purchase_number_prefix"
+                                        class="form-control @error('purchase_number_prefix') is-invalid @enderror"
+                                        value="{{ Request::old('purchase_number_prefix') }}"
+                                    />
+                                    @error('purchase_number_prefix')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="next_purchase_number">
+                                        <span>{{ __('Next Purchase Number') }}</span>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        name="next_purchase_number"
+                                        class="form-control @error('next_purchase_number') is-invalid @enderror"
+                                        value="{{ Request::old('next_purchase_number') }}"
+                                    />
+                                    @error('next_purchase_number')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         <button
