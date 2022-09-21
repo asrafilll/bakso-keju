@@ -276,7 +276,7 @@
                                             var product = e.params.data.product;
 
                                             $productId.val(null).trigger('change');
-                                            LineItemsModule.addLineItem(product.id, product.name, product.price);
+                                            LineItemsModule.addLineItem(product.id, product.name, +product.price);
                                         });
 
                                         function init(branchId = null) {
