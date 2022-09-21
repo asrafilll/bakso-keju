@@ -96,30 +96,6 @@
                 </td>
             </tr>
         @endforeach
-        @foreach ($order->orderLineItems as $orderLineItem)
-            <tr>
-                <td style="text-align: center; vertical-align: top;">{{ $loop->iteration }}</td>
-                <td>
-                    <table>
-                        <tr>
-                            <td colspan="2">{{ $orderLineItem->product_name }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ __('Price') }}</td>
-                            <td style="text-align: right;">{{ $orderLineItem->idr_price }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ __('Qty') }}</td>
-                            <td style="text-align: right;">{{ $orderLineItem->idr_quantity }}</td>
-                        </tr>
-                        <tr>
-                            <td>{{ __('Total') }}</td>
-                            <td style="text-align: right;">{{ $orderLineItem->idr_total }}</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-        @endforeach
     </table>
 </body>
 
