@@ -104,4 +104,10 @@ Route::group([
     Route::delete('/items/{item}', [\App\Http\Controllers\ItemController::class, 'destroy']);
 
     Route::get('/item-inventories', [\App\Http\Controllers\ItemInventoryController::class, 'index']);
+
+    Route::get('/purchases', [\App\Http\Controllers\PurchaseController::class, 'index']);
+    Route::get('/purchases/create', [\App\Http\Controllers\PurchaseController::class, 'create']);
+    Route::post('/purchases', [\App\Http\Controllers\PurchaseController::class, 'store']);
+    Route::get('/purchases/{purchase}', [\App\Http\Controllers\PurchaseController::class, 'show']);
+    Route::delete('/purchases/{purchase}', [\App\Http\Controllers\PurchaseController::class, 'destroy']);
 });

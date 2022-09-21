@@ -30,6 +30,7 @@
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </x-nav-item>
+                <li class="nav-header">{{ __('Sales') }}</li>
                 <x-nav-item
                     :href="url('/orders')"
                     activeHref="orders"
@@ -43,6 +44,14 @@
                 >
                     <i class="nav-icon fas fa-exchange-alt"></i>
                     <p>{{ __('Inventories') }}</p>
+                </x-nav-item>
+                <li class="nav-header">{{ __('Purchasing') }}</li>
+                <x-nav-item
+                    :href="url('/purchases')"
+                    activeHref="purchases"
+                >
+                    <i class="nav-icon fas fa-dollar-sign"></i>
+                    <p>{{ __('Purchases') }}</p>
                 </x-nav-item>
                 <li class="nav-header">{{ __('Report') }}</li>
                 <x-nav-item
