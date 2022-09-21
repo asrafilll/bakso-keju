@@ -163,4 +163,73 @@ class ItemFeatureTest extends TestCase
             'id' => $item->id,
         ]);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldShowItemDetailPageWithItemInventoryData()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var ItemCategory */
+        $itemCategory = ItemCategory::factory()
+            ->for(Item::factory(), 'parentItemCategory')
+            ->create();
+        /** @var Item */
+        $item = Item::factory()
+            ->for($itemCategory)
+            ->has(
+                ItemInventory::factory()
+                    ->state([
+                        'quantity' => 10,
+                    ])
+                    ->for($branch)
+            )
+            ->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->get("/items/{$item->id}");
+
+        $response->assertSee([
+            $item->name,
+            $item->price,
+            $itemCategory->id,
+            $branch->name,
+            10,
+        ]);
+        $response->assertViewHas('itemCategories');
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedToDeleteItemWhenAlreadyHaveItemInventories()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var ItemCategory */
+        $itemCategory = ItemCategory::factory()
+            ->for(Item::factory(), 'parentItemCategory')
+            ->create();
+        /** @var Item */
+        $item = Item::factory()
+            ->for($itemCategory)
+            ->has(
+                ItemInventory::factory()
+                    ->state([
+                        'quantity' => 10,
+                    ])
+                    ->for($branch)
+            )
+            ->create();
+        /** @var User */
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->delete("/items/{$item->id}");
+
+        $response->assertSessionHas('failed');
+    }
 }

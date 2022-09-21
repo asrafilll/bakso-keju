@@ -100,6 +100,8 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
+        $item->load(['itemInventories.branch']);
+
         /** @var Collection<ItemCategory> */
         $itemCategories = ItemCategory::query()
             ->whereNotNull('parent_id')
@@ -135,6 +137,11 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
+        if ($item->itemInventories()->count() > 0) {
+            return Response::redirectTo('/items')
+                ->with('failed', __('Item already have item inventories'));
+        }
+
         $item->delete();
 
         return Response::redirectTo('/items')

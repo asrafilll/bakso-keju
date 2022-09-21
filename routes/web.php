@@ -102,4 +102,6 @@ Route::group([
     Route::get('/items/{item}', [\App\Http\Controllers\ItemController::class, 'show']);
     Route::put('/items/{item}', [\App\Http\Controllers\ItemController::class, 'update']);
     Route::delete('/items/{item}', [\App\Http\Controllers\ItemController::class, 'destroy']);
+
+    Route::get('/item-inventories', [\App\Http\Controllers\ItemInventoryController::class, 'index']);
 });

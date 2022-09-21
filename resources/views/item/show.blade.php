@@ -101,6 +101,23 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title font-weight-bold">{{ __('Inventory') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row py-3 font-weight-bold">
+                                    <div class="col">{{ __('Branch') }}</div>
+                                    <div class="col">{{ __('Quantity') }}</div>
+                                </div>
+                                @foreach ($item->itemInventories as $itemInventory)
+                                    <div class="row py-3 border-top align-items-center">
+                                        <div class="col">{{ $itemInventory->branch->name }}</div>
+                                        <div class="col">{{ $itemInventory->quantity }}</div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                         <button
                             type="submit"
                             class="btn btn-primary"

@@ -37,4 +37,12 @@ class Item extends Model
             'name' => '-'
         ]);
     }
+
+    /**
+     * @return HasMany
+     */
+    public function itemInventories()
+    {
+        return $this->hasMany(ItemInventory::class);
+    }
 }
