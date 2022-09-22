@@ -38,6 +38,11 @@
         rel="stylesheet"
         href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"
     >
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link
+        rel="stylesheet"
+        href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"
+    >
     <!-- Theme style -->
     <link
         rel="stylesheet"
@@ -55,6 +60,10 @@
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <!-- Select2 -->
     <script src="/plugins/select2/js/select2.full.min.js"></script>
+    <!-- InputMask -->
+    <script src="/plugins/moment/moment.min.js"></script>
+    <!-- Tempusdominus Bootstrap 4 -->
+    <script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
     <!-- overlayScrollbars -->
     <script src="/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
     <!-- EJS -->

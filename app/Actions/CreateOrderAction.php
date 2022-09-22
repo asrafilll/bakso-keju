@@ -130,6 +130,7 @@ class CreateOrderAction
 
         /** @var Order */
         $order = new Order([
+            'created_at' => $data['created_at'],
             'branch_id' => $data['branch_id'],
             'order_source_id' => $data['order_source_id'],
             'customer_name' => $data['customer_name'],

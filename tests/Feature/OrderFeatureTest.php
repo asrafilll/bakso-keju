@@ -12,8 +12,6 @@ use App\Models\Reseller;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
-use Mockery;
-use Mockery\MockInterface;
 use Tests\TestCase;
 
 class OrderFeatureTest extends TestCase
@@ -97,6 +95,7 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $response = $this->actingAs($user)->post('/orders', [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'order_source_id' => $orderSource->id,
             'customer_name' => 'John Doe',
@@ -111,6 +110,7 @@ class OrderFeatureTest extends TestCase
         $response->assertRedirect();
 
         $this->assertDatabaseHas('orders', [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'order_source_id' => $orderSource->id,
             'reseller_order' => false,
@@ -170,6 +170,7 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $response = $this->actingAs($user)->post('/orders', [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'order_source_id' => $orderSource->id,
             'reseller_id' => $reseller->id,
@@ -188,6 +189,7 @@ class OrderFeatureTest extends TestCase
         $totalDiscount = round($totalLineItemsPrice * ($reseller->percentage_discount / 100));
 
         $this->assertDatabaseHas('orders', [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'order_source_id' => $orderSource->id,
             'reseller_order' => true,
@@ -229,6 +231,7 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $response = $this->actingAs($user)->post('/orders', [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'order_source_id' => $orderSource->id,
             'reseller_id' => $reseller->id,
@@ -314,6 +317,7 @@ class OrderFeatureTest extends TestCase
             ->for($product)
             ->create();
         $data = [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'order_source_id' => $orderSource->id,
             'customer_name' => 'John Doe',
