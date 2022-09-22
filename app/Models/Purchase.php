@@ -15,6 +15,7 @@ class Purchase extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'created_at',
         'purchase_number',
         'branch_id',
         'customer_name',

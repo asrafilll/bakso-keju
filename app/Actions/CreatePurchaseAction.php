@@ -85,6 +85,7 @@ class CreatePurchaseAction
 
         /** @var Purchase */
         $purchase = new Purchase([
+            'created_at' => $data['created_at'],
             'branch_id' => $data['branch_id'],
             'customer_name' => $data['customer_name'],
             'purchase_number' => $purchaseNumber,

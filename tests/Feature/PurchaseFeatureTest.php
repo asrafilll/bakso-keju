@@ -79,6 +79,7 @@ class PurchaseFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $response = $this->actingAs($user)->post('/purchases', [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'customer_name' => 'John Doe',
             'line_items' => [
@@ -92,6 +93,7 @@ class PurchaseFeatureTest extends TestCase
         $response->assertRedirect();
 
         $this->assertDatabaseHas('purchases', [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'customer_name' => 'John Doe',
             'total_line_items_quantity' => 2,
@@ -140,6 +142,7 @@ class PurchaseFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $response = $this->actingAs($user)->post('/purchases', [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'customer_name' => 'John Doe',
             'line_items' => [
@@ -219,6 +222,7 @@ class PurchaseFeatureTest extends TestCase
             ->for($item)
             ->create();
         $data = [
+            'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'customer_name' => 'John Doe',
             'line_items' => [

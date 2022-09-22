@@ -50,6 +50,40 @@
                             <div class="card-body">
                                 <div
                                     class="form-group"
+                                    id="created_at-module"
+                                >
+                                    <label for="created_at">
+                                        <span>{{ __('Date') }}</span>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <input
+                                        id="created_at"
+                                        type="text"
+                                        name="created_at"
+                                        class="form-control datetimepicker-input"
+                                        data-target="#created_at"
+                                        data-toggle="datetimepicker"
+                                    />
+                                </div>
+                                <script>
+                                    var CreatedAtModule = (function() {
+                                        var $el = $('#created_at-module');
+                                        var $createdAt = $el.find('#created_at')
+
+                                        function init() {
+                                            $createdAt.datetimepicker({
+                                                format: 'YYYY-MM-DD HH:mm:ss',
+                                                icons: {
+                                                    time: 'far fa-clock'
+                                                },
+                                            });
+                                        }
+
+                                        init();
+                                    })();
+                                </script>
+                                <div
+                                    class="form-group"
                                     id="branch-module"
                                 >
                                     <label for="branch_id">

@@ -24,6 +24,10 @@ class PurchaseStoreRequest extends FormRequest
     public function rules()
     {
         return [
+            'created_at' => [
+                'required',
+                'date_format:Y-m-d H:i:s',
+            ],
             'branch_id' => [
                 'required',
                 'string',
