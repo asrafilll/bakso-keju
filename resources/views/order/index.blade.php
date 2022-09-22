@@ -103,6 +103,103 @@
                                                                 value="{{ Request::get('term') }}"
                                                             />
                                                         </div>
+                                                        <div class="row">
+                                                            <div
+                                                                class="form-group col"
+                                                                id="start_created_at-module"
+                                                            >
+                                                                <label for="start_created_at">
+                                                                    <span>{{ __('Start date') }}</span>
+                                                                    <span class="text-danger">*</span>
+                                                                </label>
+                                                                <input
+                                                                    id="start_created_at"
+                                                                    type="text"
+                                                                    name="start_created_at"
+                                                                    class="form-control datetimepicker-input"
+                                                                    data-target="#start_created_at"
+                                                                    data-toggle="datetimepicker"
+                                                                    value="{{ Request::get('start_created_at') }}"
+                                                                />
+                                                            </div>
+                                                            <script>
+                                                                var StartCreatedAtModule = (function() {
+                                                                    var $el = $('#start_created_at-module');
+                                                                    var $startCreatedAt = $el.find('#start_created_at');
+
+                                                                    $startCreatedAt.on('change.datetimepicker', function (e) {
+                                                                        if (typeof EndCreatedAtModule !== 'undefined') {
+                                                                            EndCreatedAtModule.setMinDate(e.date);
+                                                                        }
+                                                                    });
+
+                                                                    function init() {
+                                                                        $startCreatedAt.datetimepicker({
+                                                                            format: 'YYYY-MM-DD',
+                                                                            maxDate: {!! "'" . Request::get('end_created_at') . "'" !!} || false,
+                                                                        });
+                                                                    }
+
+                                                                    function setMaxDate(date) {
+                                                                        $startCreatedAt.datetimepicker('maxDate', date);
+                                                                    }
+
+                                                                    init();
+
+                                                                    return {
+                                                                        setMaxDate: setMaxDate,
+                                                                    };
+                                                                })();
+                                                            </script>
+                                                            <div
+                                                                class="form-group col"
+                                                                id="end_created_at-module"
+                                                            >
+                                                                <label for="end_created_at">
+                                                                    <span>{{ __('End date') }}</span>
+                                                                    <span class="text-danger">*</span>
+                                                                </label>
+                                                                <input
+                                                                    id="end_created_at"
+                                                                    type="text"
+                                                                    name="end_created_at"
+                                                                    class="form-control datetimepicker-input"
+                                                                    data-target="#end_created_at"
+                                                                    data-toggle="datetimepicker"
+                                                                    value="{{ Request::get('end_created_at') }}"
+                                                                />
+                                                            </div>
+                                                            <script>
+                                                                var EndCreatedAtModule = (function() {
+                                                                    var $el = $('#end_created_at-module');
+                                                                    var $endCreatedAt = $el.find('#end_created_at');
+
+                                                                    $endCreatedAt.on('change.datetimepicker', function (e) {
+                                                                        if (typeof StartCreatedAtModule !== 'undefined') {
+                                                                            StartCreatedAtModule.setMaxDate(e.date);
+                                                                        }
+                                                                    });
+
+                                                                    function init() {
+                                                                        $endCreatedAt.datetimepicker({
+                                                                            format: 'YYYY-MM-DD',
+                                                                            useCurrent: false,
+                                                                            minDate: {!! "'" . Request::get('start_created_at') . "'" !!} || false,
+                                                                        });
+                                                                    }
+
+                                                                    function setMinDate(date) {
+                                                                        $endCreatedAt.datetimepicker('minDate', date);
+                                                                    }
+
+                                                                    init();
+
+                                                                    return {
+                                                                        setMinDate: setMinDate,
+                                                                    };
+                                                                })();
+                                                            </script>
+                                                        </div>
                                                         <div
                                                             class="form-group"
                                                             id="branch-module"
@@ -149,7 +246,7 @@
                                                                 });
 
                                                                 $branchId.on('select2:clear', function() {
-                                                                    setTimeout(function () {
+                                                                    setTimeout(function() {
                                                                         $branchId.select2('close');
                                                                     }, 0);
                                                                 });
@@ -227,7 +324,7 @@
                                                                 });
 
                                                                 $orderSourceId.on('select2:clear', function() {
-                                                                    setTimeout(function () {
+                                                                    setTimeout(function() {
                                                                         $orderSourceId.select2('close');
                                                                     }, 0);
                                                                 });

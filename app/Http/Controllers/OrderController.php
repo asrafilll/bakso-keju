@@ -75,6 +75,18 @@ class OrderController extends Controller
                     }
                 }
 
+                if ($request->filled('start_created_at')) {
+                    $orderQuery->whereRaw('DATE(orders.created_at) >= ?', [
+                        $request->get('start_created_at'),
+                    ]);
+                }
+
+                if ($request->filled('end_created_at')) {
+                    $orderQuery->whereRaw('DATE(orders.created_at) <= ?', [
+                        $request->get('end_created_at'),
+                    ]);
+                }
+
                 $sortables = [
                     'order_number',
                     'created_at',
