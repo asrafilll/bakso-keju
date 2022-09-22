@@ -42,6 +42,9 @@ Route::group([
     Route::get('/profile/password', [\App\Http\Controllers\ProfilePasswordController::class, 'index']);
     Route::put('/profile/password', [\App\Http\Controllers\ProfilePasswordController::class, 'update']);
 
+    Route::get('/products/import', [\App\Http\Controllers\ProductImportController::class, 'index']);
+    Route::post('/products/import', [\App\Http\Controllers\ProductImportController::class, 'store']);
+
     Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
     Route::get('/products/create', [\App\Http\Controllers\ProductController::class, 'create']);
     Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store']);
