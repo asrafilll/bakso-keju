@@ -62,6 +62,18 @@ class PurchaseController extends Controller
                     }
                 }
 
+                if ($request->filled('start_created_at')) {
+                    $purchaseQuery->whereRaw('DATE(purchases.created_at) >= ?', [
+                        $request->get('start_created_at'),
+                    ]);
+                }
+
+                if ($request->filled('end_created_at')) {
+                    $purchaseQuery->whereRaw('DATE(purchases.created_at) <= ?', [
+                        $request->get('end_created_at'),
+                    ]);
+                }
+
                 $sortables = [
                     'purchase_number',
                     'created_at',
