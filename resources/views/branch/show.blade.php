@@ -60,6 +60,20 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
+                                    <label for="phone">
+                                        <span>{{ __('Phone') }}</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        name="phone"
+                                        class="form-control @error('phone') is-invalid @enderror"
+                                        value="{{ Request::old('phone') ?? $branch->phone }}"
+                                    />
+                                    @error('phone')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
                                     <label for="order_number_prefix">
                                         <span>{{ __('Order Number Prefix') }}</span>
                                         <span class="text-danger">*</span>

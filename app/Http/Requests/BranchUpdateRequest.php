@@ -28,6 +28,10 @@ class BranchUpdateRequest extends FormRequest
                 'required',
                 'string',
             ],
+            'phone' => [
+                'nullable',
+                'string',
+            ],
             'order_number_prefix' => [
                 'required',
                 'alpha_num',
@@ -47,5 +51,14 @@ class BranchUpdateRequest extends FormRequest
                 'min:1',
             ],
         ];
+    }
+
+    /**
+     * @override
+     * @return array<string, string>
+     */
+    public function validated()
+    {
+        return array_filter(parent::validated(), fn ($row) => !is_null($row));
     }
 }

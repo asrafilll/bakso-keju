@@ -15,6 +15,7 @@ class BranchFactory extends Factory
     {
         return [
             'name' => 'Branch #' . $this->faker->randomNumber(3, true),
+            'phone' => '0813 1582 7396',
             'order_number_prefix' => $this->faker->colorName(),
             'next_order_number' => $this->faker->randomNumber(1),
             'purchase_number_prefix' => $this->faker->colorName(),

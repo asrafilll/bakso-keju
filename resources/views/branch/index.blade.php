@@ -9,7 +9,7 @@
     <div class="content-header">
         <div class="d-flex mb-2">
         </div>
-        <div class="container">
+        <div class="container=fluid">
             <div class="row justify-content-between mb-2">
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Branches') }}</h1>
@@ -27,7 +27,7 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="container">
+        <div class="container=fluid">
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -57,10 +57,11 @@
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover">
+                            <table class="table table-hover text-nowrap">
                                 <thead>
                                     <tr>
                                         <th>{{ __('Name') }}</th>
+                                        <th>{{ __('Phone') }}</th>
                                         <th>{{ __('Order Number Prefix') }}</th>
                                         <th>{{ __('Next Order Number') }}</th>
                                         <th>{{ __('Purchase Number Prefix') }}</th>
@@ -73,6 +74,7 @@
                                     @forelse ($branches as $branch)
                                         <tr>
                                             <td class="align-middle">{{ $branch->name }}</td>
+                                            <td class="align-middle">{{ $branch->phone }}</td>
                                             <td class="align-middle">{{ $branch->order_number_prefix }}</td>
                                             <td class="align-middle">{{ $branch->next_order_number }}</td>
                                             <td class="align-middle">{{ $branch->purchase_number_prefix }}</td>
@@ -97,7 +99,7 @@
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="7"
+                                                colspan="8"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>

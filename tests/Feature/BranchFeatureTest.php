@@ -39,6 +39,7 @@ class BranchFeatureTest extends TestCase
 
         $response->assertSee([
             $branch->name,
+            $branch->phone,
             $branch->order_number_prefix,
             $branch->next_order_number,
             $branch->purchase_number_prefix,
@@ -71,6 +72,7 @@ class BranchFeatureTest extends TestCase
 
         $this->actingAs($user)->post('/branches', [
             'name' => 'Branch #1',
+            'phone' => '111222333444',
             'order_number_prefix' => 'B',
             'next_order_number' => 1,
             'purchase_number_prefix' => 'B',
@@ -79,6 +81,7 @@ class BranchFeatureTest extends TestCase
 
         $this->assertDatabaseHas('branches', [
             'name' => 'Branch #1',
+            'phone' => '111222333444',
             'order_number_prefix' => 'B',
             'next_order_number' => 1,
             'purchase_number_prefix' => 'B',
@@ -117,6 +120,7 @@ class BranchFeatureTest extends TestCase
 
         $response->assertSee([
             $branch->name,
+            $branch->phone,
             $branch->order_number_prefix,
             $branch->next_order_number,
             $branch->purchase_number_prefix,
@@ -137,6 +141,7 @@ class BranchFeatureTest extends TestCase
 
         $this->actingAs($user)->put("/branches/{$branch->id}", [
             'name' => 'Branch #2',
+            'phone' => '111222333444',
             'order_number_prefix' => 'B',
             'next_order_number' => 2,
             'purchase_number_prefix' => 'P',
@@ -145,6 +150,7 @@ class BranchFeatureTest extends TestCase
 
         $this->assertDatabaseHas('branches', [
             'id' => $branch->id,
+            'phone' => '111222333444',
             'name' => 'Branch #2',
             'order_number_prefix' => 'B',
             'next_order_number' => 2,
