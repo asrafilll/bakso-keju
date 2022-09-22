@@ -60,7 +60,7 @@
                                         id="product_category_id"
                                         class="form-control @error('product_category_id') is-invalid @enderror"
                                     >
-                                        <option value="" hidden></option>
+                                        <option value=""></option>
                                         @foreach ($productCategories as $productCategory)
                                             <option
                                                 value="{{ $productCategory->id }}"
