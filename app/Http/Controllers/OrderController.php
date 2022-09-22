@@ -7,9 +7,7 @@ use App\Actions\DeleteOrderAction;
 use App\Actions\SearchBranchesAction;
 use App\Actions\SearchOrderSourcesAction;
 use App\Http\Requests\OrderStoreRequest;
-use App\Models\Branch;
 use App\Models\Order;
-use App\Models\OrderSource;
 use App\Models\Product;
 use App\Models\Reseller;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -170,9 +168,9 @@ class OrderController extends Controller
         CreateOrderAction $createOrderAction
     ) {
         try {
-            $createOrderAction->execute($orderStoreRequest->all());
+            $order = $createOrderAction->execute($orderStoreRequest->all());
 
-            return Response::redirectTo('/orders/create')
+            return Response::redirectTo('/orders/' . $order->id)
                 ->with('success', __('crud.created', [
                     'resource' => 'order',
                 ]));
