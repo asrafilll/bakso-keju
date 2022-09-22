@@ -99,6 +99,9 @@ Route::group([
     Route::put('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'update']);
     Route::delete('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'destroy']);
 
+    Route::get('/items/import', [\App\Http\Controllers\ItemImportController::class, 'index']);
+    Route::post('/items/import', [\App\Http\Controllers\ItemImportController::class, 'store']);
+
     Route::get('/items', [\App\Http\Controllers\ItemController::class, 'index']);
     Route::get('/items/create', [\App\Http\Controllers\ItemController::class, 'create']);
     Route::post('/items', [\App\Http\Controllers\ItemController::class, 'store']);

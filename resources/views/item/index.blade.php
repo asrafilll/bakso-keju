@@ -19,6 +19,12 @@
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Items') }}</h1>
                 </div><!-- /.col -->
+                <div class="col-auto ml-auto">
+                    <a
+                        href="{{ url('/items/import') }}"
+                        class="btn btn-default"
+                    >{{ __('Import') }}</a>
+                </div><!-- /.col -->
                 <div class="col-auto">
                     <a
                         href="{{ url('/items/create') }}"
