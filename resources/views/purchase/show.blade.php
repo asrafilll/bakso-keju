@@ -109,6 +109,7 @@
                     <a
                         href="{{ Request::fullUrlWithQuery(['action' => 'print-invoice']) }}"
                         class="btn btn-primary"
+                        target="_blank"
                     >{{ __('Print invoice') }}</a>
                     @if (is_null($purchase->deleted_at))
                         <button

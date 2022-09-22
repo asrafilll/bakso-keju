@@ -30,7 +30,7 @@
     <div style="font-size: 10px; margin: 0; text-align: center; padding: 4px 8px;">
         <p>Premium Homemade Halal</p>
         <p>Bakso Sapi</p>
-        <p>0813 1582 7396</p>
+        <p>{{ $order->branch->phone }}</p>
     </div>
     <table style="font-size: 8px; padding: 4px 8px; text-align: right;">
         <tr>
