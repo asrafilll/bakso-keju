@@ -1,4 +1,9 @@
 <x-app>
+    @if (Session::has('success'))
+        <script>
+            toastr.success('{{ Session::get('success') }}');
+        </script>
+    @endif
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container">

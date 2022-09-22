@@ -285,7 +285,7 @@
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
-                            <table class="table table-hover">
+                            <table class="table table-hover text-nowrap">
                                 <thead>
                                     <tr>
                                         <th>{{ __('Order number') }}</th>
