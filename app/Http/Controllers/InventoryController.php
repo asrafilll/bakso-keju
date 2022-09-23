@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateInventoryAction;
 use App\Actions\SearchBranchesAction;
 use App\Http\Requests\InventoryStoreRequest;
 use App\Models\Branch;
@@ -115,46 +116,23 @@ class InventoryController extends Controller
 
     /**
      * @param InventoryStoreRequest $inventoryStoreRequest
+     * @param CreateInventoryAction $createInventoryAction
      * @return \Illuminate\Http\Response
      */
-    public function store(InventoryStoreRequest $inventoryStoreRequest)
-    {
+    public function store(
+        InventoryStoreRequest $inventoryStoreRequest,
+        CreateInventoryAction $createInventoryAction
+    ) {
         try {
-            DB::beginTransaction();
-
-            /** @var Inventory */
-            $inventory = Inventory::create($inventoryStoreRequest->validated() + [
+            $createInventoryAction->execute($inventoryStoreRequest->all() + [
                 'created_by' => $inventoryStoreRequest->user()->id,
             ]);
-            /** @var ProductInventory|null */
-            $productInventory = ProductInventory::query()
-                ->where([
-                    'branch_id' => $inventory->branch_id,
-                    'product_id' => $inventory->product_id,
-                ])
-                ->first();
-
-            if ($productInventory) {
-                $productInventory->update([
-                    'quantity' => $productInventory->quantity + $inventory->quantity,
-                ]);
-            } else {
-                ProductInventory::create($inventoryStoreRequest->only([
-                    'branch_id',
-                    'product_id',
-                    'quantity',
-                ]));
-            }
-
-            DB::commit();
 
             return Response::redirectTo('/inventories/create')
                 ->with('success', __('crud.created', [
                     'resource' => 'inventory',
                 ]));
         } catch (Exception $e) {
-            DB::rollBack();
-
             return Response::redirectTo('/inventories/create')
                 ->with('failed', $e->getMessage());
         }
