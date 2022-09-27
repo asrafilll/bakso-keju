@@ -14,12 +14,14 @@
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Inventories') }}</h1>
                 </div><!-- /.col -->
-                <div class="col-auto">
-                    <a
-                        href="{{ url('/inventories/create') }}"
-                        class="btn btn-primary"
-                    >{{ __('Create inventory') }}</a>
-                </div><!-- /.col -->
+                @can(\App\Enums\PermissionEnum::create_inventory()->value)
+                    <div class="col-auto">
+                        <a
+                            href="{{ url('/inventories/create') }}"
+                            class="btn btn-primary"
+                        >{{ __('Create inventory') }}</a>
+                    </div><!-- /.col -->
+                @endcan
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -149,7 +151,7 @@
                                                                 });
 
                                                                 $branchId.on('select2:clear', function() {
-                                                                    setTimeout(function () {
+                                                                    setTimeout(function() {
                                                                         $branchId.select2('close');
                                                                     }, 0);
                                                                 });

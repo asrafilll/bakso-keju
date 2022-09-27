@@ -81,8 +81,8 @@ Route::group([
     Route::delete('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_reseller());
 
     Route::get('/inventories', [\App\Http\Controllers\InventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_inventories());
-    Route::get('/inventories/create', [\App\Http\Controllers\InventoryController::class, 'create']);
-    Route::post('/inventories', [\App\Http\Controllers\InventoryController::class, 'store']);
+    Route::get('/inventories/create', [\App\Http\Controllers\InventoryController::class, 'create'])->can(\App\Enums\PermissionEnum::create_inventory());
+    Route::post('/inventories', [\App\Http\Controllers\InventoryController::class, 'store'])->can(\App\Enums\PermissionEnum::create_inventory());
 
     Route::get('/product-inventories', [\App\Http\Controllers\ProductInventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_inventories());
 
