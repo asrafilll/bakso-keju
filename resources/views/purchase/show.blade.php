@@ -116,15 +116,17 @@
                         class="btn btn-primary"
                         target="_blank"
                     >{{ __('Print invoice') }}</a>
-                    @if (is_null($purchase->deleted_at))
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            data-toggle="modal"
-                            data-target="#modal-delete"
-                            data-action="{{ url('/purchases/' . $purchase->id) }}"
-                        >{{ __('Delete') }}</button>
-                    @endif
+                    @can(\App\Enums\PermissionEnum::delete_purchase()->value)
+                        @if (is_null($purchase->deleted_at))
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                data-toggle="modal"
+                                data-target="#modal-delete"
+                                data-action="{{ url('/purchases/' . $purchase->id) }}"
+                            >{{ __('Delete') }}</button>
+                        @endif
+                    @endcan
                 </div>
             </div>
         </div>

@@ -14,12 +14,14 @@
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Purchases') }}</h1>
                 </div><!-- /.col -->
-                <div class="col-auto">
-                    <a
-                        href="{{ url('/purchases/create') }}"
-                        class="btn btn-primary"
-                    >{{ __('Create purchase') }}</a>
-                </div><!-- /.col -->
+                @can(\App\Enums\PermissionEnum::create_purchase()->value)
+                    <div class="col-auto">
+                        <a
+                            href="{{ url('/purchases/create') }}"
+                            class="btn btn-primary"
+                        >{{ __('Create purchase') }}</a>
+                    </div><!-- /.col -->
+                @endcan
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -127,7 +129,7 @@
                                                                     var $el = $('#start_created_at-module');
                                                                     var $startCreatedAt = $el.find('#start_created_at');
 
-                                                                    $startCreatedAt.on('change.datetimepicker', function (e) {
+                                                                    $startCreatedAt.on('change.datetimepicker', function(e) {
                                                                         if (typeof EndCreatedAtModule !== 'undefined') {
                                                                             EndCreatedAtModule.setMinDate(e.date);
                                                                         }
@@ -174,7 +176,7 @@
                                                                     var $el = $('#end_created_at-module');
                                                                     var $endCreatedAt = $el.find('#end_created_at');
 
-                                                                    $endCreatedAt.on('change.datetimepicker', function (e) {
+                                                                    $endCreatedAt.on('change.datetimepicker', function(e) {
                                                                         if (typeof StartCreatedAtModule !== 'undefined') {
                                                                             StartCreatedAtModule.setMaxDate(e.date);
                                                                         }
@@ -246,7 +248,7 @@
                                                                 });
 
                                                                 $branchId.on('select2:clear', function() {
-                                                                    setTimeout(function () {
+                                                                    setTimeout(function() {
                                                                         $branchId.select2('close');
                                                                     }, 0);
                                                                 });

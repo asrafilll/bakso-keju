@@ -112,8 +112,8 @@ Route::group([
     Route::get('/item-inventories', [\App\Http\Controllers\ItemInventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_item_inventories());
 
     Route::get('/purchases', [\App\Http\Controllers\PurchaseController::class, 'index'])->can(\App\Enums\PermissionEnum::view_purchases());
-    Route::get('/purchases/create', [\App\Http\Controllers\PurchaseController::class, 'create']);
-    Route::post('/purchases', [\App\Http\Controllers\PurchaseController::class, 'store']);
-    Route::get('/purchases/{purchase}', [\App\Http\Controllers\PurchaseController::class, 'show']);
-    Route::delete('/purchases/{purchase}', [\App\Http\Controllers\PurchaseController::class, 'destroy']);
+    Route::get('/purchases/create', [\App\Http\Controllers\PurchaseController::class, 'create'])->can(\App\Enums\PermissionEnum::create_purchase());
+    Route::post('/purchases', [\App\Http\Controllers\PurchaseController::class, 'store'])->can(\App\Enums\PermissionEnum::create_purchase());
+    Route::get('/purchases/{purchase}', [\App\Http\Controllers\PurchaseController::class, 'show'])->can(\App\Enums\PermissionEnum::view_purchases());
+    Route::delete('/purchases/{purchase}', [\App\Http\Controllers\PurchaseController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_purchase());
 });
