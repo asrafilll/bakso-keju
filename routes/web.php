@@ -60,11 +60,11 @@ Route::group([
     Route::delete('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_branch());
 
     Route::get('/product-categories', [\App\Http\Controllers\ProductCategoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_categories());
-    Route::get('/product-categories/create', [\App\Http\Controllers\ProductCategoryController::class, 'create']);
-    Route::post('/product-categories', [\App\Http\Controllers\ProductCategoryController::class, 'store']);
-    Route::get('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'show']);
-    Route::put('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'update']);
-    Route::delete('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'destroy']);
+    Route::get('/product-categories/create', [\App\Http\Controllers\ProductCategoryController::class, 'create'])->can(\App\Enums\PermissionEnum::create_product_category());
+    Route::post('/product-categories', [\App\Http\Controllers\ProductCategoryController::class, 'store'])->can(\App\Enums\PermissionEnum::create_product_category());
+    Route::get('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'show'])->can(\App\Enums\PermissionEnum::update_product_category());
+    Route::put('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'update'])->can(\App\Enums\PermissionEnum::update_product_category());
+    Route::delete('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_product_category());
 
     Route::get('/order-sources', [\App\Http\Controllers\OrderSourceController::class, 'index'])->can(\App\Enums\PermissionEnum::view_order_sources());
     Route::get('/order-sources/create', [\App\Http\Controllers\OrderSourceController::class, 'create']);
