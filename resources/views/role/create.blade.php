@@ -60,6 +60,75 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">{{ __('Permissions') }}</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        @foreach ($viewPermissions as $permission)
+                                            <div class="icheck-primary">
+                                                <input
+                                                    type="checkbox"
+                                                    id="permission_{{ $permission->id }}"
+                                                    name="permissions[]"
+                                                    value="{{ $permission->id }}"
+                                                />
+                                                <label for="permission_{{ $permission->id }}">
+                                                    {{ $permission->name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <div class="col">
+                                        @foreach ($createPermissions as $permission)
+                                            <div class="icheck-primary">
+                                                <input
+                                                    type="checkbox"
+                                                    id="permission_{{ $permission->id }}"
+                                                    name="permissions[]"
+                                                    value="{{ $permission->id }}"
+                                                />
+                                                <label for="permission_{{ $permission->id }}">
+                                                    {{ $permission->name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <div class="col">
+                                        @foreach ($updatePermissions as $permission)
+                                            <div class="icheck-primary">
+                                                <input
+                                                    type="checkbox"
+                                                    id="permission_{{ $permission->id }}"
+                                                    name="permissions[]"
+                                                    value="{{ $permission->id }}"
+                                                />
+                                                <label for="permission_{{ $permission->id }}">
+                                                    {{ $permission->name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    <div class="col">
+                                        @foreach ($deletePermissions as $permission)
+                                            <div class="icheck-primary">
+                                                <input
+                                                    type="checkbox"
+                                                    id="permission_{{ $permission->id }}"
+                                                    name="permissions[]"
+                                                    value="{{ $permission->id }}"
+                                                />
+                                                <label for="permission_{{ $permission->id }}">
+                                                    {{ $permission->name }}
+                                                </label>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <button
                             type="submit"
                             class="btn btn-primary"

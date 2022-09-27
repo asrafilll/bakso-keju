@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
+use App\Models\Permission;
 use App\Models\Role;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -35,7 +37,28 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return Response::view('role.create');
+        $viewPermissions = Permission::query()
+            ->where('name', 'LIKE', 'view_%')
+            ->get();
+
+        $createPermissions = Permission::query()
+            ->where('name', 'LIKE', 'create_%')
+            ->get();
+
+        $updatePermissions =  Permission::query()
+            ->where('name', 'LIKE', 'update_%')
+            ->get();
+
+        $deletePermissions =  Permission::query()
+            ->where('name', 'LIKE', 'delete_%')
+            ->get();
+
+        return Response::view('role.create', [
+            'viewPermissions' => $viewPermissions,
+            'createPermissions' => $createPermissions,
+            'updatePermissions' => $updatePermissions,
+            'deletePermissions' => $deletePermissions,
+        ]);
     }
 
     /**
@@ -44,13 +67,16 @@ class RoleController extends Controller
      */
     public function store(RoleStoreRequest $roleStoreRequest)
     {
-        DB::transaction(function () use ($roleStoreRequest) {
+        /** @var Role */
+        $role = DB::transaction(function () use ($roleStoreRequest) {
             /** @var Role */
             $role = Role::create($roleStoreRequest->only(['name']));
             $role->permissions()->sync($roleStoreRequest->get('permissions'));
+
+            return $role;
         });
 
-        return Response::redirectTo('/roles/create')
+        return Response::redirectTo("/roles/{$role->id}")
             ->with('success', __('crud.created', [
                 'resource' => 'role',
             ]));
@@ -62,7 +88,29 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+        $role->load(['permissions']);
+
+        $viewPermissions = Permission::query()
+            ->where('name', 'LIKE', 'view_%')
+            ->get();
+
+        $createPermissions = Permission::query()
+            ->where('name', 'LIKE', 'create_%')
+            ->get();
+
+        $updatePermissions =  Permission::query()
+            ->where('name', 'LIKE', 'update_%')
+            ->get();
+
+        $deletePermissions =  Permission::query()
+            ->where('name', 'LIKE', 'delete_%')
+            ->get();
+
         return Response::view('role.show', [
+            'viewPermissions' => $viewPermissions,
+            'createPermissions' => $createPermissions,
+            'updatePermissions' => $updatePermissions,
+            'deletePermissions' => $deletePermissions,
             'role' => $role,
         ]);
     }
