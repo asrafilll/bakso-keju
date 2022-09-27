@@ -39,18 +39,22 @@ class RoleController extends Controller
     {
         $viewPermissions = Permission::query()
             ->where('name', 'LIKE', 'view_%')
+            ->orderBy('name')
             ->get();
 
         $createPermissions = Permission::query()
             ->where('name', 'LIKE', 'create_%')
+            ->orderBy('name')
             ->get();
 
         $updatePermissions =  Permission::query()
             ->where('name', 'LIKE', 'update_%')
+            ->orderBy('name')
             ->get();
 
         $deletePermissions =  Permission::query()
             ->where('name', 'LIKE', 'delete_%')
+            ->orderBy('name')
             ->get();
 
         return Response::view('role.create', [
@@ -92,18 +96,22 @@ class RoleController extends Controller
 
         $viewPermissions = Permission::query()
             ->where('name', 'LIKE', 'view_%')
+            ->orderBy('name')
             ->get();
 
         $createPermissions = Permission::query()
             ->where('name', 'LIKE', 'create_%')
+            ->orderBy('name')
             ->get();
 
         $updatePermissions =  Permission::query()
             ->where('name', 'LIKE', 'update_%')
+            ->orderBy('name')
             ->get();
 
         $deletePermissions =  Permission::query()
             ->where('name', 'LIKE', 'delete_%')
+            ->orderBy('name')
             ->get();
 
         return Response::view('role.show', [
