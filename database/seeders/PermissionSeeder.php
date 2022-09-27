@@ -7,6 +7,7 @@ use App\Models\Permission;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\PermissionRegistrar;
 
 class PermissionSeeder extends Seeder
 {
@@ -20,6 +21,7 @@ class PermissionSeeder extends Seeder
         Collection::make(PermissionEnum::toValues())
             ->tap(function () {
                 Schema::disableForeignKeyConstraints();
+                app(PermissionRegistrar::class)->forgetCachedPermissions();
                 Permission::truncate();
             })
             ->each(function ($permission) {
