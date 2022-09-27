@@ -74,11 +74,11 @@ Route::group([
     Route::delete('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_order_source());
 
     Route::get('/resellers', [\App\Http\Controllers\ResellerController::class, 'index'])->can(\App\Enums\PermissionEnum::view_resellers());
-    Route::get('/resellers/create', [\App\Http\Controllers\ResellerController::class, 'create']);
-    Route::post('/resellers', [\App\Http\Controllers\ResellerController::class, 'store']);
-    Route::get('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'show']);
-    Route::put('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'update']);
-    Route::delete('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'destroy']);
+    Route::get('/resellers/create', [\App\Http\Controllers\ResellerController::class, 'create'])->can(\App\Enums\PermissionEnum::create_reseller());
+    Route::post('/resellers', [\App\Http\Controllers\ResellerController::class, 'store'])->can(\App\Enums\PermissionEnum::create_reseller());
+    Route::get('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'show'])->can(\App\Enums\PermissionEnum::update_reseller());
+    Route::put('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'update'])->can(\App\Enums\PermissionEnum::update_reseller());
+    Route::delete('/resellers/{reseller}', [\App\Http\Controllers\ResellerController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_reseller());
 
     Route::get('/inventories', [\App\Http\Controllers\InventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_inventories());
     Route::get('/inventories/create', [\App\Http\Controllers\InventoryController::class, 'create']);

@@ -14,12 +14,14 @@
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Resellers') }}</h1>
                 </div><!-- /.col -->
-                <div class="col-auto">
-                    <a
-                        href="{{ url('/resellers/create') }}"
-                        class="btn btn-primary"
-                    >{{ __('Create reseller') }}</a>
-                </div><!-- /.col -->
+                @can(\App\Enums\PermissionEnum::create_reseller()->value)
+                    <div class="col-auto">
+                        <a
+                            href="{{ url('/resellers/create') }}"
+                            class="btn btn-primary"
+                        >{{ __('Create reseller') }}</a>
+                    </div><!-- /.col -->
+                @endcan
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -74,17 +76,21 @@
                                             <td class="align-middle">{{ $reseller->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    <a
-                                                        href="{{ url('/resellers/' . $reseller->id) }}"
-                                                        class="btn btn-default"
-                                                    >{{ __('Detail') }}</a>
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-danger"
-                                                        data-toggle="modal"
-                                                        data-target="#modal-delete"
-                                                        data-action="{{ url('/resellers/' . $reseller->id) }}"
-                                                    >{{ __('Delete') }}</button>
+                                                    @can(\App\Enums\PermissionEnum::update_reseller()->value)
+                                                        <a
+                                                            href="{{ url('/resellers/' . $reseller->id) }}"
+                                                            class="btn btn-default"
+                                                        >{{ __('Detail') }}</a>
+                                                    @endcan
+                                                    @can(\App\Enums\PermissionEnum::delete_reseller()->value)
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#modal-delete"
+                                                            data-action="{{ url('/resellers/' . $reseller->id) }}"
+                                                        >{{ __('Delete') }}</button>
+                                                    @endcan
                                                 </div>
                                             </td>
                                         </tr>
