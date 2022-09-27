@@ -3,9 +3,11 @@
 namespace Tests\Feature;
 
 use App\Actions\CreateOrderAction;
+use App\Enums\PermissionEnum;
 use App\Models\Branch;
 use App\Models\Order;
 use App\Models\OrderSource;
+use App\Models\Permission;
 use App\Models\Product;
 use App\Models\ProductInventory;
 use App\Models\Reseller;
@@ -19,13 +21,25 @@ class OrderFeatureTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * Indicates whether the default seeder should run before each test.
+     *
+     * @var bool
+     */
+    protected $seed = true;
+
+    /**
      * @test
      * @return void
      */
     public function shouldShowOrderIndexPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_orders())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/orders');
 
         $response->assertStatus(200);
@@ -46,8 +60,13 @@ class OrderFeatureTest extends TestCase
             ->for($branch)
             ->for($orderSource)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_orders())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/orders');
 
         $response->assertSee([
@@ -65,8 +84,13 @@ class OrderFeatureTest extends TestCase
      */
     public function shouldShowCreateOrderPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_order())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/orders/create');
 
         $response->assertStatus(200);
@@ -92,8 +116,13 @@ class OrderFeatureTest extends TestCase
             ->for($branch)
             ->for($product)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_order())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->post('/orders', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -167,8 +196,13 @@ class OrderFeatureTest extends TestCase
                 'percentage_discount' => 10,
             ])
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_order())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->post('/orders', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -228,8 +262,13 @@ class OrderFeatureTest extends TestCase
                 'percentage_discount' => 10,
             ])
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_order())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->post('/orders', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -262,8 +301,13 @@ class OrderFeatureTest extends TestCase
             ->for($branch)
             ->for($orderSource)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_orders())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/orders/{$order->id}");
 
         $response->assertStatus(200);
@@ -284,8 +328,13 @@ class OrderFeatureTest extends TestCase
             ->for($branch)
             ->for($orderSource)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_orders())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/orders/{$order->id}");
 
         $response->assertSee([
@@ -329,8 +378,13 @@ class OrderFeatureTest extends TestCase
             ],
         ];
         $order = resolve(CreateOrderAction::class)->execute($data);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_order())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->delete("/orders/{$order->id}");
         $response->assertSessionHas(['success']);
 

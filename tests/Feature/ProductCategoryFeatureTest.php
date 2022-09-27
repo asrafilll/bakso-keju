@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Enums\PermissionEnum;
+use App\Models\Permission;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\User;
-use Database\Factories\ProductFactory;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Facade;
 use Tests\TestCase;
 
 class ProductCategoryFeatureTest extends TestCase
@@ -15,13 +15,25 @@ class ProductCategoryFeatureTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * Indicates whether the default seeder should run before each test.
+     *
+     * @var bool
+     */
+    protected $seed = true;
+
+    /**
      * @test
      * @return void
      */
     public function shouldShowProductCategoryIndexPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_product_categories())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/product-categories');
 
         $response->assertStatus(200);
@@ -35,9 +47,13 @@ class ProductCategoryFeatureTest extends TestCase
     {
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()->create();;
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_product_categories())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/product-categories');
 
         $response->assertSee($productCategory->name);
@@ -49,9 +65,13 @@ class ProductCategoryFeatureTest extends TestCase
      */
     public function shouldShowCreateProductCategoryPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_product_category())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/product-categories/create');
 
         $response->assertStatus(200);
@@ -63,9 +83,13 @@ class ProductCategoryFeatureTest extends TestCase
      */
     public function shouldCreateProductCategory()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_product_category())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->post('/product-categories', [
             'name' => 'ProductCategory #1',
         ]);
@@ -83,9 +107,13 @@ class ProductCategoryFeatureTest extends TestCase
     {
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()->create();;
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_product_category())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/product-categories/{$productCategory->id}");
 
         $response->assertStatus(200);
@@ -99,9 +127,13 @@ class ProductCategoryFeatureTest extends TestCase
     {
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_product_category())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/product-categories/{$productCategory->id}");
 
         $response->assertSee($productCategory->name);
@@ -115,9 +147,13 @@ class ProductCategoryFeatureTest extends TestCase
     {
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_product_category())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->put("/product-categories/{$productCategory->id}", [
             'name' => 'ProductCategory #2',
         ]);
@@ -136,9 +172,13 @@ class ProductCategoryFeatureTest extends TestCase
     {
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_product_category())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->delete("/product-categories/{$productCategory->id}");
 
         $this->assertDatabaseMissing('product_categories', [
@@ -156,9 +196,13 @@ class ProductCategoryFeatureTest extends TestCase
         $productCategory = ProductCategory::factory()
             ->has(Product::factory())
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_product_category())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->delete("/product-categories/{$productCategory->id}");
 
         $this->assertDatabaseMissing('product_categories', [
@@ -174,9 +218,13 @@ class ProductCategoryFeatureTest extends TestCase
     {
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_product_category())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->post('/product-categories', [
             'name' => 'Sub ProductCategory #1',
             'parent_id' => $productCategory->id,
@@ -200,9 +248,13 @@ class ProductCategoryFeatureTest extends TestCase
         $subProductCategory = ProductCategory::factory()
             ->for($productCategory, 'parentProductCategory')
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_product_category())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->put('/product-categories/' . $subProductCategory->id, [
             'name' => 'Sub ProductCategory #001',
             'parent_id' => $productCategory->id,

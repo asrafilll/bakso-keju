@@ -3,10 +3,12 @@
 namespace Tests\Feature;
 
 use App\Actions\CreatePurchaseAction;
+use App\Enums\PermissionEnum;
 use App\Models\Branch;
 use App\Models\Purchase;
 use App\Models\Item;
 use App\Models\ItemInventory;
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
@@ -17,13 +19,25 @@ class PurchaseFeatureTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * Indicates whether the default seeder should run before each test.
+     *
+     * @var bool
+     */
+    protected $seed = true;
+
+    /**
      * @test
      * @return void
      */
     public function shouldShowPurchaseIndexPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_purchases())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/purchases');
 
         $response->assertStatus(200);
@@ -41,8 +55,13 @@ class PurchaseFeatureTest extends TestCase
         $purchase = Purchase::factory()
             ->for($branch)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_purchases())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/purchases');
 
         $response->assertSee([
@@ -59,8 +78,13 @@ class PurchaseFeatureTest extends TestCase
      */
     public function shouldShowCreatePurchasePage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_purchase())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/purchases/create');
 
         $response->assertStatus(200);
@@ -76,8 +100,13 @@ class PurchaseFeatureTest extends TestCase
         $branch = Branch::factory()->create();
         /** @var Item */
         $item = Item::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_purchase())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->post('/purchases', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -139,8 +168,13 @@ class PurchaseFeatureTest extends TestCase
             ->for($branch)
             ->for($item)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_purchase())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->post('/purchases', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -173,8 +207,13 @@ class PurchaseFeatureTest extends TestCase
         $purchase = Purchase::factory()
             ->for($branch)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_purchases())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/purchases/{$purchase->id}");
 
         $response->assertStatus(200);
@@ -192,8 +231,13 @@ class PurchaseFeatureTest extends TestCase
         $purchase = Purchase::factory()
             ->for($branch)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_purchases())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/purchases/{$purchase->id}");
 
         $response->assertSee([
@@ -233,8 +277,13 @@ class PurchaseFeatureTest extends TestCase
             ],
         ];
         $purchase = resolve(CreatePurchaseAction::class)->execute($data);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_purchase())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->delete("/purchases/{$purchase->id}");
         $response->assertSessionHas(['success']);
 

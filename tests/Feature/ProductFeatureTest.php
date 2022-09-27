@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Enums\PermissionEnum;
 use App\Models\Branch;
+use App\Models\Permission;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use App\Models\ProductInventory;
@@ -16,14 +18,25 @@ class ProductFeatureTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * Indicates whether the default seeder should run before each test.
+     *
+     * @var bool
+     */
+    protected $seed = true;
+
+    /**
      * @test
      * @return void
      */
     public function shouldShowProductIndexPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_products())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/products');
 
         $response->assertStatus(200);
@@ -39,9 +52,13 @@ class ProductFeatureTest extends TestCase
         $products = Product::factory(3)->create();
         /** @var Product */
         $sampleProduct = $products->first();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_products())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/products');
 
         $response->assertSee($sampleProduct->name);
@@ -53,9 +70,13 @@ class ProductFeatureTest extends TestCase
      */
     public function shouldShowProductCreatePage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_product())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/products/create');
 
         $response->assertStatus(200);
@@ -68,8 +89,13 @@ class ProductFeatureTest extends TestCase
      */
     public function shouldCreateProduct()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_product())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()
             ->for(Product::factory(), 'parentProductCategory')
@@ -101,9 +127,13 @@ class ProductFeatureTest extends TestCase
         $product = Product::factory()
             ->for($productCategory)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_product())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/products/{$product->id}");
 
         $response->assertSee([
@@ -130,9 +160,13 @@ class ProductFeatureTest extends TestCase
                 'product_category_id' => $productCategory->id,
             ])
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_product())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->put("/products/{$product->id}", [
             'name' => 'Product #1',
             'price' => 10000,
@@ -154,9 +188,13 @@ class ProductFeatureTest extends TestCase
     {
         /** @var Product */
         $product = Product::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_product())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->delete("/products/{$product->id}");
 
         $this->assertDatabaseMissing('products', [
@@ -187,9 +225,13 @@ class ProductFeatureTest extends TestCase
                     ->for($branch)
             )
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_product())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/products/{$product->id}");
 
         $response->assertSee([
@@ -225,9 +267,13 @@ class ProductFeatureTest extends TestCase
                     ->for($branch)
             )
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_product())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->delete("/products/{$product->id}");
 
         $response->assertSessionHas('failed');

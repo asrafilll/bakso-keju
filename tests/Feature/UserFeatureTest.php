@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Enums\PermissionEnum;
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,15 +14,15 @@ class UserFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * Indicates whether the default seeder should run before each test.
+     *
+     * @var bool
+     */
+    protected $seed = true;
+
     /** @var User */
     protected $user;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->user = User::factory()->create();
-    }
 
     /**
      * @test
@@ -28,7 +30,14 @@ class UserFeatureTest extends TestCase
      */
     public function shouldShowUserIndexPage()
     {
-        $response = $this->actingAs($this->user)
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_users())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
             ->get('/users');
 
         $response->assertStatus(200);
@@ -43,8 +52,14 @@ class UserFeatureTest extends TestCase
         /** @var Collection<User> */
         $sampleUsers = User::factory(10)->create();
         $sampleUser = $sampleUsers->first();
-
-        $response = $this->actingAs($this->user)
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_users())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
             ->get('/users');
 
         $response->assertSee($sampleUser->email);
@@ -56,7 +71,14 @@ class UserFeatureTest extends TestCase
      */
     public function shouldShowCreateUserPage()
     {
-        $response = $this->actingAs($this->user)
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_user())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
             ->get('/users/create');
 
         $response->assertStatus(200);
@@ -68,7 +90,14 @@ class UserFeatureTest extends TestCase
      */
     public function shouldCreateUser()
     {
-        $this->actingAs($this->user)
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_user())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $this->actingAs($user)
             ->post('/users', [
                 'name' => 'John Doe',
                 'email' => 'johndoe@example.com',
@@ -94,9 +123,13 @@ class UserFeatureTest extends TestCase
         /** @var Role */
         $role2 = Role::create(['name' => 'Role 2']);
 
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_user())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->post('/users', [
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
@@ -187,7 +220,14 @@ class UserFeatureTest extends TestCase
      */
     public function shouldFailedToCreateUserBecauseValidationError($data, $expectedErrors)
     {
-        $response = $this->actingAs($this->user)
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_user())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
             ->post('/users', $data);
 
         $response->assertSessionHasErrors($expectedErrors);
@@ -199,11 +239,17 @@ class UserFeatureTest extends TestCase
      */
     public function shouldShowUserDetailPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_user())
+            ->first();
+        /** @var User */
+        $createdUser = User::factory()->create();
         /** @var User */
         $user = User::factory()->create();
-
-        $response = $this->actingAs($this->user)
-            ->get("/users/{$user->id}");
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
+            ->get("/users/{$createdUser->id}");
 
         $response->assertStatus(200);
     }
@@ -214,14 +260,20 @@ class UserFeatureTest extends TestCase
      */
     public function shouldContainsUserDataOnUserDetailPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_user())
+            ->first();
+        /** @var User */
+        $createdUser = User::factory()->create();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
+            ->get("/users/{$createdUser->id}");
 
-        $response = $this->actingAs($this->user)
-            ->get("/users/{$user->id}");
-
-        $response->assertSee($user->email);
-        $response->assertSee($user->name);
+        $response->assertSee($createdUser->email);
+        $response->assertSee($createdUser->name);
     }
 
     /**
@@ -237,17 +289,22 @@ class UserFeatureTest extends TestCase
         $role2 = Role::create(['name' => 'Role 2']);
 
         /** @var User */
+        $createdUser = User::factory()->create();
+        $createdUser->assignRole($role1, $role2);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_user())
+            ->first();
+        /** @var User */
         $user = User::factory()->create();
-
-        $user->assignRole($role1, $role2);
-
+        $user->permissions()->sync($permission->id);
         $response = $this
-            ->actingAs($this->user)
-            ->get("/users/{$user->id}");
+            ->actingAs($user)
+            ->get("/users/{$createdUser->id}");
 
         $response->assertSee([
-            $user->email,
-            $user->name,
+            $createdUser->email,
+            $createdUser->name,
             $role1->name,
             $role2->name,
         ]);
@@ -259,7 +316,14 @@ class UserFeatureTest extends TestCase
      */
     public function shouldErrorShowUserDetailPageWhenUserNotFound()
     {
-        $response = $this->actingAs($this->user)
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_user())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
             ->get('/users/some-user-id');
 
         $response->assertStatus(404);
@@ -272,19 +336,25 @@ class UserFeatureTest extends TestCase
     public function shouldUpdateUserWithoutUpdatingPassword()
     {
         /** @var User */
+        $createdUser = User::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_user())
+            ->first();
+        /** @var User */
         $user = User::factory()->create();
-
-        $this->actingAs($this->user)
-            ->put("/users/{$user->id}", [
+        $user->permissions()->sync($permission->id);
+        $this->actingAs($user)
+            ->put("/users/{$createdUser->id}", [
                 'name' => 'John Doe',
                 'email' => 'johndoe@example.com',
             ]);
 
-        $updatedUser = User::find($user->id);
+        $updatedUser = User::find($createdUser->id);
 
         $this->assertEquals('John Doe', $updatedUser->name);
         $this->assertEquals('johndoe@example.com', $updatedUser->email);
-        $this->assertEquals($user->password, $updatedUser->password);
+        $this->assertEquals($createdUser->password, $updatedUser->password);
     }
 
     /**
@@ -294,21 +364,27 @@ class UserFeatureTest extends TestCase
     public function shouldUpdateUserWithUpdatingPassword()
     {
         /** @var User */
+        $createdUser = User::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_user())
+            ->first();
+        /** @var User */
         $user = User::factory()->create();
-
-        $this->actingAs($this->user)
-            ->put("/users/{$user->id}", [
+        $user->permissions()->sync($permission->id);
+        $this->actingAs($user)
+            ->put("/users/{$createdUser->id}", [
                 'name' => 'John Doe',
                 'email' => 'johndoe@example.com',
                 'password' => 'secret',
                 'password_confirmation' => 'secret',
             ]);
 
-        $updatedUser = User::find($user->id);
+        $updatedUser = User::find($createdUser->id);
 
         $this->assertEquals('John Doe', $updatedUser->name);
         $this->assertEquals('johndoe@example.com', $updatedUser->email);
-        $this->assertNotEquals($user->password, $updatedUser->password);
+        $this->assertNotEquals($createdUser->password, $updatedUser->password);
     }
 
     /**
@@ -324,11 +400,19 @@ class UserFeatureTest extends TestCase
         $role2 = Role::create(['name' => 'Role 2']);
 
         /** @var User */
-        $user = User::factory()->create();
-        $user->assignRole($role1);
+        $createdUser = User::factory()->create();
+        $createdUser->assignRole($role1);
 
-        $this->actingAs($this->user)
-            ->put("/users/{$user->id}", [
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_user())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+
+        $this->actingAs($user)
+            ->put("/users/{$createdUser->id}", [
                 'name' => 'John Doe',
                 'email' => 'johndoe@example.com',
                 'roles' => [
@@ -336,20 +420,20 @@ class UserFeatureTest extends TestCase
                 ],
             ]);
 
-        $updatedUser = User::find($user->id);
+        $updatedUser = User::find($createdUser->id);
 
         $this->assertEquals('John Doe', $updatedUser->name);
         $this->assertEquals('johndoe@example.com', $updatedUser->email);
-        $this->assertEquals($user->password, $updatedUser->password);
+        $this->assertEquals($createdUser->password, $updatedUser->password);
 
         $this->assertDatabaseHas('model_has_roles', [
-            'model_id' => $user->id,
+            'model_id' => $createdUser->id,
             'model_type' => User::class,
             'role_id' => $role2->id,
         ]);
 
         $this->assertDatabaseMissing('model_has_roles', [
-            'model_id' => $user->id,
+            'model_id' => $createdUser->id,
             'model_type' => User::class,
             'role_id' => $role1->id,
         ]);
@@ -364,10 +448,16 @@ class UserFeatureTest extends TestCase
     public function shouldFailedToUpdateUserBecauseValidationError(array $data, array $expectedErrors)
     {
         /** @var User */
+        $createdUser = User::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_user())
+            ->first();
+        /** @var User */
         $user = User::factory()->create();
-
-        $response = $this->actingAs($this->user)
-            ->put("/users/{$user->id}", $data);
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
+            ->put("/users/{$createdUser->id}", $data);
 
         $response->assertSessionHasErrors($expectedErrors);
     }
@@ -430,10 +520,16 @@ class UserFeatureTest extends TestCase
         /** @var User */
         $previousUser = User::factory()->create();
         /** @var User */
+        $createdUser = User::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_user())
+            ->first();
+        /** @var User */
         $user = User::factory()->create();
-
-        $response = $this->actingAs($this->user)
-            ->put("/users/{$user->id}", [
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
+            ->put("/users/{$createdUser->id}", [
                 'name' => 'John Doe',
                 'email' => $previousUser->email,
             ]);
@@ -448,13 +544,19 @@ class UserFeatureTest extends TestCase
     public function shouldDeleteUser()
     {
         /** @var User */
+        $createdUser = User::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_user())
+            ->first();
+        /** @var User */
         $user = User::factory()->create();
-
-        $this->actingAs($this->user)
-            ->delete("/users/{$user->id}");
+        $user->permissions()->sync($permission->id);
+        $this->actingAs($user)
+            ->delete("/users/{$createdUser->id}");
 
         $this->assertDatabaseMissing('users', [
-            'id' => $user->id,
+            'id' => $createdUser->id,
         ]);
     }
 
@@ -464,7 +566,14 @@ class UserFeatureTest extends TestCase
      */
     public function shouldFailedToDeleteUserWhenUserNotFound()
     {
-        $response = $this->actingAs($this->user)
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_user())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)
             ->delete('/users/some-id');
 
         $response->assertStatus(404);

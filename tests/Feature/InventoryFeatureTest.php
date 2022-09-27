@@ -2,8 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Enums\PermissionEnum;
 use App\Models\Branch;
 use App\Models\Inventory;
+use App\Models\Permission;
 use App\Models\Product;
 use App\Models\ProductInventory;
 use App\Models\User;
@@ -15,13 +17,25 @@ class InventoryFeatureTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * Indicates whether the default seeder should run before each test.
+     *
+     * @var bool
+     */
+    protected $seed = true;
+
+    /**
      * @test
      * @return void
      */
     public function shouldShowInventoryIndexPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_inventories())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/inventories');
 
         $response->assertStatus(200);
@@ -37,8 +51,13 @@ class InventoryFeatureTest extends TestCase
         $product = Product::factory()->create();
         /** @var Branch */
         $branch = Branch::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_inventories())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         /** @var Inventory */
         $inventory = Inventory::factory()
             ->state([
@@ -64,9 +83,13 @@ class InventoryFeatureTest extends TestCase
      */
     public function shouldShowCreateInventoryPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_inventory())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/inventories/create');
 
         $response->assertStatus(200);
@@ -82,9 +105,13 @@ class InventoryFeatureTest extends TestCase
         $product = Product::factory()->create();
         /** @var Branch */
         $branch = Branch::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_inventory())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->post('/inventories', [
             'product_id' => $product->id,
             'branch_id' => $branch->id,
@@ -111,9 +138,13 @@ class InventoryFeatureTest extends TestCase
         $product = Product::factory()->create();
         /** @var Branch */
         $branch = Branch::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_inventory())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->post('/inventories', [
             'product_id' => $product->id,
             'branch_id' => $branch->id,
@@ -146,9 +177,13 @@ class InventoryFeatureTest extends TestCase
             ->for($product)
             ->for($branch)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_inventory())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->post('/inventories', [
             'product_id' => $product->id,
             'branch_id' => $branch->id,
@@ -182,9 +217,17 @@ class InventoryFeatureTest extends TestCase
             ->for($product)
             ->for($branch)
             ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_inventory())
+            ->first();
+        /** @var Permission */
+        $negativeQuantityPermission = Permission::query()
+            ->where('name', PermissionEnum::create_negative_quantity_inventory())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync([$permission->id, $negativeQuantityPermission->id]);
         $this->actingAs($user)->post('/inventories', [
             'product_id' => $product->id,
             'branch_id' => $branch->id,

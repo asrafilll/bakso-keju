@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\PermissionEnum;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -13,13 +14,25 @@ class RoleFeatureTest extends TestCase
     use RefreshDatabase;
 
     /**
+     * Indicates whether the default seeder should run before each test.
+     *
+     * @var bool
+     */
+    protected $seed = true;
+
+    /**
      * @test
      * @return void
      */
     public function shouldShowRoleIndexPage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_roles())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/roles');
 
         $response->assertStatus(200);
@@ -33,9 +46,13 @@ class RoleFeatureTest extends TestCase
     {
         /** @var Role */
         $role = Role::create(['name' => 'super admin']);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::view_roles())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/roles');
 
         $response->assertSee($role->name);
@@ -47,9 +64,13 @@ class RoleFeatureTest extends TestCase
      */
     public function shouldShowCreateRolePage()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_role())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get('/roles/create');
 
         $response->assertStatus(200);
@@ -61,13 +82,15 @@ class RoleFeatureTest extends TestCase
      */
     public function shouldCreateRole()
     {
-        $this->seed();
-
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_role())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
         /** @var Permission */
         $permission = Permission::first();
-
         $this->actingAs($user)->post('/roles', [
             'name' => 'example role',
             'permissions' => [
@@ -92,9 +115,13 @@ class RoleFeatureTest extends TestCase
     {
         /** @var Role */
         $role = Role::create(['name' => 'super admin']);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_role())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/roles/{$role->id}");
 
         $response->assertStatus(200);
@@ -108,9 +135,13 @@ class RoleFeatureTest extends TestCase
     {
         /** @var Role */
         $role = Role::create(['name' => 'super admin']);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_role())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/roles/{$role->id}");
 
         $response->assertSee($role->name);
@@ -122,9 +153,13 @@ class RoleFeatureTest extends TestCase
      */
     public function shouldFailedToShowRoleDetailPageWhenRoleNotFound()
     {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_role())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $response = $this->actingAs($user)->get("/roles/stub-role-id");
 
         $response->assertStatus(404);
@@ -136,15 +171,17 @@ class RoleFeatureTest extends TestCase
      */
     public function shouldUpdateRole()
     {
-        $this->seed();
-
         /** @var Permission */
         $permission = Permission::inRandomOrder()->first();
         /** @var Role */
         $role = Role::create(['name' => 'super admin']);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_role())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->put("/roles/{$role->id}", [
             'name' => 'admin',
             'permissions' => [
@@ -170,9 +207,13 @@ class RoleFeatureTest extends TestCase
     {
         /** @var Role */
         $role = Role::create(['name' => 'super admin']);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_role())
+            ->first();
         /** @var User */
         $user = User::factory()->create();
-
+        $user->permissions()->sync($permission->id);
         $this->actingAs($user)->delete("/roles/{$role->id}");
 
         $this->assertDatabaseMissing('roles', [
