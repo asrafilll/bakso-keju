@@ -42,15 +42,15 @@ Route::group([
     Route::get('/profile/password', [\App\Http\Controllers\ProfilePasswordController::class, 'index']);
     Route::put('/profile/password', [\App\Http\Controllers\ProfilePasswordController::class, 'update']);
 
-    Route::get('/products/import', [\App\Http\Controllers\ProductImportController::class, 'index']);
-    Route::post('/products/import', [\App\Http\Controllers\ProductImportController::class, 'store']);
+    Route::get('/products/import', [\App\Http\Controllers\ProductImportController::class, 'index'])->can(\App\Enums\PermissionEnum::create_product());
+    Route::post('/products/import', [\App\Http\Controllers\ProductImportController::class, 'store'])->can(\App\Enums\PermissionEnum::create_product());
 
     Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index'])->can(\App\Enums\PermissionEnum::view_products());
-    Route::get('/products/create', [\App\Http\Controllers\ProductController::class, 'create']);
-    Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store']);
-    Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show']);
-    Route::put('/products/{product}', [\App\Http\Controllers\ProductController::class, 'update']);
-    Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy']);
+    Route::get('/products/create', [\App\Http\Controllers\ProductController::class, 'create'])->can(\App\Enums\PermissionEnum::create_product());
+    Route::post('/products', [\App\Http\Controllers\ProductController::class, 'store'])->can(\App\Enums\PermissionEnum::create_product());
+    Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show'])->can(\App\Enums\PermissionEnum::update_product());
+    Route::put('/products/{product}', [\App\Http\Controllers\ProductController::class, 'update'])->can(\App\Enums\PermissionEnum::update_product());
+    Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_product());
 
     Route::get('/branches', [\App\Http\Controllers\BranchController::class, 'index'])->can(\App\Enums\PermissionEnum::view_branches());
     Route::get('/branches/create', [\App\Http\Controllers\BranchController::class, 'create']);

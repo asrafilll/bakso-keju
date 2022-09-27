@@ -19,18 +19,20 @@
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Products') }}</h1>
                 </div><!-- /.col -->
-                <div class="col-auto ml-auto">
-                    <a
-                        href="{{ url('/products/import') }}"
-                        class="btn btn-default"
-                    >{{ __('Import') }}</a>
-                </div><!-- /.col -->
-                <div class="col-auto">
-                    <a
-                        href="{{ url('/products/create') }}"
-                        class="btn btn-primary"
-                    >{{ __('Create product') }}</a>
-                </div><!-- /.col -->
+                @can(\App\Enums\PermissionEnum::create_product()->value)
+                    <div class="col-auto ml-auto">
+                        <a
+                            href="{{ url('/products/import') }}"
+                            class="btn btn-default"
+                        >{{ __('Import') }}</a>
+                    </div><!-- /.col -->
+                    <div class="col-auto">
+                        <a
+                            href="{{ url('/products/create') }}"
+                            class="btn btn-primary"
+                        >{{ __('Create product') }}</a>
+                    </div><!-- /.col -->
+                @endcan
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -234,17 +236,21 @@
                                             <td class="align-middle">{{ $product->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    <a
-                                                        href="{{ url('/products/' . $product->id) }}"
-                                                        class="btn btn-default"
-                                                    >{{ __('Detail') }}</a>
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-danger"
-                                                        data-toggle="modal"
-                                                        data-target="#modal-delete"
-                                                        data-action="{{ url('/products/' . $product->id) }}"
-                                                    >{{ __('Delete') }}</button>
+                                                    @can(\App\Enums\PermissionEnum::update_product()->value)
+                                                        <a
+                                                            href="{{ url('/products/' . $product->id) }}"
+                                                            class="btn btn-default"
+                                                        >{{ __('Detail') }}</a>
+                                                    @endcan
+                                                    @can(\App\Enums\PermissionEnum::delete_product()->value)
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#modal-delete"
+                                                            data-action="{{ url('/products/' . $product->id) }}"
+                                                        >{{ __('Delete') }}</button>
+                                                    @endcan
                                                 </div>
                                             </td>
                                         </tr>
