@@ -93,11 +93,11 @@ Route::group([
     Route::delete('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_order());
 
     Route::get('/item-categories', [\App\Http\Controllers\ItemCategoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_item_categories());
-    Route::get('/item-categories/create', [\App\Http\Controllers\ItemCategoryController::class, 'create']);
-    Route::post('/item-categories', [\App\Http\Controllers\ItemCategoryController::class, 'store']);
-    Route::get('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'show']);
-    Route::put('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'update']);
-    Route::delete('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'destroy']);
+    Route::get('/item-categories/create', [\App\Http\Controllers\ItemCategoryController::class, 'create'])->can(\App\Enums\PermissionEnum::create_item_category());
+    Route::post('/item-categories', [\App\Http\Controllers\ItemCategoryController::class, 'store'])->can(\App\Enums\PermissionEnum::create_item_category());
+    Route::get('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'show'])->can(\App\Enums\PermissionEnum::update_item_category());
+    Route::put('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'update'])->can(\App\Enums\PermissionEnum::update_item_category());
+    Route::delete('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_item_category());
 
     Route::get('/items/import', [\App\Http\Controllers\ItemImportController::class, 'index']);
     Route::post('/items/import', [\App\Http\Controllers\ItemImportController::class, 'store']);
