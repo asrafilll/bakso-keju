@@ -19,5 +19,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Super Admin',
             'password' => 'secret',
         ]);
+
+        $this->call(PermissionSeeder::class);
     }
 }
