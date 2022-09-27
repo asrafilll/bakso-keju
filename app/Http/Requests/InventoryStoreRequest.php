@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\PermissionEnum;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,7 +25,7 @@ class InventoryStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'product_id' => [
                 'required',
                 'string',
@@ -38,11 +39,21 @@ class InventoryStoreRequest extends FormRequest
             'quantity' => [
                 'required',
                 'integer',
+                'min:0',
             ],
             'note' => [
                 'nullable',
                 'string',
             ],
         ];
+
+        if ($this->user()->hasPermissionTo(PermissionEnum::create_negative_quantity_inventory())) {
+            $rules['quantity'] = [
+                'required',
+                'integer',
+            ];
+        }
+
+        return $rules;
     }
 }
