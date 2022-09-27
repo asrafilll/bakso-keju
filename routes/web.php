@@ -67,11 +67,11 @@ Route::group([
     Route::delete('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_product_category());
 
     Route::get('/order-sources', [\App\Http\Controllers\OrderSourceController::class, 'index'])->can(\App\Enums\PermissionEnum::view_order_sources());
-    Route::get('/order-sources/create', [\App\Http\Controllers\OrderSourceController::class, 'create']);
-    Route::post('/order-sources', [\App\Http\Controllers\OrderSourceController::class, 'store']);
-    Route::get('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'show']);
-    Route::put('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'update']);
-    Route::delete('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'destroy']);
+    Route::get('/order-sources/create', [\App\Http\Controllers\OrderSourceController::class, 'create'])->can(\App\Enums\PermissionEnum::create_order_source());
+    Route::post('/order-sources', [\App\Http\Controllers\OrderSourceController::class, 'store'])->can(\App\Enums\PermissionEnum::create_order_source());
+    Route::get('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'show'])->can(\App\Enums\PermissionEnum::update_order_source());
+    Route::put('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'update'])->can(\App\Enums\PermissionEnum::update_order_source());
+    Route::delete('/order-sources/{orderSource}', [\App\Http\Controllers\OrderSourceController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_order_source());
 
     Route::get('/resellers', [\App\Http\Controllers\ResellerController::class, 'index'])->can(\App\Enums\PermissionEnum::view_resellers());
     Route::get('/resellers/create', [\App\Http\Controllers\ResellerController::class, 'create']);

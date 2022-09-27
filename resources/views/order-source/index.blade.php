@@ -14,12 +14,14 @@
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Order Sources') }}</h1>
                 </div><!-- /.col -->
-                <div class="col-auto">
-                    <a
-                        href="{{ url('/order-sources/create') }}"
-                        class="btn btn-primary"
-                    >{{ __('Create order source') }}</a>
-                </div><!-- /.col -->
+                @can(\App\Enums\PermissionEnum::create_order_source()->value)
+                    <div class="col-auto">
+                        <a
+                            href="{{ url('/order-sources/create') }}"
+                            class="btn btn-primary"
+                        >{{ __('Create order source') }}</a>
+                    </div><!-- /.col -->
+                @endcan
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -72,17 +74,21 @@
                                             <td class="align-middle">{{ $orderSource->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    <a
-                                                        href="{{ url('/order-sources/' . $orderSource->id) }}"
-                                                        class="btn btn-default"
-                                                    >{{ __('Detail') }}</a>
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-danger"
-                                                        data-toggle="modal"
-                                                        data-target="#modal-delete"
-                                                        data-action="{{ url('/order-sources/' . $orderSource->id) }}"
-                                                    >{{ __('Delete') }}</button>
+                                                    @can(\App\Enums\PermissionEnum::update_order_source()->value)
+                                                        <a
+                                                            href="{{ url('/order-sources/' . $orderSource->id) }}"
+                                                            class="btn btn-default"
+                                                        >{{ __('Detail') }}</a>
+                                                    @endcan
+                                                    @can(\App\Enums\PermissionEnum::delete_order_source()->value)
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#modal-delete"
+                                                            data-action="{{ url('/order-sources/' . $orderSource->id) }}"
+                                                        >{{ __('Delete') }}</button>
+                                                    @endcan
                                                 </div>
                                             </td>
                                         </tr>
