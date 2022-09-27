@@ -330,7 +330,7 @@
                                                             results: products.map(function(product) {
                                                                 return {
                                                                     id: product.id,
-                                                                    text: product.name,
+                                                                    text: product.formatted_name,
                                                                     product: product,
                                                                 };
                                                             }),

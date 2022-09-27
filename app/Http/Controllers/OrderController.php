@@ -13,6 +13,7 @@ use App\Models\Reseller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class OrderController extends Controller
@@ -152,11 +153,16 @@ class OrderController extends Controller
                 $products = Product::query()
                     ->select([
                         'products.*',
+                        DB::raw("CONCAT_WS(' - ', product_categories.name, sub_product_categories.name, products.name) as formatted_name")
                     ])
                     ->join('product_inventories', 'products.id', 'product_inventories.product_id')
+                    ->join('product_categories as sub_product_categories', 'products.product_category_id', 'sub_product_categories.id')
+                    ->join('product_categories', 'sub_product_categories.parent_id', 'product_categories.id')
                     ->where('product_inventories.branch_id', $request->get('branch_id'))
                     ->where('product_inventories.quantity', '>', 0)
-                    ->where('products.name', 'LIKE', "%{$request->get('term')}%")
+                    ->whereRaw("CONCAT_WS(' - ', product_categories.name, sub_product_categories.name, products.name) LIKE ?", [
+                        "%{$request->get('term')}%"
+                    ])
                     ->orderBy('products.name')
                     ->get();
 
