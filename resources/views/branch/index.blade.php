@@ -14,12 +14,14 @@
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Branches') }}</h1>
                 </div><!-- /.col -->
-                <div class="col-auto">
-                    <a
-                        href="{{ url('/branches/create') }}"
-                        class="btn btn-primary"
-                    >{{ __('Create branch') }}</a>
-                </div><!-- /.col -->
+                @can(\App\Enums\PermissionEnum::create_branch()->value)
+                    <div class="col-auto">
+                        <a
+                            href="{{ url('/branches/create') }}"
+                            class="btn btn-primary"
+                        >{{ __('Create branch') }}</a>
+                    </div><!-- /.col -->
+                @endcan
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -82,17 +84,21 @@
                                             <td class="align-middle">{{ $branch->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    <a
-                                                        href="{{ url('/branches/' . $branch->id) }}"
-                                                        class="btn btn-default"
-                                                    >{{ __('Detail') }}</a>
-                                                    <button
-                                                        type="button"
-                                                        class="btn btn-danger"
-                                                        data-toggle="modal"
-                                                        data-target="#modal-delete"
-                                                        data-action="{{ url('/branches/' . $branch->id) }}"
-                                                    >{{ __('Delete') }}</button>
+                                                    @can(\App\Enums\PermissionEnum::update_branch()->value)
+                                                        <a
+                                                            href="{{ url('/branches/' . $branch->id) }}"
+                                                            class="btn btn-default"
+                                                        >{{ __('Detail') }}</a>
+                                                    @endcan
+                                                    @can(\App\Enums\PermissionEnum::delete_branch()->value)
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#modal-delete"
+                                                            data-action="{{ url('/branches/' . $branch->id) }}"
+                                                        >{{ __('Delete') }}</button>
+                                                    @endcan
                                                 </div>
                                             </td>
                                         </tr>

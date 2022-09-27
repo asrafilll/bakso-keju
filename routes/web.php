@@ -53,11 +53,11 @@ Route::group([
     Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_product());
 
     Route::get('/branches', [\App\Http\Controllers\BranchController::class, 'index'])->can(\App\Enums\PermissionEnum::view_branches());
-    Route::get('/branches/create', [\App\Http\Controllers\BranchController::class, 'create']);
-    Route::post('/branches', [\App\Http\Controllers\BranchController::class, 'store']);
-    Route::get('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'show']);
-    Route::put('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'update']);
-    Route::delete('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'destroy']);
+    Route::get('/branches/create', [\App\Http\Controllers\BranchController::class, 'create'])->can(\App\Enums\PermissionEnum::create_branch());
+    Route::post('/branches', [\App\Http\Controllers\BranchController::class, 'store'])->can(\App\Enums\PermissionEnum::create_branch());
+    Route::get('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'show'])->can(\App\Enums\PermissionEnum::update_branch());
+    Route::put('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'update'])->can(\App\Enums\PermissionEnum::update_branch());
+    Route::delete('/branches/{branch}', [\App\Http\Controllers\BranchController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_branch());
 
     Route::get('/product-categories', [\App\Http\Controllers\ProductCategoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_categories());
     Route::get('/product-categories/create', [\App\Http\Controllers\ProductCategoryController::class, 'create']);
