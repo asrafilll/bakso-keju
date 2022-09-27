@@ -99,15 +99,15 @@ Route::group([
     Route::put('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'update'])->can(\App\Enums\PermissionEnum::update_item_category());
     Route::delete('/item-categories/{itemCategory}', [\App\Http\Controllers\ItemCategoryController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_item_category());
 
-    Route::get('/items/import', [\App\Http\Controllers\ItemImportController::class, 'index']);
-    Route::post('/items/import', [\App\Http\Controllers\ItemImportController::class, 'store']);
+    Route::get('/items/import', [\App\Http\Controllers\ItemImportController::class, 'index'])->can(\App\Enums\PermissionEnum::create_item());
+    Route::post('/items/import', [\App\Http\Controllers\ItemImportController::class, 'store'])->can(\App\Enums\PermissionEnum::create_item());
 
     Route::get('/items', [\App\Http\Controllers\ItemController::class, 'index'])->can(\App\Enums\PermissionEnum::view_items());
-    Route::get('/items/create', [\App\Http\Controllers\ItemController::class, 'create']);
-    Route::post('/items', [\App\Http\Controllers\ItemController::class, 'store']);
-    Route::get('/items/{item}', [\App\Http\Controllers\ItemController::class, 'show']);
-    Route::put('/items/{item}', [\App\Http\Controllers\ItemController::class, 'update']);
-    Route::delete('/items/{item}', [\App\Http\Controllers\ItemController::class, 'destroy']);
+    Route::get('/items/create', [\App\Http\Controllers\ItemController::class, 'create'])->can(\App\Enums\PermissionEnum::create_item());
+    Route::post('/items', [\App\Http\Controllers\ItemController::class, 'store'])->can(\App\Enums\PermissionEnum::create_item());
+    Route::get('/items/{item}', [\App\Http\Controllers\ItemController::class, 'show'])->can(\App\Enums\PermissionEnum::update_item());
+    Route::put('/items/{item}', [\App\Http\Controllers\ItemController::class, 'update'])->can(\App\Enums\PermissionEnum::update_item());
+    Route::delete('/items/{item}', [\App\Http\Controllers\ItemController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_item());
 
     Route::get('/item-inventories', [\App\Http\Controllers\ItemInventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_item_inventories());
 
