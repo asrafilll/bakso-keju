@@ -31,6 +31,6 @@ class DatabaseSeeder extends Seeder
             'name' => 'Super Admin',
         ]);
         $role->permissions()->sync($permissionIDs);
-        $user->hasRole($role);
+        $user->assignRole($role);
     }
 }
