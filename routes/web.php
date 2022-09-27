@@ -31,11 +31,11 @@ Route::group([
     Route::delete('/users/{user}', [\App\Http\Controllers\UserController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_user());
 
     Route::get('/roles', [\App\Http\Controllers\RoleController::class, 'index'])->can(\App\Enums\PermissionEnum::view_roles());
-    Route::get('/roles/create', [\App\Http\Controllers\RoleController::class, 'create']);
-    Route::post('/roles', [\App\Http\Controllers\RoleController::class, 'store']);
-    Route::get('/roles/{role}', [\App\Http\Controllers\RoleController::class, 'show']);
-    Route::put('/roles/{role}', [\App\Http\Controllers\RoleController::class, 'update']);
-    Route::delete('/roles/{role}', [\App\Http\Controllers\RoleController::class, 'destroy']);
+    Route::get('/roles/create', [\App\Http\Controllers\RoleController::class, 'create'])->can(\App\Enums\PermissionEnum::create_role());
+    Route::post('/roles', [\App\Http\Controllers\RoleController::class, 'store'])->can(\App\Enums\PermissionEnum::create_role());
+    Route::get('/roles/{role}', [\App\Http\Controllers\RoleController::class, 'show'])->can(\App\Enums\PermissionEnum::update_role());
+    Route::put('/roles/{role}', [\App\Http\Controllers\RoleController::class, 'update'])->can(\App\Enums\PermissionEnum::update_role());
+    Route::delete('/roles/{role}', [\App\Http\Controllers\RoleController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_role());
 
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index']);
     Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update']);
