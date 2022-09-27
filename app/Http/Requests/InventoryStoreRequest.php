@@ -47,7 +47,7 @@ class InventoryStoreRequest extends FormRequest
             ],
         ];
 
-        if ($this->user()->hasPermissionTo(PermissionEnum::create_negative_quantity_inventory()->value)) {
+        if ($this->user()->can(PermissionEnum::create_negative_quantity_inventory()->value)) {
             $rules['quantity'] = [
                 'required',
                 'integer',
