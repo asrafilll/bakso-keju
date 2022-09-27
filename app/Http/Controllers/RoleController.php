@@ -6,6 +6,7 @@ use App\Http\Requests\RoleStoreRequest;
 use App\Http\Requests\RoleUpdateRequest;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 
 class RoleController extends Controller
@@ -43,7 +44,11 @@ class RoleController extends Controller
      */
     public function store(RoleStoreRequest $roleStoreRequest)
     {
-        Role::create($roleStoreRequest->validated());
+        DB::transaction(function () use ($roleStoreRequest) {
+            /** @var Role */
+            $role = Role::create($roleStoreRequest->only(['name']));
+            $role->permissions()->sync($roleStoreRequest->get('permissions'));
+        });
 
         return Response::redirectTo('/roles/create')
             ->with('success', __('crud.created', [
@@ -70,8 +75,9 @@ class RoleController extends Controller
     public function update(Role $role, RoleUpdateRequest $roleUpdateRequest)
     {
         $role->update(
-            $roleUpdateRequest->validated()
+            $roleUpdateRequest->only(['name'])
         );
+        $role->permissions()->sync($roleUpdateRequest->get('permissions'));
 
         return Response::redirectTo("/roles/{$role->id}")
             ->with('success', __('crud.updated', [

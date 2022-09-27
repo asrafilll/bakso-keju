@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -60,15 +61,26 @@ class RoleFeatureTest extends TestCase
      */
     public function shouldCreateRole()
     {
+        $this->seed();
+
         /** @var User */
         $user = User::factory()->create();
+        /** @var Permission */
+        $permission = Permission::first();
 
         $this->actingAs($user)->post('/roles', [
             'name' => 'example role',
+            'permissions' => [
+                $permission->id,
+            ],
         ]);
 
         $this->assertDatabaseHas('roles', [
             'name' => 'example role',
+        ]);
+
+        $this->assertDatabaseHas('role_has_permissions', [
+            'permission_id' => $permission->id,
         ]);
     }
 
@@ -124,6 +136,10 @@ class RoleFeatureTest extends TestCase
      */
     public function shouldUpdateRole()
     {
+        $this->seed();
+
+        /** @var Permission */
+        $permission = Permission::inRandomOrder()->first();
         /** @var Role */
         $role = Role::create(['name' => 'super admin']);
         /** @var User */
@@ -131,11 +147,19 @@ class RoleFeatureTest extends TestCase
 
         $this->actingAs($user)->put("/roles/{$role->id}", [
             'name' => 'admin',
+            'permissions' => [
+                $permission->id,
+            ]
         ]);
 
-        $role->refresh();
+        $this->assertDatabaseHas('roles', [
+            'id' => $role->id,
+            'name' => 'admin',
+        ]);
 
-        $this->assertEquals('admin', $role->name);
+        $this->assertDatabaseHas('role_has_permissions', [
+            'permission_id' => $permission->id,
+        ]);
     }
 
     /**
