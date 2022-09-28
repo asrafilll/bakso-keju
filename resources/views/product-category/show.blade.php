@@ -35,13 +35,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <form
-                        action="{{ url('/product-categories/' . $productCategory->id) }}"
-                        method="POST"
-                        novalidate
-                    >
-                        @csrf
-                        @method('PUT')
+                    @can(\App\Enums\PermissionEnum::update_product_category()->value)
+                        <form
+                            action="{{ url('/product-categories/' . $productCategory->id) }}"
+                            method="POST"
+                            novalidate
+                        >
+                            @csrf
+                            @method('PUT')
+                        @endcan
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-group">
@@ -86,11 +88,13 @@
                                 @endif
                             </div>
                         </div>
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >{{ __('Save') }}</button>
-                    </form>
+                        @can(\App\Enums\PermissionEnum::update_product_category()->value)
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >{{ __('Save') }}</button>
+                        </form>
+                    @endcan
                 </div>
             </div>
         </div>

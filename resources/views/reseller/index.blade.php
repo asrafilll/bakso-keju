@@ -76,7 +76,7 @@
                                             <td class="align-middle">{{ $reseller->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    @can(\App\Enums\PermissionEnum::update_reseller()->value)
+                                                    @can(\App\Enums\PermissionEnum::view_resellers()->value)
                                                         <a
                                                             href="{{ url('/resellers/' . $reseller->id) }}"
                                                             class="btn btn-default"

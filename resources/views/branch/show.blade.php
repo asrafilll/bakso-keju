@@ -35,13 +35,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <form
-                        action="{{ url('/branches/' . $branch->id) }}"
-                        method="POST"
-                        novalidate
-                    >
-                        @csrf
-                        @method('PUT')
+                    @can(\App\Enums\PermissionEnum::update_branch()->value)
+                        <form
+                            action="{{ url('/branches/' . $branch->id) }}"
+                            method="POST"
+                            novalidate
+                        >
+                            @csrf
+                            @method('PUT')
+                        @endcan
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-group">
@@ -135,11 +137,13 @@
                                 </div>
                             </div>
                         </div>
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >{{ __('Save') }}</button>
-                    </form>
+                        @can(\App\Enums\PermissionEnum::update_branch()->value)
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >{{ __('Save') }}</button>
+                        </form>
+                    @endcan
                 </div>
             </div>
         </div>

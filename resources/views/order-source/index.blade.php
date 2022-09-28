@@ -74,7 +74,7 @@
                                             <td class="align-middle">{{ $orderSource->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    @can(\App\Enums\PermissionEnum::update_order_source()->value)
+                                                    @can(\App\Enums\PermissionEnum::view_order_sources()->value)
                                                         <a
                                                             href="{{ url('/order-sources/' . $orderSource->id) }}"
                                                             class="btn btn-default"

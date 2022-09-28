@@ -74,7 +74,7 @@
                                             <td class="align-middle">{{ $role->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    @can(\App\Enums\PermissionEnum::update_role()->value)
+                                                    @can(\App\Enums\PermissionEnum::view_roles()->value)
                                                         <a
                                                             href="{{ url('/roles/' . $role->id) }}"
                                                             class="btn btn-default"

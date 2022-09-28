@@ -132,7 +132,7 @@
                                             <td class="align-middle">{{ $user->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    @can(\App\Enums\PermissionEnum::update_user()->value)
+                                                    @can(\App\Enums\PermissionEnum::view_users()->value)
                                                         <a
                                                             href="{{ url('/users/' . $user->id) }}"
                                                             class="btn btn-default"

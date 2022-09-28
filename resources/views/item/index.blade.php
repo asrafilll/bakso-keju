@@ -236,7 +236,7 @@
                                             <td class="align-middle">{{ $item->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    @can(\App\Enums\PermissionEnum::update_item()->value)
+                                                    @can(\App\Enums\PermissionEnum::view_items()->value)
                                                         <a
                                                             href="{{ url('/items/' . $item->id) }}"
                                                             class="btn btn-default"

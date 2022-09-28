@@ -81,7 +81,7 @@
                                             <td class="align-middle">{{ $itemCategory->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    @can(\App\Enums\PermissionEnum::update_item_category()->value)
+                                                    @can(\App\Enums\PermissionEnum::view_item_categories()->value)
                                                         <a
                                                             href="{{ url('/item-categories/' . $itemCategory->id) }}"
                                                             class="btn btn-default"

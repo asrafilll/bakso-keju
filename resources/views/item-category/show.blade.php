@@ -35,13 +35,15 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <form
-                        action="{{ url('/item-categories/' . $itemCategory->id) }}"
-                        method="POST"
-                        novalidate
-                    >
-                        @csrf
-                        @method('PUT')
+                    @can(\App\Enums\PermissionEnum::update_item_category()->value)
+                        <form
+                            action="{{ url('/item-categories/' . $itemCategory->id) }}"
+                            method="POST"
+                            novalidate
+                        >
+                            @csrf
+                            @method('PUT')
+                        @endcan
                         <div class="card">
                             <div class="card-body">
                                 <div class="form-group">
@@ -74,8 +76,7 @@
                                             @foreach ($parentItemCategories as $parentItemCategory)
                                                 <option
                                                     value="{{ $parentItemCategory->id }}"
-                                                    @if (Request::old('parent_id') == $parentItemCategory->id ||
-                                                        $itemCategory->parent_id == $parentItemCategory->id) selected @endif
+                                                    @if (Request::old('parent_id') == $parentItemCategory->id || $itemCategory->parent_id == $parentItemCategory->id) selected @endif
                                                 >{{ $parentItemCategory->name }}</option>
                                             @endforeach
                                         </select>
@@ -86,11 +87,13 @@
                                 @endif
                             </div>
                         </div>
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >{{ __('Save') }}</button>
-                    </form>
+                        @can(\App\Enums\PermissionEnum::update_item_category()->value)
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >{{ __('Save') }}</button>
+                        </form>
+                    @endcan
                 </div>
             </div>
         </div>

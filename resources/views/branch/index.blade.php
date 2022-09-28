@@ -84,7 +84,7 @@
                                             <td class="align-middle">{{ $branch->created_at }}</td>
                                             <td class="align-middle">
                                                 <div class="btn-group btn-group-sm">
-                                                    @can(\App\Enums\PermissionEnum::update_branch()->value)
+                                                    @can(\App\Enums\PermissionEnum::view_branches()->value)
                                                         <a
                                                             href="{{ url('/branches/' . $branch->id) }}"
                                                             class="btn btn-default"
