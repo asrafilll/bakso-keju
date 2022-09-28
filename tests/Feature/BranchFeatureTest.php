@@ -126,7 +126,7 @@ class BranchFeatureTest extends TestCase
         $branch = Branch::factory()->create();;
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_branch())
+            ->where('name', PermissionEnum::view_branches())
             ->first();
         /** @var User */
         $user = User::factory()->create();
@@ -146,7 +146,7 @@ class BranchFeatureTest extends TestCase
         $branch = Branch::factory()->create();
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_branch())
+            ->where('name', PermissionEnum::view_branches())
             ->first();
         /** @var User */
         $user = User::factory()->create();

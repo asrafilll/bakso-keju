@@ -110,7 +110,7 @@ class OrderSourceFeatureTest extends TestCase
         $orderSource = OrderSource::factory()->create();;
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_order_source())
+            ->where('name', PermissionEnum::view_order_sources())
             ->first();
         /** @var User */
         $user = User::factory()->create();
@@ -130,7 +130,7 @@ class OrderSourceFeatureTest extends TestCase
         $orderSource = OrderSource::factory()->create();
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_order_source())
+            ->where('name', PermissionEnum::view_order_sources())
             ->first();
         /** @var User */
         $user = User::factory()->create();

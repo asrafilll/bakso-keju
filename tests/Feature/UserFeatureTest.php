@@ -241,7 +241,7 @@ class UserFeatureTest extends TestCase
     {
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_user())
+            ->where('name', PermissionEnum::view_users())
             ->first();
         /** @var User */
         $createdUser = User::factory()->create();
@@ -262,7 +262,7 @@ class UserFeatureTest extends TestCase
     {
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_user())
+            ->where('name', PermissionEnum::view_users())
             ->first();
         /** @var User */
         $createdUser = User::factory()->create();
@@ -293,7 +293,7 @@ class UserFeatureTest extends TestCase
         $createdUser->assignRole($role1, $role2);
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_user())
+            ->where('name', PermissionEnum::view_users())
             ->first();
         /** @var User */
         $user = User::factory()->create();

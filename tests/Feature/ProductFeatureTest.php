@@ -129,7 +129,7 @@ class ProductFeatureTest extends TestCase
             ->create();
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_product())
+            ->where('name', PermissionEnum::view_products())
             ->first();
         /** @var User */
         $user = User::factory()->create();
@@ -227,7 +227,7 @@ class ProductFeatureTest extends TestCase
             ->create();
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_product())
+            ->where('name', PermissionEnum::view_products())
             ->first();
         /** @var User */
         $user = User::factory()->create();

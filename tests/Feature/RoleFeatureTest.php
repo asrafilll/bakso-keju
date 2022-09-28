@@ -117,7 +117,7 @@ class RoleFeatureTest extends TestCase
         $role = Role::create(['name' => 'super admin']);
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_role())
+            ->where('name', PermissionEnum::view_roles())
             ->first();
         /** @var User */
         $user = User::factory()->create();
@@ -137,7 +137,7 @@ class RoleFeatureTest extends TestCase
         $role = Role::create(['name' => 'super admin']);
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_role())
+            ->where('name', PermissionEnum::view_roles())
             ->first();
         /** @var User */
         $user = User::factory()->create();

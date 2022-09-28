@@ -113,7 +113,7 @@ class ResellerFeatureTest extends TestCase
         $reseller = Reseller::factory()->create();;
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_reseller())
+            ->where('name', PermissionEnum::view_resellers())
             ->first();
         /** @var User */
         $user = User::factory()->create();
@@ -133,7 +133,7 @@ class ResellerFeatureTest extends TestCase
         $reseller = Reseller::factory()->create();
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::update_reseller())
+            ->where('name', PermissionEnum::view_resellers())
             ->first();
         /** @var User */
         $user = User::factory()->create();
