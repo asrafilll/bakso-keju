@@ -20,8 +20,8 @@ Route::post('/auth/signout', [\App\Http\Controllers\AuthController::class, 'sign
 Route::group([
     'middleware' => ['auth']
 ], function () {
-    Route::view('/', 'welcome');
-    Route::view('/dashboard', 'welcome');
+    Route::redirect('/', '/dashboard');
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index']);
 
     Route::get('/users', [\App\Http\Controllers\UserController::class, 'index'])->can(\App\Enums\PermissionEnum::view_users());
     Route::post('/users', [\App\Http\Controllers\UserController::class, 'store'])->can(\App\Enums\PermissionEnum::create_user());

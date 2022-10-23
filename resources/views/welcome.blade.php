@@ -2,15 +2,9 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">Dashboard</h1>
-                </div><!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard v1</li>
-                    </ol>
+            <div class="row justify-content-between mb-2">
+                <div class="col-auto">
+                    <h1 class="m-0">{{ __('Dashboard') }}</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -20,77 +14,73 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <!-- Small boxes (Stat box) -->
             <div class="row">
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-info">
-                        <div class="inner">
-                            <h3>150</h3>
-
-                            <p>New Orders</p>
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-bordered table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            rowspan="3"
+                                            class="align-middle"
+                                        >{{ __('Product') }}</th>
+                                        <th
+                                            rowspan="3"
+                                            class="align-middle"
+                                        >{{ __('In Pcs') }}</th>
+                                        <th
+                                            rowspan="3"
+                                            class="align-middle"
+                                        >{{ __('In Value') }}</th>
+                                        @foreach ($branches as $branch)
+                                            <th
+                                                colspan="{{ count($branch['order_sources']) * 2 }}"
+                                                class="text-center"
+                                            >
+                                                {{ $branch['name'] }}
+                                            </th>
+                                        @endforeach
+                                    </tr>
+                                    <tr>
+                                        @foreach ($branches as $branch)
+                                            @foreach ($branch['order_sources'] as $orderSource)
+                                                <th
+                                                    colspan="2"
+                                                    class="text-center"
+                                                >
+                                                    {{ $orderSource['name'] }}
+                                                </th>
+                                            @endforeach
+                                        @endforeach
+                                    </tr>
+                                    <tr>
+                                        @foreach ($branches as $branch)
+                                            @foreach ($branch['order_sources'] as $orderSource)
+                                                <th>{{ __('In Pcs') }}</th>
+                                                <th>{{ __('In Value') }}</th>
+                                            @endforeach
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($products as $product)
+                                        <tr>
+                                            <td>{{ $product['product_name'] }}</td>
+                                            <td class="text-right">{{ $product['idr_total_quantity'] }}</td>
+                                            <td class="text-right">{{ $product['idr_total_price'] }}</td>
+                                            @foreach ($product['branches'] as $branch)
+                                                @foreach ($branch['order_sources'] as $orderSource)
+                                                    <td class="text-right">{{ $orderSource['idr_total_quantity'] }}
+                                                    </td>
+                                                    <td class="text-right">{{ $orderSource['idr_total_price'] }}</td>
+                                                @endforeach
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="icon">
-                            <i class="ion ion-bag"></i>
-                        </div>
-                        <a
-                            href="#"
-                            class="small-box-footer"
-                        >More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>53<sup style="font-size: 20px">%</sup></h3>
-
-                            <p>Bounce Rate</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-stats-bars"></i>
-                        </div>
-                        <a
-                            href="#"
-                            class="small-box-footer"
-                        >More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-warning">
-                        <div class="inner">
-                            <h3>44</h3>
-
-                            <p>User Registrations</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-person-add"></i>
-                        </div>
-                        <a
-                            href="#"
-                            class="small-box-footer"
-                        >More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <!-- ./col -->
-                <div class="col-lg-3 col-6">
-                    <!-- small box -->
-                    <div class="small-box bg-danger">
-                        <div class="inner">
-                            <h3>65</h3>
-
-                            <p>Unique Visitors</p>
-                        </div>
-                        <div class="icon">
-                            <i class="ion ion-pie-graph"></i>
-                        </div>
-                        <a
-                            href="#"
-                            class="small-box-footer"
-                        >More info <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->

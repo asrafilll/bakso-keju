@@ -25,10 +25,13 @@ class FetchProductSummariesAction
         $productSummaries = $this->getProductSummaries($fromDate, $toDate);
         $branchesWithOrderSources = $this->getBranchesWithOrderSources();
 
-        return $this->transform(
-            $productSummaries,
-            $branchesWithOrderSources
-        );
+        return [
+            'branches' => $branchesWithOrderSources,
+            'products' => $this->transform(
+                $productSummaries,
+                $branchesWithOrderSources
+            )
+        ];
     }
 
     /**
@@ -98,7 +101,9 @@ class FetchProductSummariesAction
                 'id' => $branchItem->id,
                 'name' => $branchItem->name,
                 'total_quantity' => 0,
+                'idr_total_quantity' => '0',
                 'total_price' => 0,
+                'idr_total_price' => '0',
                 'order_sources' => [],
             ];
             foreach ($orderSourceCollection as $orderSourceItem) {
@@ -106,7 +111,9 @@ class FetchProductSummariesAction
                     'id' => $orderSourceItem->id,
                     'name' => $orderSourceItem->name,
                     'total_quantity' => 0,
+                    'idr_total_quantity' => '0',
                     'total_price' => 0,
+                    'idr_total_price' => '0',
                 ];
             }
         }
@@ -139,13 +146,45 @@ class FetchProductSummariesAction
             $totalQuantity = intval($productSummary->total_quantity);
             $totalPrice = intval($productSummary->total_price);
             $productSummariesMap[$productSummary->product_id]['total_quantity'] += $totalQuantity;
+            $productSummariesMap[$productSummary->product_id]['idr_total_quantity'] = $this->getIdrCurrency(
+                $productSummariesMap[$productSummary->product_id]['total_quantity']
+            );
             $productSummariesMap[$productSummary->product_id]['total_price'] += $totalPrice;
+            $productSummariesMap[$productSummary->product_id]['idr_total_price'] = $this->getIdrCurrency(
+                $productSummariesMap[$productSummary->product_id]['total_price']
+            );
             $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['total_quantity'] += $totalQuantity;
+            $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['idr_total_quantity'] = $this->getIdrCurrency(
+                $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['total_quantity']
+            );
             $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['total_price'] += $totalPrice;
+            $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['idr_total_price'] = $this->getIdrCurrency(
+                $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['total_price']
+            );
             $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_quantity'] = $totalQuantity;
+            $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['idr_total_quantity'] = $this->getIdrCurrency(
+                $totalQuantity
+            );
             $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_price'] = $totalPrice;
+            $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['idr_total_price'] = $this->getIdrCurrency(
+                $totalPrice
+            );
         }
 
         return $productSummariesMap;
+    }
+
+    /**
+     * @param int $value
+     * @return string
+     */
+    private function getIdrCurrency(int $value)
+    {
+        return number_format(
+            $value,
+            0,
+            ',',
+            '.'
+        );
     }
 }
