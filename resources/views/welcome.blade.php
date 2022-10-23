@@ -17,6 +17,55 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+                        <div class="card-body">
+                            <form
+                                action="{{ '/dashboard' }}"
+                                method="GET"
+                            >
+                                <div class="form-row align-items-center">
+                                    <div class="form-group row col-sm-4">
+                                        <label
+                                            for="from_date"
+                                            class="col-form-label col-4 col-sm-auto text-right"
+                                        >{{ __('From date') }}</label>
+                                        <div class="col">
+                                            <input
+                                                type="date"
+                                                name="from_date"
+                                                id="from_date"
+                                                class="form-control"
+                                                value="{{ Request::get('from_date', \Illuminate\Support\Carbon::now()->format('Y-m-d')) }}"
+                                                onchange="document.getElementById('to_date').setAttribute('min', this.value)"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row col-sm-4">
+                                        <label
+                                            for="to_date"
+                                            class="col-form-label col-4 col-sm-auto text-right"
+                                        >{{ __('To date') }}</label>
+                                        <div class="col">
+                                            <input
+                                                type="date"
+                                                name="to_date"
+                                                id="to_date"
+                                                class="form-control"
+                                                value="{{ Request::get('to_date', \Illuminate\Support\Carbon::now()->format('Y-m-d')) }}"
+                                                onchange="document.getElementById('from_date').setAttribute('max', this.value)"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-sm-auto text-right">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary"
+                                        >{{ __('Filter') }}</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card">
                         <div class="card-body table-responsive p-0">
                             <table class="table table-bordered table-hover text-nowrap">
                                 <thead>
