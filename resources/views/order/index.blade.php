@@ -7,8 +7,6 @@
 
     <!-- Content Header (Page header) -->
     <div class="content-header">
-        <div class="d-flex mb-2">
-        </div>
         <div class="container-fluid">
             <div class="row justify-content-between mb-2">
                 <div class="col-auto">
