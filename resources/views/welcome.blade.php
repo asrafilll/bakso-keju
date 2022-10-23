@@ -41,9 +41,7 @@
                                             <th
                                                 colspan="{{ count($branch['order_sources']) * 2 }}"
                                                 class="text-center"
-                                            >
-                                                {{ $branch['name'] }}
-                                            </th>
+                                            >{{ $branch['name'] }}</th>
                                         @endforeach
                                     </tr>
                                     <tr>
@@ -52,9 +50,7 @@
                                                 <th
                                                     colspan="2"
                                                     class="text-center"
-                                                >
-                                                    {{ $orderSource['name'] }}
-                                                </th>
+                                                >{{ $orderSource['name'] }}</th>
                                             @endforeach
                                         @endforeach
                                     </tr>
