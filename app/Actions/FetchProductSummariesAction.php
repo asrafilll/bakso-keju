@@ -46,28 +46,41 @@ class FetchProductSummariesAction
                 SELECT
                     products.id as product_id,
                     CONCAT_WS(' - ', sub_product_categories.name, products.name) as product_name,
-                    branches.id as branch_id,
-                    branches.name as branch_name,
-                    order_sources.id as order_source_id,
-                    order_sources.name as order_source_name,
-                    IFNULL(SUM(order_line_items.quantity), 0) as total_quantity,
-                    IFNULL(SUM(order_line_items.total), 0) as total_price
+                    order_summaries.branch_id,
+                    order_summaries.branch_name,
+                    order_summaries.order_source_id,
+                    order_summaries.order_source_name,
+                    IFNULL(SUM(order_summaries.quantity), 0) as total_quantity,
+                    IFNULL(SUM(order_summaries.total), 0) as total_price
                 FROM
                     products
-                JOIN product_categories sub_product_categories ON
+                LEFT JOIN product_categories sub_product_categories ON
                     products.product_category_id = sub_product_categories.id
-                LEFT JOIN order_line_items ON
-                    products.id = order_line_items.product_id
-                LEFT JOIN orders ON
-                    order_line_items.order_id = orders.id
-                LEFT JOIN branches on
-                    orders.branch_id = branches.id
-                LEFT JOIN order_sources on
-                    orders.order_source_id = order_sources.id
-                WHERE DATE(orders.created_at) >= ? AND DATE(orders.created_at) <= ?
+                LEFT JOIN (
+                    SELECT
+                        order_line_items.product_id,
+                        order_line_items.quantity,
+                        order_line_items.total,
+                        orders.branch_id,
+                        branches.name as branch_name,
+                        orders.order_source_id,
+                        order_sources.name as order_source_name
+                    FROM
+                        order_line_items
+                    JOIN orders ON
+                        order_line_items.order_id = orders.id
+                    JOIN branches on
+                        orders.branch_id = branches.id
+                    JOIN order_sources on
+                        orders.order_source_id = order_sources.id
+                    WHERE
+                        DATE(orders.created_at) >= ?
+                            AND DATE(orders.created_at) <= ?
+                        ) as order_summaries ON
+                        products.id = order_summaries.product_id
                 GROUP BY
-                    branches.id,
-                    order_sources.id,
+                    order_summaries.branch_id,
+                    order_summaries.order_source_id,
                     products.id
                 ORDER BY
                     product_name ASC,
@@ -138,9 +151,15 @@ class FetchProductSummariesAction
                     'product_id' => $productSummary->product_id,
                     'product_name' => $productSummary->product_name,
                     'total_quantity' => 0,
+                    'idr_total_quantity' => '0',
                     'total_price' => 0,
+                    'idr_total_price' => '0',
                     'branches' => $branchesWithOrderSources,
                 ];
+            }
+
+            if (is_null($productSummary->branch_id)) {
+                continue;
             }
 
             $totalQuantity = intval($productSummary->total_quantity);
@@ -182,7 +201,7 @@ class FetchProductSummariesAction
     {
         return number_format(
             $value,
-            0,
+            '0',
             ',',
             '.'
         );
