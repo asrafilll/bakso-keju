@@ -23,15 +23,19 @@
                                     <tr>
                                         <th
                                             rowspan="3"
+                                            class="align-middle text-center"
+                                        >{{ __('No') }}</th>
+                                        <th
+                                            rowspan="3"
                                             class="align-middle"
                                         >{{ __('Product') }}</th>
                                         <th
                                             rowspan="3"
-                                            class="align-middle"
+                                            class="align-middle text-center"
                                         >{{ __('In Pcs') }}</th>
                                         <th
                                             rowspan="3"
-                                            class="align-middle"
+                                            class="align-middle text-center"
                                         >{{ __('In Value') }}</th>
                                         @foreach ($branches as $branch)
                                             <th
@@ -66,6 +70,7 @@
                                 <tbody>
                                     @foreach ($products as $product)
                                         <tr>
+                                            <td class="text-right">{{ $loop->iteration }}</td>
                                             <td>{{ $product['product_name'] }}</td>
                                             <td class="text-right">{{ $product['idr_total_quantity'] }}</td>
                                             <td class="text-right">{{ $product['idr_total_price'] }}</td>
