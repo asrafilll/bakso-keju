@@ -2,22 +2,18 @@
 
 namespace Tests\Feature;
 
-use App\Actions\CreateManufacturingOrderAction;
+use App\Actions\CreateManufactureProductComponentAction;
 use App\Enums\PermissionEnum;
 use App\Models\Branch;
-use App\Models\ManufacturingOrder;
+use App\Models\ManufactureProductComponent;
 use App\Models\Permission;
-use App\Models\Product;
 use App\Models\ProductComponent;
 use App\Models\ProductComponentInventory;
-use App\Models\ProductInventory;
-use App\Models\Reseller;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
-class ManufacturingOrderFeatureTest extends TestCase
+class ManufactureProductComponentFeatureTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -32,16 +28,16 @@ class ManufacturingOrderFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldShowManufacturingOrderIndexPage()
+    public function shouldShowManufactureProductComponentIndexPage()
     {
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::view_manufacturing_orders())
+            ->where('name', PermissionEnum::view_manufacture_product_components())
             ->first();
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
-        $response = $this->actingAs($user)->get('/manufacturing-orders');
+        $response = $this->actingAs($user)->get('/manufacture-product-components');
 
         $response->assertStatus(200);
     }
@@ -50,11 +46,11 @@ class ManufacturingOrderFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldContainsManufacturingOrderOnManufacturingOrderIndexPage()
+    public function shouldContainsManufactureProductComponentOnManufactureProductComponentIndexPage()
     {
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::view_manufacturing_orders())
+            ->where('name', PermissionEnum::view_manufacture_product_components())
             ->first();
         /** @var User */
         $user = User::factory()->create();
@@ -62,17 +58,17 @@ class ManufacturingOrderFeatureTest extends TestCase
 
         /** @var Branch */
         $branch = Branch::factory()->create();
-        /** @var ManufacturingOrder */
-        $manufacturingOrder = ManufacturingOrder::factory()
+        /** @var ManufactureProductComponent */
+        $manufactureProductComponent = ManufactureProductComponent::factory()
             ->for($branch)
             ->create([
                 'created_by' => $user->id,
             ]);
-        $response = $this->actingAs($user)->get('/manufacturing-orders');
+        $response = $this->actingAs($user)->get('/manufacture-product-components');
 
         $response->assertSee([
-            $manufacturingOrder->order_number,
-            $manufacturingOrder->created_at,
+            $manufactureProductComponent->order_number,
+            $manufactureProductComponent->created_at,
             $branch->name,
         ]);
     }
@@ -81,16 +77,16 @@ class ManufacturingOrderFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldShowCreateManufacturingOrderPage()
+    public function shouldShowCreateManufactureProductComponentPage()
     {
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::create_manufacturing_order())
+            ->where('name', PermissionEnum::create_manufacture_product_component())
             ->first();
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
-        $response = $this->actingAs($user)->get('/manufacturing-orders/create');
+        $response = $this->actingAs($user)->get('/manufacture-product-components/create');
 
         $response->assertStatus(200);
     }
@@ -99,7 +95,7 @@ class ManufacturingOrderFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldCreateManufacturingOrder()
+    public function shouldCreateManufactureProductComponent()
     {
         /** @var Branch */
         $branch = Branch::factory()->create();
@@ -107,12 +103,12 @@ class ManufacturingOrderFeatureTest extends TestCase
         $productComponent = ProductComponent::factory()->create();
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::create_manufacturing_order())
+            ->where('name', PermissionEnum::create_manufacture_product_component())
             ->first();
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
-        $response = $this->actingAs($user)->post('/manufacturing-orders', [
+        $response = $this->actingAs($user)->post('/manufacture-product-components', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'line_items' => [
@@ -127,7 +123,7 @@ class ManufacturingOrderFeatureTest extends TestCase
 
         $response->assertRedirect();
 
-        $this->assertDatabaseHas('manufacturing_orders', [
+        $this->assertDatabaseHas('manufacture_product_components', [
             'created_at' => '2022-01-01 00:00:00',
             'created_by' => $user->id,
             'branch_id' => $branch->id,
@@ -136,7 +132,7 @@ class ManufacturingOrderFeatureTest extends TestCase
             'total_line_items_price' => 10000 * 2,
         ]);
 
-        $this->assertDatabaseHas('manufacturing_order_line_items', [
+        $this->assertDatabaseHas('manufacture_product_component_line_items', [
             'product_component_id' => $productComponent->id,
             'product_component_name' => $productComponent->name,
             'price' => 10000,
@@ -156,23 +152,23 @@ class ManufacturingOrderFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldShowManufacturingOrderDetailPage()
+    public function shouldShowManufactureProductComponentDetailPage()
     {
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::view_manufacturing_orders())
+            ->where('name', PermissionEnum::view_manufacture_product_components())
             ->first();
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
         /** @var Branch */
         $branch = Branch::factory()->create();
-        /** @var ManufacturingOrder */
-        $manufacturingOrder = ManufacturingOrder::factory()
+        /** @var ManufactureProductComponent */
+        $manufactureProductComponent = ManufactureProductComponent::factory()
             ->for($branch)
             ->for($user, 'creator')
             ->create();
-        $response = $this->actingAs($user)->get("/manufacturing-orders/{$manufacturingOrder->id}");
+        $response = $this->actingAs($user)->get("/manufacture-product-components/{$manufactureProductComponent->id}");
 
         $response->assertStatus(200);
     }
@@ -181,27 +177,27 @@ class ManufacturingOrderFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldContainsManufacturingOrderDataWhenShowManufacturingOrderDetailPage()
+    public function shouldContainsManufactureProductComponentDataWhenShowManufactureProductComponentDetailPage()
     {
         /** @var Branch */
         $branch = Branch::factory()->create();
-        /** @var ManufacturingOrder */
-        $manufacturingOrder = ManufacturingOrder::factory()
+        /** @var ManufactureProductComponent */
+        $manufactureProductComponent = ManufactureProductComponent::factory()
             ->for($branch)
             ->create();
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::view_manufacturing_orders())
+            ->where('name', PermissionEnum::view_manufacture_product_components())
             ->first();
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
-        $response = $this->actingAs($user)->get("/manufacturing-orders/{$manufacturingOrder->id}");
+        $response = $this->actingAs($user)->get("/manufacture-product-components/{$manufactureProductComponent->id}");
 
         $response->assertSee([
-            $manufacturingOrder->order_number,
+            $manufactureProductComponent->order_number,
             $branch->name,
-            $manufacturingOrder->customer_name,
+            $manufactureProductComponent->customer_name,
         ]);
     }
 
@@ -209,11 +205,11 @@ class ManufacturingOrderFeatureTest extends TestCase
      * @test
      * @return void
      */
-    public function shouldDeleteManufacturingOrder()
+    public function shouldDeleteManufactureProductComponent()
     {
         /** @var Permission */
         $permission = Permission::query()
-            ->where('name', PermissionEnum::delete_manufacturing_order())
+            ->where('name', PermissionEnum::delete_manufacture_product_component())
             ->first();
         /** @var User */
         $user = User::factory()->create();
@@ -241,19 +237,19 @@ class ManufacturingOrderFeatureTest extends TestCase
                 ],
             ],
         ];
-        $manufacturingOrder = resolve(CreateManufacturingOrderAction::class)->execute($data + [
+        $manufactureProductComponent = resolve(CreateManufactureProductComponentAction::class)->execute($data + [
             'created_by' => $user->id,
         ]);
 
-        $response = $this->actingAs($user)->delete("/manufacturing-orders/{$manufacturingOrder->id}");
+        $response = $this->actingAs($user)->delete("/manufacture-product-components/{$manufactureProductComponent->id}");
         $response->assertSessionHas(['success']);
 
-        $this->assertDatabaseMissing('manufacturing_orders', [
-            'id' => $manufacturingOrder->id,
+        $this->assertDatabaseMissing('manufacture_product_components', [
+            'id' => $manufactureProductComponent->id,
         ]);
 
-        $this->assertDatabaseMissing('manufacturing_order_line_items', [
-            'manufacturing_order_id' => $manufacturingOrder->id,
+        $this->assertDatabaseMissing('manufacture_product_component_line_items', [
+            'manufacture_product_component_id' => $manufactureProductComponent->id,
             'product_component_id' => $productComponent->id,
         ]);
 

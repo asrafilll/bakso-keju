@@ -10,14 +10,14 @@
             <div class="row align-items-center mb-2">
                 <div class="col-auto">
                     <a
-                        href="{{ url('/manufacturing-orders') }}"
+                        href="{{ url('/manufacture-product-components') }}"
                         class="btn btn-default"
                     >
                         <i class="fas fa-arrow-left"></i>
                     </a>
                 </div>
                 <div class="col-auto">
-                    <h1 class="m-0">{{ $manufacturingOrder->order_number }}</h1>
+                    <h1 class="m-0">{{ $manufactureProductComponent->order_number }}</h1>
                 </div>
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -35,13 +35,13 @@
                                 <div class="col">
                                     <dl>
                                         <dt>{{ __('Branch') }}</dt>
-                                        <dd>{{ $manufacturingOrder->branch->name }}</dd>
+                                        <dd>{{ $manufactureProductComponent->branch->name }}</dd>
                                     </dl>
                                 </div>
                                 <div class="col">
                                     <dl>
                                         <dt>{{ __('Created by') }}</dt>
-                                        <dd>{{ $manufacturingOrder->creator->name }}</dd>
+                                        <dd>{{ $manufactureProductComponent->creator->name }}</dd>
                                     </dl>
                                 </div>
                             </div>
@@ -70,20 +70,20 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($manufacturingOrder->manufacturingOrderLineItems as $manufacturingOrderLineItem)
+                                        @foreach ($manufactureProductComponent->manufactureProductComponentLineItems as $manufactureProductComponentLineItem)
                                             <tr>
-                                                <td>{{ $manufacturingOrderLineItem->product_component_name }}</td>
+                                                <td>{{ $manufactureProductComponentLineItem->product_component_name }}</td>
                                                 <td class="text-right">
-                                                    {{ $manufacturingOrderLineItem->idr_price }}
+                                                    {{ $manufactureProductComponentLineItem->idr_price }}
                                                 </td>
                                                 <td class="text-right">
-                                                    {{ $manufacturingOrderLineItem->idr_quantity }}
+                                                    {{ $manufactureProductComponentLineItem->idr_quantity }}
                                                 </td>
                                                 <td class="text-right">
-                                                    {{ $manufacturingOrderLineItem->idr_total_weight }}
+                                                    {{ $manufactureProductComponentLineItem->idr_total_weight }}
                                                 </td>
                                                 <td class="text-right">
-                                                    {{ $manufacturingOrderLineItem->idr_total_price }}
+                                                    {{ $manufactureProductComponentLineItem->idr_total_price }}
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -92,13 +92,13 @@
                                         <tr>
                                             <th colspan="2">{{ __('Sub Total') }}</th>
                                             <th class="text-right">
-                                                {{ $manufacturingOrder->idr_total_line_items_quantity }}
+                                                {{ $manufactureProductComponent->idr_total_line_items_quantity }}
                                             </th>
                                             <th class="text-right">
-                                                {{ $manufacturingOrder->idr_total_line_items_weight }}
+                                                {{ $manufactureProductComponent->idr_total_line_items_weight }}
                                             </th>
                                             <th class="text-right">
-                                                {{ $manufacturingOrder->idr_total_line_items_price }}
+                                                {{ $manufactureProductComponent->idr_total_line_items_price }}
                                             </th>
                                         </tr>
                                     </tfoot>
@@ -111,7 +111,7 @@
                         class="btn btn-danger"
                         data-toggle="modal"
                         data-target="#modal-delete"
-                        data-action="{{ url('/manufacturing-orders/' . $manufacturingOrder->id) }}"
+                        data-action="{{ url('/manufacture-product-components/' . $manufactureProductComponent->id) }}"
                     >{{ __('Delete') }}</button>
                 </div>
             </div>

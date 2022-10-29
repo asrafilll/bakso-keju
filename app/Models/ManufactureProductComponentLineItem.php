@@ -6,7 +6,7 @@ use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ManufacturingOrderLineItem extends Model
+class ManufactureProductComponentLineItem extends Model
 {
     use HasFactory;
     use HasUuid;
@@ -15,7 +15,7 @@ class ManufacturingOrderLineItem extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'manufacturing_order_id',
+        'manufacture_product_component_id',
         'product_component_id',
         'product_component_name',
         'price',
@@ -27,9 +27,9 @@ class ManufacturingOrderLineItem extends Model
     /**
      * @return BelongsTo
      */
-    public function manufacturingOrder()
+    public function manufactureProductComponent()
     {
-        return $this->belongsTo(ManufacturingOrder::class);
+        return $this->belongsTo(ManufactureProductComponent::class);
     }
 
     /**

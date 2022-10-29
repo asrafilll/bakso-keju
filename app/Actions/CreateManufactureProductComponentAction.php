@@ -3,8 +3,8 @@
 namespace App\Actions;
 
 use App\Models\Branch;
-use App\Models\ManufacturingOrder;
-use App\Models\ManufacturingOrderLineItem;
+use App\Models\ManufactureProductComponent;
+use App\Models\ManufactureProductComponentLineItem;
 use App\Models\Order;
 use App\Models\ProductComponent;
 use App\Models\ProductComponentInventory;
@@ -15,7 +15,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
-class CreateManufacturingOrderAction
+class CreateManufactureProductComponentAction
 {
     /**
      * @param array $data
@@ -45,7 +45,7 @@ class CreateManufacturingOrderAction
             ->whereIn('id', $lineItemsProductComponentIDs)
             ->get();
         /** @var Collection */
-        $manufacturingOrderLineItems = new Collection();
+        $manufactureProductComponentLineItems = new Collection();
 
         foreach ($lineItems as $lineItem) {
             $productComponent = $productComponents->firstWhere('id', $lineItem['product_component_id']);
@@ -61,7 +61,7 @@ class CreateManufacturingOrderAction
             $quantity = intval($lineItem['quantity']);
             $totalWeight = floatval($lineItem['total_weight']);
 
-            $manufacturingOrderLineItems->push(new ManufacturingOrderLineItem([
+            $manufactureProductComponentLineItems->push(new ManufactureProductComponentLineItem([
                 'product_component_id' => $productComponent->id,
                 'product_component_name' => $productComponent->name,
                 'price' => $price,
@@ -72,12 +72,12 @@ class CreateManufacturingOrderAction
         }
 
         $orderNumber = Carbon::now()->format('YmdHis');
-        $totalLineItemsQuantity = $manufacturingOrderLineItems->sum('quantity');
-        $totalLineItemsWeight = $manufacturingOrderLineItems->sum('total_weight');
-        $totalLineItemsPrice = $manufacturingOrderLineItems->sum('total_price');
+        $totalLineItemsQuantity = $manufactureProductComponentLineItems->sum('quantity');
+        $totalLineItemsWeight = $manufactureProductComponentLineItems->sum('total_weight');
+        $totalLineItemsPrice = $manufactureProductComponentLineItems->sum('total_price');
 
-        /** @var ManufacturingOrder */
-        $manufacturingOrder = new ManufacturingOrder([
+        /** @var ManufactureProductComponent */
+        $manufactureProductComponent = new ManufactureProductComponent([
             'created_at' => $data['created_at'],
             'created_by' => $data['created_by'],
             'branch_id' => $data['branch_id'],
@@ -87,31 +87,31 @@ class CreateManufacturingOrderAction
             'total_line_items_price' => $totalLineItemsPrice,
         ]);
 
-        $manufacturingOrder->save();
+        $manufactureProductComponent->save();
 
-        foreach ($manufacturingOrderLineItems as $manufacturingOrderLineItem) {
-            $manufacturingOrderLineItem->manufacturing_order_id = $manufacturingOrder->id;
-            $manufacturingOrderLineItem->save();
+        foreach ($manufactureProductComponentLineItems as $manufactureProductComponentLineItem) {
+            $manufactureProductComponentLineItem->manufacture_product_component_id = $manufactureProductComponent->id;
+            $manufactureProductComponentLineItem->save();
 
             $productComponentInventory = ProductComponentInventory::query()
-                ->where('branch_id', $manufacturingOrder->branch_id)
-                ->where('product_component_id', $manufacturingOrderLineItem->product_component_id)
+                ->where('branch_id', $manufactureProductComponent->branch_id)
+                ->where('product_component_id', $manufactureProductComponentLineItem->product_component_id)
                 ->first();
 
             if ($productComponentInventory) {
-                $productComponentInventory->quantity += $manufacturingOrderLineItem->quantity;
+                $productComponentInventory->quantity += $manufactureProductComponentLineItem->quantity;
                 $productComponentInventory->save();
             } else {
                 ProductComponentInventory::create([
-                    'branch_id' => $manufacturingOrder->branch_id,
-                    'product_component_id' => $manufacturingOrderLineItem->product_component_id,
-                    'quantity' => $manufacturingOrderLineItem->quantity,
+                    'branch_id' => $manufactureProductComponent->branch_id,
+                    'product_component_id' => $manufactureProductComponentLineItem->product_component_id,
+                    'quantity' => $manufactureProductComponentLineItem->quantity,
                 ]);
             }
         }
 
         DB::commit();
 
-        return $manufacturingOrder;
+        return $manufactureProductComponent;
     }
 }

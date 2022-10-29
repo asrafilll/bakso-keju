@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class ManufacturingOrder extends Model
+class ManufactureProductComponent extends Model
 {
     use HasFactory;
     use HasUuid;
@@ -37,9 +37,9 @@ class ManufacturingOrder extends Model
     /**
      * @return HasMany
      */
-    public function manufacturingOrderLineItems()
+    public function manufactureProductComponentLineItems()
     {
-        return $this->hasMany(ManufacturingOrderLineItem::class);
+        return $this->hasMany(ManufactureProductComponentLineItem::class);
     }
 
     /**

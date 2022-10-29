@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\CreateManufacturingOrderAction;
-use App\Actions\DeleteManufacturingOrderAction;
+use App\Actions\CreateManufactureProductComponentAction;
+use App\Actions\DeleteManufactureProductComponentAction;
 use App\Actions\SearchBranchesAction;
-use App\Http\Requests\ManufacturingOrderStoreRequest;
-use App\Models\ManufacturingOrder;
+use App\Http\Requests\ManufactureProductComponentStoreRequest;
+use App\Models\ManufactureProductComponent;
 use App\Models\ProductComponent;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
-class ManufacturingOrderController extends Controller
+class ManufactureProductComponentController extends Controller
 {
     /**
      * @param Request $request
@@ -30,15 +30,15 @@ class ManufacturingOrderController extends Controller
                 );
             },
             'default' => function () use ($request) {
-                $manufacturingOrderQuery = ManufacturingOrder::query()
+                $manufactureProductComponentQuery = ManufactureProductComponent::query()
                     ->select([
-                        'manufacturing_orders.*',
+                        'manufacture_product_components.*',
                         'branches.name as branch_name',
                     ])
-                    ->join('branches', 'manufacturing_orders.branch_id', 'branches.id');
+                    ->join('branches', 'manufacture_product_components.branch_id', 'branches.id');
 
                 if ($request->filled('term')) {
-                    $manufacturingOrderQuery->where(function ($query) use ($request) {
+                    $manufactureProductComponentQuery->where(function ($query) use ($request) {
                         $searchables = [
                             'orders.order_number',
                             'branches.name',
@@ -56,18 +56,18 @@ class ManufacturingOrderController extends Controller
 
                 foreach ($filterables as $filterable) {
                     if ($request->filled($filterable)) {
-                        $manufacturingOrderQuery->where($filterable, $request->get($filterable));
+                        $manufactureProductComponentQuery->where($filterable, $request->get($filterable));
                     }
                 }
 
                 if ($request->filled('start_created_at')) {
-                    $manufacturingOrderQuery->whereRaw('DATE(orders.created_at) >= ?', [
+                    $manufactureProductComponentQuery->whereRaw('DATE(orders.created_at) >= ?', [
                         $request->get('start_created_at'),
                     ]);
                 }
 
                 if ($request->filled('end_created_at')) {
-                    $manufacturingOrderQuery->whereRaw('DATE(orders.created_at) <= ?', [
+                    $manufactureProductComponentQuery->whereRaw('DATE(orders.created_at) <= ?', [
                         $request->get('end_created_at'),
                     ]);
                 }
@@ -90,10 +90,10 @@ class ManufacturingOrderController extends Controller
                     $direction = $request->get('direction');
                 }
 
-                $manufacturingOrders = $manufacturingOrderQuery->orderBy($sort, $direction)->paginate();
+                $manufactureProductComponents = $manufactureProductComponentQuery->orderBy($sort, $direction)->paginate();
 
-                return Response::view('manufacturing-order.index', [
-                    'manufacturingOrders' => $manufacturingOrders,
+                return Response::view('manufacture-product-component.index', [
+                    'manufactureProductComponents' => $manufactureProductComponents,
                 ]);
             },
         ];
@@ -124,7 +124,7 @@ class ManufacturingOrderController extends Controller
                 return Response::json($productComponents);
             },
             'default' => function () {
-                return Response::view('manufacturing-order.create');
+                return Response::view('manufacture-product-component.create');
             },
         ];
 
@@ -132,66 +132,66 @@ class ManufacturingOrderController extends Controller
     }
 
     /**
-     * @param ManufacturingOrderStoreRequest $request
-     * @param CreateManufacturingOrderAction $createManufacturingOrderAction
+     * @param ManufactureProductComponentStoreRequest $request
+     * @param CreateManufactureProductComponentAction $createmanufactureProductComponentAction
      * @return \Illuminate\Http\Response
      */
     public function store(
-        ManufacturingOrderStoreRequest $manufacturingOrderStoreRequest,
-        CreateManufacturingOrderAction $createManufacturingOrderAction
+        ManufactureProductComponentStoreRequest $manufactureProductComponentstoreRequest,
+        CreateManufactureProductComponentAction $createmanufactureProductComponentAction
     ) {
         try {
-            $order = $createManufacturingOrderAction->execute(
-                $manufacturingOrderStoreRequest->all() + [
-                    'created_by' => $manufacturingOrderStoreRequest->user()->id,
+            $order = $createmanufactureProductComponentAction->execute(
+                $manufactureProductComponentstoreRequest->all() + [
+                    'created_by' => $manufactureProductComponentstoreRequest->user()->id,
                 ]
             );
 
-            return Response::redirectTo('/manufacturing-orders/' . $order->id)
+            return Response::redirectTo('/manufacture-product-components/' . $order->id)
                 ->with('success', __('crud.created', [
-                    'resource' => 'manufacturing order',
+                    'resource' => 'manufacture product component',
                 ]));
         } catch (Exception $e) {
-            return Response::redirectTo('/manufacturing-orders/create')
+            return Response::redirectTo('/manufacture-product-components/create')
                 ->with('failed', $e->getMessage());
         }
     }
 
     /**
-     * @param ManufacturingOrder $manufacturingOrder
+     * @param ManufactureProductComponent $manufactureProductComponent
      * @return \Illuminate\Http\Response
      */
-    public function show(ManufacturingOrder $manufacturingOrder)
+    public function show(ManufactureProductComponent $manufactureProductComponent)
     {
-        $manufacturingOrder->load([
+        $manufactureProductComponent->load([
             'branch',
-            'manufacturingOrderLineItems',
+            'manufactureProductComponentLineItems',
             'creator',
         ]);
 
-        return Response::view('manufacturing-order.show', [
-            'manufacturingOrder' => $manufacturingOrder,
+        return Response::view('manufacture-product-component.show', [
+            'manufactureProductComponent' => $manufactureProductComponent,
         ]);
     }
 
     /**
-     * @param ManufacturingOrder $manufacturingOrder
-     * @param DeleteManufacturingOrderAction $deleteManufacturingOrderAction
+     * @param ManufactureProductComponent $manufactureProductComponent
+     * @param DeleteManufactureProductComponentAction $deletemanufactureProductComponentAction
      * @return \Illuminate\Http\Response
      */
     public function destroy(
-        ManufacturingOrder $manufacturingOrder,
-        DeleteManufacturingOrderAction $deleteManufacturingOrderAction
+        ManufactureProductComponent $manufactureProductComponent,
+        DeleteManufactureProductComponentAction $deletemanufactureProductComponentAction
     ) {
         try {
-            $deleteManufacturingOrderAction->execute($manufacturingOrder);
+            $deletemanufactureProductComponentAction->execute($manufactureProductComponent);
 
-            return Response::redirectTo('/manufacturing-orders')
+            return Response::redirectTo('/manufacture-product-components')
                 ->with('success', __('crud.deleted', [
-                    'resource' => 'manufacturing order',
+                    'resource' => 'manufacture product component',
                 ]));
         } catch (Exception $e) {
-            return Response::redirectTo('/manufacturing-orders')
+            return Response::redirectTo('/manufacture-product-components')
                 ->with('failed', $e->getMessage());
         }
     }

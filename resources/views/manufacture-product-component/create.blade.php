@@ -21,14 +21,14 @@
             <div class="row mb-2">
                 <div class="col-auto">
                     <a
-                        href="{{ url('/manufacturing-orders') }}"
+                        href="{{ url('/manufacture-product-components') }}"
                         class="btn btn-default"
                     >
                         <i class="fas fa-arrow-left"></i>
                     </a>
                 </div>
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('Create manufacturing order') }}</h1>
+                    <h1 class="m-0">{{ __('Create manufacture product component') }}</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -41,7 +41,7 @@
             <div class="row">
                 <div class="col-12">
                     <form
-                        action="{{ url('/manufacturing-orders') }}"
+                        action="{{ url('/manufacture-product-components') }}"
                         method="POST"
                         novalidate
                     >
@@ -109,7 +109,7 @@
                                             $branchId.select2({
                                                 theme: 'bootstrap4',
                                                 ajax: {
-                                                    url: '/manufacturing-orders/create?action=fetch-branches',
+                                                    url: '/manufacture-product-components/create?action=fetch-branches',
                                                     dataType: 'json',
                                                     delay: 250,
                                                     processResults: function(branches) {
@@ -170,7 +170,7 @@
                                                 theme: 'bootstrap4',
                                                 placeholder: '{{ __('Search product components') }}',
                                                 ajax: {
-                                                    url: '/manufacturing-orders/create?action=fetch-product-components',
+                                                    url: '/manufacture-product-components/create?action=fetch-product-components',
                                                     dataType: 'json',
                                                     delay: 250,
                                                     processResults: function(productComponents) {

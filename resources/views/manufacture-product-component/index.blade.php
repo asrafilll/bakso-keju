@@ -10,14 +10,14 @@
         <div class="container-fluid">
             <div class="row justify-content-between mb-2">
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('Manufacturing orders') }}</h1>
+                    <h1 class="m-0">{{ __('Manufacture product components') }}</h1>
                 </div><!-- /.col -->
-                @can(\App\Enums\PermissionEnum::create_manufacturing_order()->value)
+                @can(\App\Enums\PermissionEnum::create_manufacture_product_component()->value)
                     <div class="col-auto">
                         <a
-                            href="{{ url('/manufacturing-orders/create') }}"
+                            href="{{ url('/manufacture-product-components/create') }}"
                             class="btn btn-primary"
-                        >{{ __('Create manufacturing order') }}</a>
+                        >{{ __('Create manufacture product component') }}</a>
                     </div><!-- /.col -->
                 @endcan
             </div><!-- /.row -->
@@ -49,7 +49,7 @@
                                                 name="term"
                                                 class="form-control"
                                                 value="{{ Request::get('term') }}"
-                                                placeholder="{{ __('Filter manufacturing orders') }}"
+                                                placeholder="{{ __('Filter Manufacture product components') }}"
                                             />
                                         </div>
                                     </form>
@@ -94,7 +94,7 @@
                                                     <div class="modal-body">
                                                         <div class="form-group">
                                                             <label for="term">
-                                                                <span>{{ __('Filter manufacturing orders') }}</span>
+                                                                <span>{{ __('Filter Manufacture product components') }}</span>
                                                             </label>
                                                             <input
                                                                 type="search"
@@ -257,7 +257,7 @@
                                                                         placeholder: '',
                                                                         allowClear: true,
                                                                         ajax: {
-                                                                            url: '/manufacturing-orders?action=fetch-branches',
+                                                                            url: '/manufacture-product-components?action=fetch-branches',
                                                                             dataType: 'json',
                                                                             delay: 250,
                                                                             processResults: function(branches) {
@@ -394,18 +394,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($manufacturingOrders as $manufacturingOrder)
+                                    @forelse ($manufactureProductComponents as $manufactureProductComponent)
                                         <tr>
                                             <td class="align-middle">
-                                                <a href="{{ url('/manufacturing-orders/' . $manufacturingOrder->id) }}">
-                                                    {{ $manufacturingOrder->order_number }}
+                                                <a href="{{ url('/manufacture-product-components/' . $manufactureProductComponent->id) }}">
+                                                    {{ $manufactureProductComponent->order_number }}
                                                 </a>
                                             </td>
-                                            <td class="align-middle">{{ $manufacturingOrder->created_at }}</td>
-                                            <td class="align-middle">{{ $manufacturingOrder->branch_name }}</td>
-                                            <td class="align-middle">{{ $manufacturingOrder->idr_total_line_items_quantity }}</td>
-                                            <td class="align-middle">{{ $manufacturingOrder->idr_total_line_items_weight }}</td>
-                                            <td class="align-middle">{{ $manufacturingOrder->idr_total_line_items_price }}</td>
+                                            <td class="align-middle">{{ $manufactureProductComponent->created_at }}</td>
+                                            <td class="align-middle">{{ $manufactureProductComponent->branch_name }}</td>
+                                            <td class="align-middle">{{ $manufactureProductComponent->idr_total_line_items_quantity }}</td>
+                                            <td class="align-middle">{{ $manufactureProductComponent->idr_total_line_items_weight }}</td>
+                                            <td class="align-middle">{{ $manufactureProductComponent->idr_total_line_items_price }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -419,7 +419,7 @@
                             </table>
                         </div>
                         <div class="card-footer d-flex justify-content-center">
-                            {!! $manufacturingOrders->withQueryString()->links() !!}
+                            {!! $manufactureProductComponents->withQueryString()->links() !!}
                         </div>
                     </div>
                 </div>

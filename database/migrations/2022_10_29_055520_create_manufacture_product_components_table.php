@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateManufacturingOrdersTable extends Migration
+class CreateManufactureProductComponentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateManufacturingOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::create('manufacturing_orders', function (Blueprint $table) {
+        Schema::create('manufacture_product_components', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
@@ -36,6 +36,6 @@ class CreateManufacturingOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('manufacturing_orders');
+        Schema::dropIfExists('manufacture_product_components');
     }
 }
