@@ -64,6 +64,18 @@
                         <p>{{ __('Purchases') }}</p>
                     </x-nav-item>
                 @endcan
+                @canany([\App\Enums\PermissionEnum::view_manufacturing_orders()->value])
+                    <li class="nav-header">{{ __('Manufacturing') }}</li>
+                @endcanany
+                @can(\App\Enums\PermissionEnum::view_manufacturing_orders()->value)
+                    <x-nav-item
+                        :href="url('/manufacturing-orders')"
+                        activeHref="manufacturing-orders"
+                    >
+                        <i class="nav-icon fas fa-sync"></i>
+                        <p>{{ __('Manufacturing Orders') }}</p>
+                    </x-nav-item>
+                @endcan
                 @canany([\App\Enums\PermissionEnum::view_product_inventories()->value,
                     \App\Enums\PermissionEnum::view_item_inventories()->value])
                     <li class="nav-header">{{ __('Report') }}</li>
