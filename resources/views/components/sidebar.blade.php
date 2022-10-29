@@ -30,8 +30,15 @@
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>Dashboard</p>
                 </x-nav-item>
-                @canany([\App\Enums\PermissionEnum::view_orders()->value,
-                    \App\Enums\PermissionEnum::view_inventories()->value])
+                @canany([
+                    \App\Enums\PermissionEnum::view_orders()->value,
+                    \App\Enums\PermissionEnum::view_inventories()->value,
+                    \App\Enums\PermissionEnum::view_product_inventories()->value,
+                    \App\Enums\PermissionEnum::view_products()->value,
+                    \App\Enums\PermissionEnum::view_product_categories()->value,
+                    \App\Enums\PermissionEnum::view_order_sources()->value,
+                    \App\Enums\PermissionEnum::view_resellers()->value,
+                ])
                     <li class="nav-header">{{ __('Sales') }}</li>
                 @endcanany
                 @can(\App\Enums\PermissionEnum::view_orders()->value)
@@ -52,34 +59,6 @@
                         <p>{{ __('Inventories') }}</p>
                     </x-nav-item>
                 @endcan
-                @canany([\App\Enums\PermissionEnum::view_purchases()->value])
-                    <li class="nav-header">{{ __('Purchasing') }}</li>
-                @endcanany
-                @can(\App\Enums\PermissionEnum::view_purchases()->value)
-                    <x-nav-item
-                        :href="url('/purchases')"
-                        activeHref="purchases"
-                    >
-                        <i class="nav-icon fas fa-dollar-sign"></i>
-                        <p>{{ __('Purchases') }}</p>
-                    </x-nav-item>
-                @endcan
-                @canany([\App\Enums\PermissionEnum::view_manufacturing_orders()->value])
-                    <li class="nav-header">{{ __('Manufacturing') }}</li>
-                @endcanany
-                @can(\App\Enums\PermissionEnum::view_manufacturing_orders()->value)
-                    <x-nav-item
-                        :href="url('/manufacturing-orders')"
-                        activeHref="manufacturing-orders"
-                    >
-                        <i class="nav-icon fas fa-sync"></i>
-                        <p>{{ __('Manufacturing Orders') }}</p>
-                    </x-nav-item>
-                @endcan
-                @canany([\App\Enums\PermissionEnum::view_product_inventories()->value,
-                    \App\Enums\PermissionEnum::view_item_inventories()->value])
-                    <li class="nav-header">{{ __('Report') }}</li>
-                @endcanany
                 @can(\App\Enums\PermissionEnum::view_product_inventories()->value)
                     <x-nav-item
                         :href="url('/product-inventories')"
@@ -88,20 +67,6 @@
                         <i class="nav-icon fas fa-box-open"></i>
                         <p>{{ __('Product Inventories') }}</p>
                     </x-nav-item>
-                @endcan
-                @can(\App\Enums\PermissionEnum::view_item_inventories()->value)
-                    <x-nav-item
-                        :href="url('/item-inventories')"
-                        activeHref="item-inventories"
-                    >
-                        <i class="nav-icon fas fa-box-open"></i>
-                        <p>{{ __('Item Inventories') }}</p>
-                    </x-nav-item>
-                @endcan
-                @canany([\App\Enums\PermissionEnum::view_products()->value,
-                    \App\Enums\PermissionEnum::view_product_categories()->value,
-                    \App\Enums\PermissionEnum::view_product_components()->value])
-                    <li class="nav-header">{{ __('Product Catalog') }}</li>
                 @endcan
                 @can(\App\Enums\PermissionEnum::view_products()->value)
                     <x-nav-item
@@ -121,42 +86,6 @@
                         <p>{{ __('Product Categories') }}</p>
                     </x-nav-item>
                 @endcan
-                @can(\App\Enums\PermissionEnum::view_product_components()->value)
-                    <x-nav-item
-                        :href="url('/product-components')"
-                        activeHref="product-components"
-                    >
-                        <i class="nav-icon fas fa-toolbox"></i>
-                        <p>{{ __('Product Components') }}</p>
-                    </x-nav-item>
-                @endcan
-                @canany([\App\Enums\PermissionEnum::view_items()->value,
-                    \App\Enums\PermissionEnum::view_item_categories()->value])
-                    <li class="nav-header">{{ __('Item Catalog') }}</li>
-                @endcanany
-                @can(\App\Enums\PermissionEnum::view_items()->value)
-                    <x-nav-item
-                        :href="url('/items')"
-                        activeHref="items"
-                    >
-                        <i class="nav-icon fas fa-box"></i>
-                        <p>{{ __('Items') }}</p>
-                    </x-nav-item>
-                @endcan
-                @can(\App\Enums\PermissionEnum::view_item_categories()->value)
-                    <x-nav-item
-                        :href="url('/item-categories')"
-                        activeHref="item-categories"
-                    >
-                        <i class="nav-icon fas fa-boxes"></i>
-                        <p>{{ __('Item Categories') }}</p>
-                    </x-nav-item>
-                @endcan
-                @canany([\App\Enums\PermissionEnum::view_branches()->value,
-                    \App\Enums\PermissionEnum::view_order_sources()->value,
-                    \App\Enums\PermissionEnum::view_resellers()->value])
-                    <li class="nav-header">{{ __('Master') }}</li>
-                @endcanany
                 @can(\App\Enums\PermissionEnum::view_resellers()->value)
                     <x-nav-item
                         :href="url('/resellers')"
@@ -175,6 +104,77 @@
                         <p>{{ __('Order Sources') }}</p>
                     </x-nav-item>
                 @endcan
+                @canany([
+                    \App\Enums\PermissionEnum::view_purchases()->value,
+                    \App\Enums\PermissionEnum::view_item_inventories()->value,
+                    \App\Enums\PermissionEnum::view_items()->value,
+                    \App\Enums\PermissionEnum::view_item_categories()->value,
+                ])
+                    <li class="nav-header">{{ __('Purchasing') }}</li>
+                @endcanany
+                @can(\App\Enums\PermissionEnum::view_purchases()->value)
+                    <x-nav-item
+                        :href="url('/purchases')"
+                        activeHref="purchases"
+                    >
+                        <i class="nav-icon fas fa-dollar-sign"></i>
+                        <p>{{ __('Purchases') }}</p>
+                    </x-nav-item>
+                @endcan
+                @can(\App\Enums\PermissionEnum::view_item_inventories()->value)
+                    <x-nav-item
+                        :href="url('/item-inventories')"
+                        activeHref="item-inventories"
+                    >
+                        <i class="nav-icon fas fa-box-open"></i>
+                        <p>{{ __('Item Inventories') }}</p>
+                    </x-nav-item>
+                @endcan
+                @can(\App\Enums\PermissionEnum::view_items()->value)
+                    <x-nav-item
+                        :href="url('/items')"
+                        activeHref="items"
+                    >
+                        <i class="nav-icon fas fa-box"></i>
+                        <p>{{ __('Items') }}</p>
+                    </x-nav-item>
+                @endcan
+                @can(\App\Enums\PermissionEnum::view_item_categories()->value)
+                    <x-nav-item
+                        :href="url('/item-categories')"
+                        activeHref="item-categories"
+                    >
+                        <i class="nav-icon fas fa-boxes"></i>
+                        <p>{{ __('Item Categories') }}</p>
+                    </x-nav-item>
+                @endcan
+                @canany([
+                    \App\Enums\PermissionEnum::view_manufacturing_orders()->value,
+                    \App\Enums\PermissionEnum::view_product_components()->value,
+                ])
+                    <li class="nav-header">{{ __('Manufacturing') }}</li>
+                @endcanany
+                @can(\App\Enums\PermissionEnum::view_manufacturing_orders()->value)
+                    <x-nav-item
+                        :href="url('/manufacturing-orders')"
+                        activeHref="manufacturing-orders"
+                    >
+                        <i class="nav-icon fas fa-sync"></i>
+                        <p>{{ __('Manufacturing Orders') }}</p>
+                    </x-nav-item>
+                @endcan
+                @can(\App\Enums\PermissionEnum::view_product_components()->value)
+                    <x-nav-item
+                        :href="url('/product-components')"
+                        activeHref="product-components"
+                    >
+                        <i class="nav-icon fas fa-toolbox"></i>
+                        <p>{{ __('Product Components') }}</p>
+                    </x-nav-item>
+                @endcan
+                @canany([\App\Enums\PermissionEnum::view_branches()->value])
+                    <li class="nav-header">{{ __('Master') }}</li>
+                @endcanany
                 @can(\App\Enums\PermissionEnum::view_branches()->value)
                     <x-nav-item
                         :href="url('/branches')"
