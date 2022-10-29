@@ -116,4 +116,6 @@ Route::group([
     Route::post('/purchases', [\App\Http\Controllers\PurchaseController::class, 'store'])->can(\App\Enums\PermissionEnum::create_purchase());
     Route::get('/purchases/{purchase}', [\App\Http\Controllers\PurchaseController::class, 'show'])->can(\App\Enums\PermissionEnum::view_purchases());
     Route::delete('/purchases/{purchase}', [\App\Http\Controllers\PurchaseController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_purchase());
+
+    Route::get('/product-components', [\App\Http\Controllers\ProductComponentController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_components());
 });

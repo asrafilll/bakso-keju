@@ -87,7 +87,8 @@
                     </x-nav-item>
                 @endcan
                 @canany([\App\Enums\PermissionEnum::view_products()->value,
-                    \App\Enums\PermissionEnum::view_product_categories()->value])
+                    \App\Enums\PermissionEnum::view_product_categories()->value,
+                    \App\Enums\PermissionEnum::view_product_components()->value])
                     <li class="nav-header">{{ __('Product Catalog') }}</li>
                 @endcan
                 @can(\App\Enums\PermissionEnum::view_products()->value)
@@ -106,6 +107,15 @@
                     >
                         <i class="nav-icon fas fa-boxes"></i>
                         <p>{{ __('Product Categories') }}</p>
+                    </x-nav-item>
+                @endcan
+                @can(\App\Enums\PermissionEnum::view_product_components()->value)
+                    <x-nav-item
+                        :href="url('/product-components')"
+                        activeHref="product-components"
+                    >
+                        <i class="nav-icon fas fa-toolbox"></i>
+                        <p>{{ __('Product Components') }}</p>
                     </x-nav-item>
                 @endcan
                 @canany([\App\Enums\PermissionEnum::view_items()->value,
