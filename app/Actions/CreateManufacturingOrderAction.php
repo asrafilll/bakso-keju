@@ -7,6 +7,7 @@ use App\Models\ManufacturingOrder;
 use App\Models\ManufacturingOrderLineItem;
 use App\Models\Order;
 use App\Models\ProductComponent;
+use App\Models\ProductComponentInventory;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Carbon;
@@ -91,6 +92,22 @@ class CreateManufacturingOrderAction
         foreach ($manufacturingOrderLineItems as $manufacturingOrderLineItem) {
             $manufacturingOrderLineItem->manufacturing_order_id = $manufacturingOrder->id;
             $manufacturingOrderLineItem->save();
+
+            $productComponentInventory = ProductComponentInventory::query()
+                ->where('branch_id', $manufacturingOrder->branch_id)
+                ->where('product_component_id', $manufacturingOrderLineItem->product_component_id)
+                ->first();
+
+            if ($productComponentInventory) {
+                $productComponentInventory->quantity += $manufacturingOrderLineItem->quantity;
+                $productComponentInventory->save();
+            } else {
+                ProductComponentInventory::create([
+                    'branch_id' => $manufacturingOrder->branch_id,
+                    'product_component_id' => $manufacturingOrderLineItem->product_component_id,
+                    'quantity' => $manufacturingOrderLineItem->quantity,
+                ]);
+            }
         }
 
         DB::commit();

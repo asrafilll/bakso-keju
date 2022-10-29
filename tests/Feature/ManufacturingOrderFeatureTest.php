@@ -9,6 +9,7 @@ use App\Models\ManufacturingOrder;
 use App\Models\Permission;
 use App\Models\Product;
 use App\Models\ProductComponent;
+use App\Models\ProductComponentInventory;
 use App\Models\ProductInventory;
 use App\Models\Reseller;
 use App\Models\User;
@@ -143,6 +144,12 @@ class ManufacturingOrderFeatureTest extends TestCase
             'total_weight' => 3000,
             'total_price' => 10000 * 2,
         ]);
+
+        $this->assertDatabaseHas('product_component_inventories', [
+            'branch_id' => $branch->id,
+            'product_component_id' => $productComponent->id,
+            'quantity' => 2,
+        ]);
     }
 
     /**
@@ -151,12 +158,6 @@ class ManufacturingOrderFeatureTest extends TestCase
      */
     public function shouldShowManufacturingOrderDetailPage()
     {
-        /** @var Branch */
-        $branch = Branch::factory()->create();
-        /** @var ManufacturingOrder */
-        $manufacturingOrder = ManufacturingOrder::factory()
-            ->for($branch)
-            ->create();
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::view_manufacturing_orders())
@@ -164,6 +165,13 @@ class ManufacturingOrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var ManufacturingOrder */
+        $manufacturingOrder = ManufacturingOrder::factory()
+            ->for($branch)
+            ->for($user, 'creator')
+            ->create();
         $response = $this->actingAs($user)->get("/manufacturing-orders/{$manufacturingOrder->id}");
 
         $response->assertStatus(200);
@@ -214,6 +222,13 @@ class ManufacturingOrderFeatureTest extends TestCase
         $branch = Branch::factory()->create();
         /** @var ProductComponent */
         $productComponent = ProductComponent::factory()->create();
+        /** @var ProductComponentInventory */
+        $productComponentInventory = ProductComponentInventory::factory()
+            ->for($branch)
+            ->for($productComponent)
+            ->create([
+                'quantity' => 10,
+            ]);
         $data = [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -235,6 +250,16 @@ class ManufacturingOrderFeatureTest extends TestCase
 
         $this->assertDatabaseMissing('manufacturing_orders', [
             'id' => $manufacturingOrder->id,
+        ]);
+
+        $this->assertDatabaseMissing('manufacturing_order_line_items', [
+            'manufacturing_order_id' => $manufacturingOrder->id,
+            'product_component_id' => $productComponent->id,
+        ]);
+
+        $this->assertDatabaseHas('product_component_inventories', [
+            'id' => $productComponentInventory->id,
+            'quantity' => 10,
         ]);
     }
 }

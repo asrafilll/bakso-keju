@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CreateManufacturingOrderAction;
+use App\Actions\DeleteManufacturingOrderAction;
 use App\Actions\SearchBranchesAction;
 use App\Http\Requests\ManufacturingOrderStoreRequest;
 use App\Models\ManufacturingOrder;
@@ -175,16 +176,23 @@ class ManufacturingOrderController extends Controller
 
     /**
      * @param ManufacturingOrder $manufacturingOrder
+     * @param DeleteManufacturingOrderAction $deleteManufacturingOrderAction
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ManufacturingOrder $manufacturingOrder)
-    {
-        $manufacturingOrder->manufacturingOrderLineItems()->delete();
-        $manufacturingOrder->delete();
+    public function destroy(
+        ManufacturingOrder $manufacturingOrder,
+        DeleteManufacturingOrderAction $deleteManufacturingOrderAction
+    ) {
+        try {
+            $deleteManufacturingOrderAction->execute($manufacturingOrder);
 
-        return Response::redirectTo('/manufacturing-orders')
-            ->with('success', __('crud.deleted', [
-                'resource' => 'manufacturing order',
-            ]));
+            return Response::redirectTo('/manufacturing-orders')
+                ->with('success', __('crud.deleted', [
+                    'resource' => 'manufacturing order',
+                ]));
+        } catch (Exception $e) {
+            return Response::redirectTo('/manufacturing-orders')
+                ->with('failed', $e->getMessage());
+        }
     }
 }
