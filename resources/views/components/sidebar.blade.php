@@ -151,6 +151,7 @@
                 @canany([
                     \App\Enums\PermissionEnum::view_manufacturing_orders()->value,
                     \App\Enums\PermissionEnum::view_product_components()->value,
+                    \App\Enums\PermissionEnum::view_product_component_inventories()->value,
                 ])
                     <li class="nav-header">{{ __('Manufacturing') }}</li>
                 @endcanany
@@ -169,7 +170,16 @@
                         activeHref="product-components"
                     >
                         <i class="nav-icon fas fa-toolbox"></i>
-                        <p>{{ __('Product Components') }}</p>
+                        <p>{{ __('Components') }}</p>
+                    </x-nav-item>
+                @endcan
+                @can(\App\Enums\PermissionEnum::view_product_components()->value)
+                    <x-nav-item
+                        :href="url('/product-component-inventories')"
+                        activeHref="product-component-inventories"
+                    >
+                        <i class="nav-icon fas fa-box-open"></i>
+                        <p>{{ __('Component Inventories') }}</p>
                     </x-nav-item>
                 @endcan
                 @canany([\App\Enums\PermissionEnum::view_branches()->value])

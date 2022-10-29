@@ -124,4 +124,6 @@ Route::group([
     Route::post('/manufacturing-orders', [\App\Http\Controllers\ManufacturingOrderController::class, 'store'])->can(\App\Enums\PermissionEnum::create_manufacturing_order());
     Route::get('/manufacturing-orders/{manufacturingOrder}', [\App\Http\Controllers\ManufacturingOrderController::class, 'show'])->can(\App\Enums\PermissionEnum::view_manufacturing_orders());
     Route::delete('/manufacturing-orders/{manufacturingOrder}', [\App\Http\Controllers\ManufacturingOrderController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_manufacturing_order());
+
+    Route::get('/product-component-inventories', [\App\Http\Controllers\ProductComponentInventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_component_inventories());
 });

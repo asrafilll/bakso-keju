@@ -56,6 +56,7 @@ use Spatie\Enum\Laravel\Enum;
  * @method static self view_manufacturing_orders()
  * @method static self create_manufacturing_order()
  * @method static self delete_manufacturing_order()
+ * @method static self view_product_component_inventories()
  */
 final class PermissionEnum extends Enum
 {
