@@ -22,9 +22,9 @@ class CreateManufactureProductComponentsTable extends Migration
             $table->foreign('created_by')
                 ->references('id')
                 ->on('users');
-                $table->string('order_number');
-                $table->unsignedBigInteger('total_line_items_quantity')->default(0);
-                $table->unsignedFloat('total_line_items_weight')->default(0);
+            $table->string('order_number');
+            $table->unsignedBigInteger('total_line_items_quantity')->default(0);
+            $table->unsignedFloat('total_line_items_weight')->default(0);
             $table->unsignedBigInteger('total_line_items_price')->default(0);
         });
     }

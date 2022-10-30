@@ -40,7 +40,7 @@ class ManufactureProductComponentController extends Controller
                 if ($request->filled('term')) {
                     $manufactureProductComponentQuery->where(function ($query) use ($request) {
                         $searchables = [
-                            'orders.order_number',
+                            'manufacture_product_components.order_number',
                             'branches.name',
                         ];
 
