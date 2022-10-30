@@ -197,7 +197,6 @@ class ManufactureProductComponentFeatureTest extends TestCase
         $response->assertSee([
             $manufactureProductComponent->order_number,
             $branch->name,
-            $manufactureProductComponent->customer_name,
         ]);
     }
 

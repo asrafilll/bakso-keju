@@ -149,12 +149,22 @@
                     </x-nav-item>
                 @endcan
                 @canany([
+                    \App\Enums\PermissionEnum::view_manufacture_products()->value,
                     \App\Enums\PermissionEnum::view_manufacture_product_components()->value,
                     \App\Enums\PermissionEnum::view_product_component_inventories()->value,
                     \App\Enums\PermissionEnum::view_product_components()->value,
                 ])
                     <li class="nav-header">{{ __('Manufacture') }}</li>
                 @endcanany
+                @can(\App\Enums\PermissionEnum::view_manufacture_products()->value)
+                    <x-nav-item
+                        :href="url('/manufacture-products')"
+                        activeHref="manufacture-products"
+                    >
+                        <i class="nav-icon fas fa-sync"></i>
+                        <p>{{ __('Manufacture Products') }}</p>
+                    </x-nav-item>
+                @endcan
                 @can(\App\Enums\PermissionEnum::view_manufacture_product_components()->value)
                     <x-nav-item
                         :href="url('/manufacture-product-components')"
