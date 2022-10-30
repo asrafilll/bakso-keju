@@ -118,6 +118,7 @@ class ManufactureProductComponentController extends Controller
             },
             'fetch-product-components' => function () use ($request) {
                 $productComponents = ProductComponent::query()
+                    ->where('name', 'LIKE', "%{$request->get('term')}%")
                     ->orderBy('name')
                     ->get();
 
