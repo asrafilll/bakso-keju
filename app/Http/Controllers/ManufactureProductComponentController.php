@@ -6,6 +6,7 @@ use App\Actions\CreateManufactureProductComponentAction;
 use App\Actions\DeleteManufactureProductComponentAction;
 use App\Actions\SearchBranchesAction;
 use App\Http\Requests\ManufactureProductComponentStoreRequest;
+use App\Models\Branch;
 use App\Models\ManufactureProductComponent;
 use App\Models\ProductComponent;
 use Exception;
@@ -125,7 +126,13 @@ class ManufactureProductComponentController extends Controller
                 return Response::json($productComponents);
             },
             'default' => function () {
-                return Response::view('manufacture-product-component.create');
+                $mainBranch = Branch::query()
+                    ->where('is_main', true)
+                    ->first();
+
+                return Response::view('manufacture-product-component.create', [
+                    'mainBranch' => $mainBranch,
+                ]);
             },
         ];
 

@@ -6,6 +6,7 @@ use App\Actions\CreateManufactureProductAction;
 use App\Actions\DeleteManufactureProductAction;
 use App\Actions\SearchBranchesAction;
 use App\Http\Requests\ManufactureProductStoreRequest;
+use App\Models\Branch;
 use App\Models\ManufactureProduct;
 use App\Models\Product;
 use App\Models\ProductComponent;
@@ -138,7 +139,13 @@ class ManufactureProductController extends Controller
                 return Response::json($products);
             },
             'default' => function () {
-                return Response::view('manufacture-product.create');
+                $mainBranch = Branch::query()
+                    ->where('is_main', true)
+                    ->first();
+
+                return Response::view('manufacture-product.create', [
+                    'mainBranch' => $mainBranch,
+                ]);
             },
         ];
 

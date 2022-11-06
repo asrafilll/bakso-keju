@@ -95,7 +95,14 @@
                                         name="branch_id"
                                         class="form-control @error('branch_id') is-invalid @enderror"
                                         style="width: 100%;"
-                                    ></select>
+                                    >
+                                        @if ($mainBranch)
+                                            <option
+                                                value="{{ $mainBranch->id }}"
+                                                selected
+                                            >{{ $mainBranch->name }}</option>
+                                        @endif
+                                    </select>
                                     @error('branch_id')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
@@ -118,6 +125,7 @@
                                                                 return {
                                                                     id: branch.id,
                                                                     text: branch.name,
+                                                                    selected: branch.selected,
                                                                     branch: branch,
                                                                 };
                                                             }),
