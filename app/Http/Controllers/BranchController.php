@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateBranchAction;
+use App\Actions\UpdateBranchAction;
 use App\Http\Requests\BranchStoreRequest;
 use App\Http\Requests\BranchUpdateRequest;
 use App\Models\Branch;
@@ -48,11 +50,14 @@ class BranchController extends Controller
 
     /**
      * @param BranchStoreRequest $branchStoreRequest
+     * @param CreateBranchAction $createBranchAction
      * @return \Illuminate\Http\Response
      */
-    public function store(BranchStoreRequest $branchStoreRequest)
-    {
-        Branch::create($branchStoreRequest->validated());
+    public function store(
+        BranchStoreRequest $branchStoreRequest,
+        CreateBranchAction $createBranchAction
+    ) {
+        $createBranchAction->execute($branchStoreRequest->validated());
 
         return Response::redirectTo('/branches/create')
             ->with('success', __('crud.created', [
@@ -74,11 +79,16 @@ class BranchController extends Controller
     /**
      * @param Branch $branch
      * @param BranchUpdateRequest $branchUpdateRequest
+     * @param UpdateBranchAction $updateBranchAction
      * @return \Illuminate\Http\Response
      */
-    public function update(Branch $branch, BranchUpdateRequest $branchUpdateRequest)
-    {
-        $branch->update(
+    public function update(
+        Branch $branch,
+        BranchUpdateRequest $branchUpdateRequest,
+        UpdateBranchAction $updateBranchAction
+    ) {
+        $updateBranchAction->execute(
+            $branch,
             $branchUpdateRequest->validated()
         );
 

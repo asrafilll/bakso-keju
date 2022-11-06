@@ -75,7 +75,12 @@
                                 <tbody>
                                     @forelse ($branches as $branch)
                                         <tr>
-                                            <td class="align-middle">{{ $branch->name }}</td>
+                                            <td class="align-middle">
+                                                <span>{{ $branch->name }}</span>
+                                                @if ($branch->is_main)
+                                                    <span class="badge badge-primary">{{ __('main') }}</span>
+                                                @endif
+                                            </td>
                                             <td class="align-middle">{{ $branch->phone }}</td>
                                             <td class="align-middle">{{ $branch->order_number_prefix }}</td>
                                             <td class="align-middle">{{ $branch->next_order_number }}</td>

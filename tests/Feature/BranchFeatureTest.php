@@ -104,6 +104,7 @@ class BranchFeatureTest extends TestCase
             'next_order_number' => 1,
             'purchase_number_prefix' => 'B',
             'next_purchase_number' => 1,
+            'is_main' => true,
         ]);
 
         $this->assertDatabaseHas('branches', [
@@ -113,6 +114,7 @@ class BranchFeatureTest extends TestCase
             'next_order_number' => 1,
             'purchase_number_prefix' => 'B',
             'next_purchase_number' => 1,
+            'is_main' => true,
         ]);
     }
 
@@ -170,7 +172,7 @@ class BranchFeatureTest extends TestCase
     public function shouldUpdateBranch()
     {
         /** @var Branch */
-        $branch = Branch::factory()->create();
+        $branch = Branch::factory()->main()->create();
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::update_branch())
@@ -195,6 +197,7 @@ class BranchFeatureTest extends TestCase
             'next_order_number' => 2,
             'purchase_number_prefix' => 'P',
             'next_purchase_number' => 2,
+            'is_main' => false,
         ]);
     }
 
@@ -217,6 +220,97 @@ class BranchFeatureTest extends TestCase
 
         $this->assertDatabaseMissing('branches', [
             'id' => $branch->id,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldUnsetOtherBranchesIsMainToFalseWhenCreateBranchWithIsMainIsTrue()
+    {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_branch())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        /** @var Branch */
+        $existingBranch = Branch::factory()
+            ->main()
+            ->create();
+
+        $this->actingAs($user)->post('/branches', [
+            'name' => 'Main Branch #1',
+            'phone' => '111222333444',
+            'order_number_prefix' => 'B',
+            'next_order_number' => 1,
+            'purchase_number_prefix' => 'B',
+            'next_purchase_number' => 1,
+            'is_main' => true,
+        ]);
+
+        $this->assertDatabaseHas('branches', [
+            'name' => 'Main Branch #1',
+            'phone' => '111222333444',
+            'order_number_prefix' => 'B',
+            'next_order_number' => 1,
+            'purchase_number_prefix' => 'B',
+            'next_purchase_number' => 1,
+            'is_main' => true,
+        ]);
+
+        $this->assertDatabaseHas('branches', [
+            'id' => $existingBranch->id,
+            'is_main' => false,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldUnsetOtherBranchesIsMainToFalseWhenUpdateBranchWithIsMainIsTrue()
+    {
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_branch())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        /** @var Branch */
+        $existingBranch = Branch::factory()
+            ->main()
+            ->create();
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+
+        $this->actingAs($user)->put("/branches/{$branch->id}", [
+            'name' => 'Main Branch #1',
+            'phone' => '111222333444',
+            'order_number_prefix' => 'B',
+            'next_order_number' => 1,
+            'purchase_number_prefix' => 'B',
+            'next_purchase_number' => 1,
+            'is_main' => true,
+        ]);
+
+        $this->assertDatabaseHas('branches', [
+            'id' => $branch->id,
+            'name' => 'Main Branch #1',
+            'phone' => '111222333444',
+            'order_number_prefix' => 'B',
+            'next_order_number' => 1,
+            'purchase_number_prefix' => 'B',
+            'next_purchase_number' => 1,
+            'is_main' => true,
+        ]);
+
+        $this->assertDatabaseHas('branches', [
+            'id' => $existingBranch->id,
+            'is_main' => false,
         ]);
     }
 }

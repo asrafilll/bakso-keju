@@ -22,4 +22,13 @@ class BranchFactory extends Factory
             'next_purchase_number' => $this->faker->randomNumber(1),
         ];
     }
+
+    public function main()
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'is_main' => true,
+            ];
+        });
+    }
 }

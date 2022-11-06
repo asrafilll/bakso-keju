@@ -50,6 +50,10 @@ class BranchStoreRequest extends FormRequest
                 'integer',
                 'min:1',
             ],
+            'is_main' => [
+                'nullable',
+                'boolean',
+            ],
         ];
     }
 

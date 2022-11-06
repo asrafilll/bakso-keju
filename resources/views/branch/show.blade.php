@@ -135,6 +135,20 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                                <div class="form-group">
+                                    <div class="icheck-primary">
+                                        <input
+                                            type="checkbox"
+                                            id="is_main"
+                                            name="is_main"
+                                            value="1"
+                                            @if(Request::old('is_main') ?? $branch->is_main) checked @endif
+                                        >
+                                        <label for="is_main">
+                                            {{ __('Set as main branch') }}
+                                        </label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         @can(\App\Enums\PermissionEnum::update_branch()->value)

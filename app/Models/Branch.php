@@ -21,5 +21,6 @@ class Branch extends Model
         'next_order_number',
         'purchase_number_prefix',
         'next_purchase_number',
+        'is_main',
     ];
 }

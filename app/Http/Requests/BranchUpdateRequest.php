@@ -50,6 +50,10 @@ class BranchUpdateRequest extends FormRequest
                 'integer',
                 'min:1',
             ],
+            'is_main' => [
+                'nullable',
+                'boolean',
+            ],
         ];
     }
 
@@ -59,6 +63,8 @@ class BranchUpdateRequest extends FormRequest
      */
     public function validated()
     {
-        return array_filter(parent::validated(), fn ($row) => !is_null($row));
+        return array_filter(parent::validated()  + [
+            'is_main' => $this->filled('is_main'),
+        ], fn ($row) => !is_null($row));
     }
 }
