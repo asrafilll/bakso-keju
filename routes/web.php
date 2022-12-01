@@ -118,6 +118,11 @@ Route::group([
     Route::delete('/purchases/{purchase}', [\App\Http\Controllers\PurchaseController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_purchase());
 
     Route::get('/product-components', [\App\Http\Controllers\ProductComponentController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_components());
+    Route::get('/product-components/create', [\App\Http\Controllers\ProductComponentController::class, 'create'])->can(\App\Enums\PermissionEnum::create_product_component());
+    Route::post('/product-components', [\App\Http\Controllers\ProductComponentController::class, 'store'])->can(\App\Enums\PermissionEnum::create_product_component());
+    Route::get('/product-components/{productComponent}', [\App\Http\Controllers\ProductComponentController::class, 'show'])->can(\App\Enums\PermissionEnum::view_product_components());
+    Route::put('/product-components/{productComponent}', [\App\Http\Controllers\ProductComponentController::class, 'update'])->can(\App\Enums\PermissionEnum::update_product_component());
+    Route::delete('/product-components/{productComponent}', [\App\Http\Controllers\ProductComponentController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_product_component());
 
     Route::get('/manufacture-product-components', [\App\Http\Controllers\ManufactureProductComponentController::class, 'index'])->can(\App\Enums\PermissionEnum::view_manufacture_product_components());
     Route::get('/manufacture-product-components/create', [\App\Http\Controllers\ManufactureProductComponentController::class, 'create'])->can(\App\Enums\PermissionEnum::create_manufacture_product_component());

@@ -6,6 +6,14 @@
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Product components') }}</h1>
                 </div><!-- /.col -->
+                @can(\App\Enums\PermissionEnum::create_product_component()->value)
+                    <div class="col-auto">
+                        <a
+                            href="{{ url('/product-components/create') }}"
+                            class="btn btn-primary"
+                        >{{ __('Create product component') }}</a>
+                    </div><!-- /.col -->
+                @endcan
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -48,6 +56,7 @@
                                     <tr>
                                         <th>{{ __('Name') }}</th>
                                         <th>{{ __('Date created') }}</th>
+                                        <th width="10"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,11 +64,30 @@
                                         <tr>
                                             <td class="align-middle">{{ $productComponent->name }}</td>
                                             <td class="align-middle">{{ $productComponent->created_at }}</td>
+                                            <td class="align-middle">
+                                                <div class="btn-group btn-group-sm">
+                                                    @can(\App\Enums\PermissionEnum::view_product_components()->value)
+                                                        <a
+                                                            href="{{ url('/product-components/' . $productComponent->id) }}"
+                                                            class="btn btn-default"
+                                                        >{{ __('Detail') }}</a>
+                                                    @endcan
+                                                    @can(\App\Enums\PermissionEnum::delete_product_component()->value)
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#modal-delete"
+                                                            data-action="{{ url('/product-components/' . $productComponent->id) }}"
+                                                        >{{ __('Delete') }}</button>
+                                                    @endcan
+                                                </div>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="2"
+                                                colspan="3"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>
