@@ -24,16 +24,13 @@ class FetchProductSummariesAction
         $toDate = $toDate ?: Carbon::now()->format('Y-m-d');
         $productSummaries = $this->getProductSummaries($fromDate, $toDate);
         $branchesWithOrderSources = $this->getBranchesWithOrderSources();
-        ['products' => $products, 'summary' => $summary] = $this->generate(
-            $productSummaries,
-            $branchesWithOrderSources
-        );
 
         return [
             'branches' => $branchesWithOrderSources,
-            'products' => $products,
-            'summary' => $summary,
-        ];
+        ] + $this->generate(
+            $productSummaries,
+            $branchesWithOrderSources
+        );
     }
 
     /**
@@ -47,7 +44,9 @@ class FetchProductSummariesAction
             DB::select("
                 SELECT
                     products.id as product_id,
-                    CONCAT_WS(' - ', sub_product_categories.name, products.name) as product_name,
+                    products.product_category_id as sub_product_category_id,
+                    IFNULL(sub_product_categories.name, 'Uncategorized') as sub_product_category_name,
+                    CONCAT_WS(' - ', IFNULL(sub_product_categories.name, 'Uncategorized'), products.name) as product_name,
                     order_summaries.branch_id,
                     order_summaries.branch_name,
                     order_summaries.order_source_id,
@@ -85,6 +84,7 @@ class FetchProductSummariesAction
                     order_summaries.order_source_id,
                     products.id
                 ORDER BY
+                    sub_product_category_name ASC,
                     product_name ASC,
                     branch_name ASC,
                     order_source_name ASC;
@@ -153,12 +153,25 @@ class FetchProductSummariesAction
             'idr_total_price' => '0',
             'branches' => $branchesWithOrderSources,
         ];
+        $summaryPerProductCategory = [];
 
         foreach ($productSummaries as $productSummary) {
             if (!array_key_exists($productSummary->product_id, $productSummariesMap)) {
                 $productSummariesMap[$productSummary->product_id] = [
                     'product_id' => $productSummary->product_id,
                     'product_name' => $productSummary->product_name,
+                    'total_quantity' => 0,
+                    'idr_total_quantity' => '0',
+                    'total_price' => 0,
+                    'idr_total_price' => '0',
+                    'branches' => $branchesWithOrderSources,
+                ];
+            }
+
+            if (!array_key_exists($productSummary->sub_product_category_id, $summaryPerProductCategory)) {
+                $summaryPerProductCategory[$productSummary->sub_product_category_id] = [
+                    'id' => $productSummary->sub_product_category_id,
+                    'name' => $productSummary->sub_product_category_name,
                     'total_quantity' => 0,
                     'idr_total_quantity' => '0',
                     'total_price' => 0,
@@ -219,11 +232,38 @@ class FetchProductSummariesAction
             $productSummariesMap[$productSummary->product_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['idr_total_price'] = $this->getIdrCurrency(
                 $totalPrice
             );
+
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['total_quantity'] += $totalQuantity;
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['idr_total_quantity'] = $this->getIdrCurrency(
+                $summaryPerProductCategory[$productSummary->sub_product_category_id]['total_quantity']
+            );
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['total_price'] += $totalPrice;
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['idr_total_price'] = $this->getIdrCurrency(
+                $summaryPerProductCategory[$productSummary->sub_product_category_id]['total_price']
+            );
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['total_quantity'] += $totalQuantity;
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['idr_total_quantity'] = $this->getIdrCurrency(
+                $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['total_quantity']
+            );
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['total_price'] += $totalPrice;
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['idr_total_price'] = $this->getIdrCurrency(
+                $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['total_price']
+            );
+
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_quantity'] += $totalQuantity;
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['idr_total_quantity'] = $this->getIdrCurrency(
+                $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_quantity']
+            );
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_price'] += $totalPrice;
+            $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['idr_total_price'] = $this->getIdrCurrency(
+                $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_price']
+            );
         }
 
         return [
             'products' => $productSummariesMap,
             'summary' => $summary,
+            'summaryPerProductCategory' => $summaryPerProductCategory,
         ];
     }
 
