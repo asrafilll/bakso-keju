@@ -92,6 +92,13 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">{{ __('Total') }}</th>
+                                        <th class="text-right">{{ $summary['idr_total_quantity'] }}</th>
+                                        <th class="text-right">{{ $summary['idr_total_price'] }}</th>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
