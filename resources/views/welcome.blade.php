@@ -66,6 +66,39 @@
                         </div>
                     </div>
                     <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ __('Summary per Branch') }}</h3>
+                        </div>
+                        <div class="card-body table-responsive p-0">
+                            <table class="table table-bordered table-hover text-nowrap">
+                                <thead>
+                                    <tr>
+                                        <th
+                                            class="text-center"
+                                            width="10"
+                                        >{{ __('No') }}</th>
+                                        <th class="text-center">{{ __('Branch') }}</th>
+                                        <th class="text-center">{{ __('In Pcs') }}</th>
+                                        <th class="text-center">{{ __('In Value') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($summary['branches'] as $branch)
+                                        <tr>
+                                            <td class="text-right">{{ $loop->iteration }}</td>
+                                            <td>{{ $branch['name'] }}</td>
+                                            <td class="text-right">{{ $branch['idr_total_quantity'] }}</td>
+                                            <td class="text-right">{{ $branch['idr_total_price'] }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ __('Summary per Product') }}</h3>
+                        </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-bordered table-hover text-nowrap">
                                 <thead>
