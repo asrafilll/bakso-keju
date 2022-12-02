@@ -24,13 +24,15 @@ class FetchProductSummariesAction
         $toDate = $toDate ?: Carbon::now()->format('Y-m-d');
         $productSummaries = $this->getProductSummaries($fromDate, $toDate);
         $branchesWithOrderSources = $this->getBranchesWithOrderSources();
+        ['products' => $products, 'summary' => $summary] = $this->generate(
+            $productSummaries,
+            $branchesWithOrderSources
+        );
 
         return [
             'branches' => $branchesWithOrderSources,
-            'products' => $this->transform(
-                $productSummaries,
-                $branchesWithOrderSources
-            )
+            'products' => $products,
+            'summary' => $summary,
         ];
     }
 
@@ -139,11 +141,18 @@ class FetchProductSummariesAction
      * @param array<int, mixed> $branchesWithOrderSources
      * @return array<string, mixed>
      */
-    private function transform(
+    private function generate(
         $productSummaries,
         $branchesWithOrderSources
     ) {
         $productSummariesMap = [];
+        $summary = [
+            'total_quantity' => 0,
+            'idr_total_quantity' => '0',
+            'total_price' => 0,
+            'idr_total_price' => '0',
+            'branches' => $branchesWithOrderSources,
+        ];
 
         foreach ($productSummaries as $productSummary) {
             if (!array_key_exists($productSummary->product_id, $productSummariesMap)) {
@@ -164,6 +173,28 @@ class FetchProductSummariesAction
 
             $totalQuantity = intval($productSummary->total_quantity);
             $totalPrice = intval($productSummary->total_price);
+
+            $summary['total_quantity'] += $totalQuantity;
+            $summary['idr_total_quantity'] = $this->getIdrCurrency($summary['total_quantity']);
+            $summary['total_price'] += $totalPrice;
+            $summary['idr_total_price'] = $this->getIdrCurrency($summary['total_price']);
+            $summary['branches'][$productSummary->branch_id]['total_quantity'] += $totalQuantity;
+            $summary['branches'][$productSummary->branch_id]['idr_total_quantity'] = $this->getIdrCurrency(
+                $summary['branches'][$productSummary->branch_id]['total_quantity']
+            );
+            $summary['branches'][$productSummary->branch_id]['total_price'] += $totalPrice;
+            $summary['branches'][$productSummary->branch_id]['idr_total_price'] = $this->getIdrCurrency(
+                $summary['branches'][$productSummary->branch_id]['total_price']
+            );
+            $summary['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_quantity'] += $totalQuantity;
+            $summary['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['idr_total_quantity'] = $this->getIdrCurrency(
+                $summary['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_quantity']
+            );
+            $summary['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_price'] += $totalPrice;
+            $summary['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['idr_total_price'] = $this->getIdrCurrency(
+                $summary['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_price']
+            );
+
             $productSummariesMap[$productSummary->product_id]['total_quantity'] += $totalQuantity;
             $productSummariesMap[$productSummary->product_id]['idr_total_quantity'] = $this->getIdrCurrency(
                 $productSummariesMap[$productSummary->product_id]['total_quantity']
@@ -190,7 +221,10 @@ class FetchProductSummariesAction
             );
         }
 
-        return $productSummariesMap;
+        return [
+            'products' => $productSummariesMap,
+            'summary' => $summary,
+        ];
     }
 
     /**

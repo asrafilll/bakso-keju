@@ -129,6 +129,23 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="2">{{ __('Total') }}</th>
+                                        <th class="text-right">{{ $summary['idr_total_quantity'] }}</th>
+                                        <th class="text-right">{{ $summary['idr_total_price'] }}</th>
+                                        @foreach ($summary['branches'] as $branch)
+                                            @foreach ($branch['order_sources'] as $orderSource)
+                                                <td class="text-right">
+                                                    {{ $orderSource['idr_total_quantity'] }}
+                                                </td>
+                                                <td class="text-right">
+                                                    {{ $orderSource['idr_total_price'] }}
+                                                </td>
+                                            @endforeach
+                                        @endforeach
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
