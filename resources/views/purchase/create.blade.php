@@ -216,6 +216,10 @@
                                                 <th
                                                     width="100px"
                                                     class="text-right"
+                                                >{{ __('Price') }}</th>
+                                                <th
+                                                    width="100px"
+                                                    class="text-right"
                                                 >{{ __('Quantity') }}</th>
                                                 <th width="250px"class="text-right">{{ __('Total') }}</th>
                                                 <th width="10px"></th>
@@ -234,7 +238,17 @@
                                                         value="<%= lineItem.item_id %>"
                                                     >
                                                     <div><%= lineItem.item_name %></div>
-                                                    <div><%= lineItem.item_price.toLocaleString('id') %></div>
+                                                </td>
+                                                <td class="text-right">
+                                                    <input
+                                                        type="number"
+                                                        name="line_items[<%= index %>][price]"
+                                                        class="form-control text-right line-item-price"
+                                                        value="<%= lineItem.price %>"
+                                                        min="1"
+                                                        style="width: 100px;"
+                                                        data-item-id="<%= lineItem.item_id %>"
+                                                    >
                                                 </td>
                                                 <td class="text-right">
                                                     <input
@@ -262,7 +276,7 @@
                                     </script>
                                     <script type="text/html" id="line-items-total-template">
                                         <tr>
-                                            <th>{{ __('Sub Total') }}</th>
+                                            <th colspan="2">{{ __('Sub Total') }}</th>
                                             <th class="text-right"><%= totalLineItemsQuantity.toLocaleString('id') %></th>
                                             <th class="text-right"><%= totalLineItemsPrice.toLocaleString('id') %></th>
                                             <th></th>
@@ -282,12 +296,20 @@
                                         var totalLineItemsQuantity = 0;
                                         var totalLineItemsPrice = 0;
 
+                                        $('body').on('blur', '.line-item-price', function() {
+                                            var $this = $(this);
+                                            var price = $this.val();
+                                            var itemId = $this.data('item-id');
+
+                                            updateLineItemPrice(itemId, +price);
+                                        });
+
                                         $('body').on('blur', '.line-item-quantity', function() {
                                             var $this = $(this);
                                             var quantity = $this.val();
                                             var itemId = $this.data('item-id');
 
-                                            updateLineItem(itemId, +quantity);
+                                            updateLineItemQuantity(itemId, +quantity);
                                         });
 
                                         $('body').on('click', '.line-item-delete', function() {
@@ -297,29 +319,45 @@
                                             deleteLineItem(itemId);
                                         });
 
-                                        function addLineItem(item_id, item_name, item_price) {
+                                        function addLineItem(item_id, item_name, price) {
                                             var existingLineItem = lineItems.get(item_id);
+                                            var price = existingLineItem ? existingLineItem.price : price;
                                             var quantity = existingLineItem ? existingLineItem.quantity + 1 : 1;
 
                                             lineItems.set(item_id, {
                                                 item_id: item_id,
                                                 item_name: item_name,
-                                                item_price: item_price,
+                                                price: price,
                                                 quantity: quantity,
-                                                total: item_price * quantity,
+                                                total: price * quantity,
                                             });
 
                                             calculateTotal();
                                             render()
                                         }
 
-                                        function updateLineItem(item_id, quantity) {
+                                        function updateLineItemPrice(item_id, price) {
+                                            console.log(price)
+                                            if (price < 1) {
+                                                lineItems.delete(item_id);
+                                            } else {
+                                                var lineItem = lineItems.get(item_id);
+                                                lineItem.price = price;
+                                                lineItem.total = lineItem.price * lineItem.quantity;
+                                                lineItems.set(item_id, lineItem);
+                                            }
+
+                                            calculateTotal();
+                                            render();
+                                        }
+
+                                        function updateLineItemQuantity(item_id, quantity) {
                                             if (quantity < 1) {
                                                 lineItems.delete(item_id);
                                             } else {
                                                 var lineItem = lineItems.get(item_id);
                                                 lineItem.quantity = quantity;
-                                                lineItem.total = lineItem.item_price * lineItem.quantity;
+                                                lineItem.total = lineItem.price * lineItem.quantity;
                                                 lineItems.set(item_id, lineItem);
                                             }
 
@@ -350,6 +388,7 @@
                                                 totalLineItemsPrice += lineItem.total;
                                             });
 
+                                            OrderSummary.setTotalLineItemsQuantity(totalLineItemsQuantity);
                                             OrderSummary.setTotalLineItemsPrice(totalLineItemsPrice);
                                         }
 
@@ -389,6 +428,10 @@
                                     <script type="text/html" id="purchase-summary-template">
                                         <table class="table">
                                             <tr>
+                                                <td>{{ __('Quantity') }}</td>
+                                                <td class="text-right"><%= totalLineItemsQuantity.toLocaleString('id') %></td>
+                                            </tr>
+                                            <tr>
                                                 <td>{{ __('Sub Total') }}</td>
                                                 <td class="text-right"><%= totalLineItemsPrice.toLocaleString('id') %></td>
                                             </tr>
@@ -405,7 +448,14 @@
 
                                         var template = $('#purchase-summary-template').html();
 
+                                        var totalLineItemsQuantity = 0;
                                         var totalLineItemsPrice = 0;
+
+                                        function setTotalLineItemsQuantity(value) {
+                                            totalLineItemsQuantity = value;
+
+                                            render();
+                                        }
 
                                         function setTotalLineItemsPrice(value) {
                                             totalLineItemsPrice = value;
@@ -420,6 +470,7 @@
                                         function render() {
                                             $el.html(
                                                 ejs.render(template, {
+                                                    totalLineItemsQuantity: totalLineItemsQuantity,
                                                     totalLineItemsPrice: totalLineItemsPrice,
                                                     totalPrice: getTotalPrice(),
                                                 })
@@ -429,6 +480,7 @@
                                         render();
 
                                         return {
+                                            setTotalLineItemsQuantity: setTotalLineItemsQuantity,
                                             setTotalLineItemsPrice: setTotalLineItemsPrice,
                                         };
                                     })();

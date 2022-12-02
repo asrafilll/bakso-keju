@@ -65,6 +65,10 @@
                                             <th
                                                 width="100px"
                                                 class="text-right"
+                                            >{{ __('Price') }}</th>
+                                            <th
+                                                width="100px"
+                                                class="text-right"
                                             >{{ __('Quantity') }}</th>
                                             <th width="250px"class="text-right">{{ __('Total') }}</th>
                                         </tr>
@@ -72,10 +76,8 @@
                                     <tbody>
                                         @foreach ($purchase->purchaseLineItems as $purchaseLineItem)
                                             <tr>
-                                                <td>
-                                                    <div>{{ $purchaseLineItem->item_name }}</div>
-                                                    <div>{{ $purchaseLineItem->idr_price }}</div>
-                                                </td>
+                                                <td>{{ $purchaseLineItem->item_name }}</td>
+                                                <td class="text-right">{{ $purchaseLineItem->idr_price }}</td>
                                                 <td class="text-right">{{ $purchaseLineItem->idr_quantity }}</td>
                                                 <td class="text-right">{{ $purchaseLineItem->idr_total }}</td>
                                             </tr>
@@ -83,7 +85,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th>{{ __('Sub Total') }}</th>
+                                            <th colspan="2">{{ __('Sub Total') }}</th>
                                             <th class="text-right">{{ $purchase->idr_total_line_items_quantity }}</th>
                                             <th class="text-right">{{ $purchase->idr_total_line_items_price }}</th>
                                         </tr>
@@ -99,6 +101,10 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table">
+                                    <tr>
+                                        <td>{{ __('Quantity') }}</td>
+                                        <td class="text-right">{{ $purchase->idr_total_line_items_quantity }}</td>
+                                    </tr>
                                     <tr>
                                         <td>{{ __('Sub Total') }}</td>
                                         <td class="text-right">{{ $purchase->idr_total_line_items_price }}</td>

@@ -56,14 +56,15 @@ class CreatePurchaseAction
                 );
             }
 
+            $price = intval($lineItem['price']);
             $quantity = intval($lineItem['quantity']);
 
             $purchaseLineItems->push(new PurchaseLineItem([
                 'item_id' => $item->id,
                 'item_name' => $item->name,
-                'price' => $item->price,
+                'price' => $price,
                 'quantity' => $quantity,
-                'total' => $item->price * $quantity,
+                'total' => $price * $quantity,
             ]));
         }
 

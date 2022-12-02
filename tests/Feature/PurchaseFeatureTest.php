@@ -114,6 +114,7 @@ class PurchaseFeatureTest extends TestCase
             'line_items' => [
                 [
                     'item_id' => $item->id,
+                    'price' => 10000,
                     'quantity' => 2,
                 ],
             ],
@@ -126,16 +127,16 @@ class PurchaseFeatureTest extends TestCase
             'branch_id' => $branch->id,
             'customer_name' => 'John Doe',
             'total_line_items_quantity' => 2,
-            'total_line_items_price' => $item->price * 2,
-            'total_price' => $item->price * 2,
+            'total_line_items_price' => 10000 * 2,
+            'total_price' => 10000 * 2,
         ]);
 
         $this->assertDatabaseHas('purchase_line_items', [
             'item_id' => $item->id,
             'item_name' => $item->name,
-            'price' => $item->price,
+            'price' => 10000,
             'quantity' => 2,
-            'total' => $item->price * 2,
+            'total' => 10000 * 2,
         ]);
 
         $this->assertDatabaseHas('branches', [
@@ -182,6 +183,7 @@ class PurchaseFeatureTest extends TestCase
             'line_items' => [
                 [
                     'item_id' => $item->id,
+                    'price' => 10000,
                     'quantity' => 2,
                 ],
             ],
@@ -272,6 +274,7 @@ class PurchaseFeatureTest extends TestCase
             'line_items' => [
                 [
                     'item_id' => $item->id,
+                    'price' => 10000,
                     'quantity' => 2,
                 ],
             ],

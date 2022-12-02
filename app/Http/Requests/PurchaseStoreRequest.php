@@ -44,6 +44,10 @@ class PurchaseStoreRequest extends FormRequest
                 'required',
                 'string',
             ],
+            'line_items.*.price' => [
+                'required',
+                'integer',
+            ],
             'line_items.*.quantity' => [
                 'required',
                 'integer',
