@@ -75,8 +75,9 @@ class FetchProductSummariesAction
                     JOIN order_sources on
                         orders.order_source_id = order_sources.id
                     WHERE
-                        DATE(orders.created_at) >= ?
-                            AND DATE(orders.created_at) <= ?
+                        orders.deleted_at IS NULL
+                        AND DATE(orders.created_at) >= ?
+                        AND DATE(orders.created_at) <= ?
                         ) as order_summaries ON
                         products.id = order_summaries.product_id
                 GROUP BY
