@@ -153,12 +153,15 @@ class OrderController extends Controller
                 $products = Product::query()
                     ->select([
                         'products.*',
+                        'product_prices.price as active_price',
                         DB::raw("CONCAT_WS(' - ', product_categories.name, sub_product_categories.name, products.name) as formatted_name")
                     ])
                     ->join('product_inventories', 'products.id', 'product_inventories.product_id')
+                    ->join('product_prices', 'products.id', 'product_prices.product_id')
                     ->join('product_categories as sub_product_categories', 'products.product_category_id', 'sub_product_categories.id')
                     ->join('product_categories', 'sub_product_categories.parent_id', 'product_categories.id')
                     ->where('product_inventories.branch_id', $request->get('branch_id'))
+                    ->where('product_prices.order_source_id', $request->get('order_source_id'))
                     ->where('product_inventories.quantity', '>', 0)
                     ->whereRaw("CONCAT_WS(' - ', product_categories.name, sub_product_categories.name, products.name) LIKE ?", [
                         "%{$request->get('term')}%"

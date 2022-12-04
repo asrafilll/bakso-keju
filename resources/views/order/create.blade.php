@@ -108,7 +108,7 @@
                                         $branchId.on('select2:select', function(e) {
                                             var branch = e.params.data.branch;
 
-                                            ProductModule.init(branch.id);
+                                            ProductModule.setBranchId(branch.id);
                                             LineItemsModule.deleteAllLineItems();
                                         });
 
@@ -160,6 +160,13 @@
                                         var $el = $('#order-source-module');
                                         var $orderSourceId = $el.find('#order_source_id');
 
+                                        $orderSourceId.on('select2:select', function(e) {
+                                            var orderSource = e.params.data.orderSource;
+
+                                            ProductModule.setOrderSourceId(orderSource.id);
+                                            LineItemsModule.deleteAllLineItems();
+                                        });
+
                                         function init() {
                                             $orderSourceId.select2({
                                                 theme: 'bootstrap4',
@@ -173,6 +180,7 @@
                                                                 return {
                                                                     id: orderSource.id,
                                                                     text: orderSource.name,
+                                                                    orderSource: orderSource,
                                                                 };
                                                             }),
                                                         };
@@ -305,24 +313,39 @@
                                     var ProductModule = (function() {
                                         var $el = $('#product-module');
                                         var $productId = $el.find('#product_id');
+                                        var branchId;
+                                        var orderSourceId;
 
                                         $productId.on('select2:select', function(e) {
                                             var product = e.params.data.product;
 
                                             $productId.val(null).trigger('change');
-                                            LineItemsModule.addLineItem(product.id, product.name, +product.price);
+                                            LineItemsModule.addLineItem(product.id, product.name, +product.active_price);
                                         });
 
-                                        function init(branchId = null) {
+                                        function setBranchId(value) {
+                                            branchId = value;
+
+                                            init();
+                                        }
+
+                                        function setOrderSourceId(value) {
+                                            orderSourceId = value;
+
+                                            init();
+                                        }
+
+                                        function init() {
                                             var config = {
                                                 theme: 'bootstrap4',
                                                 placeholder: '{{ __('Search products') }}',
                                                 ajax: null,
                                             };
 
-                                            if (branchId) {
+                                            if (branchId && orderSourceId) {
                                                 config.ajax = {
-                                                    url: '/orders/create?action=fetch-products&branch_id=' + branchId,
+                                                    url: '/orders/create?action=fetch-products&branch_id=' + branchId +
+                                                        '&order_source_id=' + orderSourceId,
                                                     dataType: 'json',
                                                     delay: 250,
                                                     processResults: function(products) {
@@ -346,6 +369,8 @@
 
                                         return {
                                             init: init,
+                                            setBranchId: setBranchId,
+                                            setOrderSourceId: setOrderSourceId,
                                         };
                                     })();
                                 </script>
