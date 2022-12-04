@@ -39,6 +39,19 @@ class ProductUpdateRequest extends FormRequest
                 'string',
                 Rule::exists('product_categories', 'id'),
             ],
+            'prices' => [
+                'required',
+                'array',
+            ],
+            'prices.*.order_source_id' => [
+                'required',
+                'string',
+            ],
+            'prices.*.price' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
         ];
     }
 }

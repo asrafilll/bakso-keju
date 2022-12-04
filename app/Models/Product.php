@@ -47,4 +47,12 @@ class Product extends Model
     {
         return $this->hasMany(ProductInventory::class);
     }
+
+    /**
+     * @return HasMany
+     */
+    public function productPrices()
+    {
+        return $this->hasMany(ProductPrice::class);
+    }
 }

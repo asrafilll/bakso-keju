@@ -88,7 +88,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="price">
-                                        <span>{{ __('Price') }}</span>
+                                        <span>{{ __('Default Price') }}</span>
                                         <span class="text-danger">*</span>
                                     </label>
                                     <input
@@ -101,6 +101,38 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title font-weight-bold">{{ __('Price per Order Source') }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row py-3 font-weight-bold">
+                                    <div class="col">{{ __('Order Source') }}</div>
+                                    <div class="col">{{ __('Price') }}</div>
+                                </div>
+                                @foreach ($orderSources as $key => $orderSource)
+                                    <div class="row py-3 border-top align-items-center">
+                                        <div class="col">
+                                            <input
+                                                type="hidden"
+                                                class="form-control"
+                                                name="prices[{{ $key }}][order_source_id]"
+                                                value="{{ $orderSource->id }}"
+                                            />
+                                            <span>{{ $orderSource->name }}</span>
+                                        </div>
+                                        <div class="col">
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                name="prices[{{ $key }}][price]"
+                                                value="{{ $product->productPrices->firstWhere('order_source_id', $orderSource->id)->price }}"
+                                            />
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                         <div class="card">

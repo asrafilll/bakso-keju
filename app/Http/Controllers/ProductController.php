@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\CreateProductAction;
+use App\Actions\UpdateProductAction;
 use App\Http\Requests\ProductStoreRequest;
 use App\Http\Requests\ProductUpdateRequest;
+use App\Models\OrderSource;
 use App\Models\Product;
 use App\Models\ProductCategory;
 use Illuminate\Database\Eloquent\Collection;
@@ -75,18 +78,27 @@ class ProductController extends Controller
             ->orderBy('name')
             ->get();
 
+        /** @var Collection<OrderSource> */
+        $orderSources = OrderSource::query()
+            ->orderBy('name')
+            ->get();
+
         return Response::view('product.create', [
             'productCategories' => $productCategories,
+            'orderSources' => $orderSources,
         ]);
     }
 
     /**
      * @param ProductStoreRequest $productStoreRequest
+     * @param CreateProductAction $createProductAction
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductStoreRequest $productStoreRequest)
-    {
-        Product::create($productStoreRequest->validated());
+    public function store(
+        ProductStoreRequest $productStoreRequest,
+        CreateProductAction $createProductAction
+    ) {
+        $createProductAction->execute($productStoreRequest->validated());
 
         return Response::redirectTo('/products/create')
             ->with('success', __('crud.created', [
@@ -100,7 +112,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product->load(['productInventories.branch']);
+        $product->load(['productInventories.branch', 'productPrices']);
 
         /** @var Collection<ProductCategory> */
         $productCategories = ProductCategory::query()
@@ -108,20 +120,31 @@ class ProductController extends Controller
             ->orderBy('name')
             ->get();
 
+        /** @var Collection<OrderSource> */
+        $orderSources = OrderSource::query()
+            ->orderBy('name')
+            ->get();
+
         return Response::view('product.show', [
             'product' => $product,
             'productCategories' => $productCategories,
+            'orderSources' => $orderSources,
         ]);
     }
 
     /**
      * @param Product $product
      * @param ProductUpdateRequest $productUpdateRequest
+     * @param UpdateProductAction $updateProductAction
      * @return \Illuminate\Http\Response
      */
-    public function update(Product $product, ProductUpdateRequest $productUpdateRequest)
-    {
-        $product->update(
+    public function update(
+        Product $product,
+        ProductUpdateRequest $productUpdateRequest,
+        UpdateProductAction $updateProductAction
+    ) {
+        $updateProductAction->execute(
+            $product,
             $productUpdateRequest->validated()
         );
 
@@ -142,6 +165,7 @@ class ProductController extends Controller
                 ->with('failed', __('Product already have product inventories'));
         }
 
+        $product->productPrices()->delete();
         $product->delete();
 
         return Response::redirectTo('/products')

@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\PermissionEnum;
 use App\Models\Branch;
+use App\Models\OrderSource;
 use App\Models\Permission;
 use App\Models\Product;
 use App\Models\ProductCategory;
@@ -100,16 +101,29 @@ class ProductFeatureTest extends TestCase
         $productCategory = ProductCategory::factory()
             ->for(Product::factory(), 'parentProductCategory')
             ->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
         $this->actingAs($user)->post('/products', [
             'name' => 'Product 1',
             'price' => 10000,
             'product_category_id' => $productCategory->id,
+            'prices' => [
+                [
+                    'order_source_id' => $orderSource->id,
+                    'price' => 11000,
+                ],
+            ],
         ]);
 
         $this->assertDatabaseHas('products', [
             'name' => 'Product 1',
             'price' => 10000,
             'product_category_id' => $productCategory->id,
+        ]);
+
+        $this->assertDatabaseHas('product_prices', [
+            'order_source_id' => $orderSource->id,
+            'price' => 11000,
         ]);
     }
 
@@ -160,6 +174,12 @@ class ProductFeatureTest extends TestCase
                 'product_category_id' => $productCategory->id,
             ])
             ->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        $product->productPrices()->create([
+            'order_source_id' => $orderSource->id,
+            'price' => 10000,
+        ]);
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::update_product())
@@ -171,12 +191,24 @@ class ProductFeatureTest extends TestCase
             'name' => 'Product #1',
             'price' => 10000,
             'product_category_id' => $productCategory->id,
+            'prices' => [
+                [
+                    'order_source_id' => $orderSource->id,
+                    'price' => 11000,
+                ],
+            ],
         ]);
 
         $this->assertDatabaseHas('products', [
             'name' => 'Product #1',
             'price' => 10000,
             'product_category_id' => $productCategory->id,
+        ]);
+
+        $this->assertDatabaseHas('product_prices', [
+            'product_id' => $product->id,
+            'order_source_id' => $orderSource->id,
+            'price' => 11000,
         ]);
     }
 
@@ -188,6 +220,12 @@ class ProductFeatureTest extends TestCase
     {
         /** @var Product */
         $product = Product::factory()->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        $product->productPrices()->create([
+            'order_source_id' => $orderSource->id,
+            'price' => 10000,
+        ]);
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::delete_product())
@@ -199,6 +237,9 @@ class ProductFeatureTest extends TestCase
 
         $this->assertDatabaseMissing('products', [
             'id' => $product->id,
+        ]);
+        $this->assertDatabaseMissing('product_prices', [
+            'product_id' => $product->id,
         ]);
     }
 
