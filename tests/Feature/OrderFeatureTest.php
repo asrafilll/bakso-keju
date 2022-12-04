@@ -108,6 +108,10 @@ class OrderFeatureTest extends TestCase
         $orderSource = OrderSource::factory()->create();
         /** @var Product */
         $product = Product::factory()->create();
+        $product->productPrices()->create([
+            'order_source_id' => $orderSource->id,
+            'price' => 15000,
+        ]);
         /** @var ProductInventory */
         $productInventory = ProductInventory::factory()
             ->state([
@@ -148,16 +152,16 @@ class OrderFeatureTest extends TestCase
             'percentage_discount' => 0,
             'total_discount' => 0,
             'total_line_items_quantity' => 2,
-            'total_line_items_price' => $product->price * 2,
-            'total_price' => $product->price * 2,
+            'total_line_items_price' => 15000 * 2,
+            'total_price' => 15000 * 2,
         ]);
 
         $this->assertDatabaseHas('order_line_items', [
             'product_id' => $product->id,
             'product_name' => $product->name,
-            'price' => $product->price,
+            'price' => 15000,
             'quantity' => 2,
-            'total' => $product->price * 2,
+            'total' => 15000 * 2,
         ]);
 
         $this->assertDatabaseHas('branches', [
@@ -183,6 +187,10 @@ class OrderFeatureTest extends TestCase
         $orderSource = OrderSource::factory()->create();
         /** @var Product */
         $product = Product::factory()->create();
+        $product->productPrices()->create([
+            'order_source_id' => $orderSource->id,
+            'price' => 15000,
+        ]);
         ProductInventory::factory()
             ->state([
                 'quantity' => 10,
@@ -219,7 +227,7 @@ class OrderFeatureTest extends TestCase
 
         $response->assertRedirect();
 
-        $totalLineItemsPrice = $product->price * 2;
+        $totalLineItemsPrice = 15000 * 2;
         $totalDiscount = round($totalLineItemsPrice * ($reseller->percentage_discount / 100));
 
         $this->assertDatabaseHas('orders', [
@@ -249,6 +257,10 @@ class OrderFeatureTest extends TestCase
         $orderSource = OrderSource::factory()->create();
         /** @var Product */
         $product = Product::factory()->create();
+        $product->productPrices()->create([
+            'order_source_id' => $orderSource->id,
+            'price' => 15000,
+        ]);
         ProductInventory::factory()
             ->state([
                 'quantity' => 1,
@@ -357,6 +369,10 @@ class OrderFeatureTest extends TestCase
         $orderSource = OrderSource::factory()->create();
         /** @var Product */
         $product = Product::factory()->create();
+        $product->productPrices()->create([
+            'order_source_id' => $orderSource->id,
+            'price' => 15000,
+        ]);
         /** @var ProductInventory */
         $productInventory = ProductInventory::factory()
             ->state([

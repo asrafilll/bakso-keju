@@ -70,10 +70,13 @@ class CreateOrderAction
         $products = Product::query()
             ->select([
                 'products.*',
+                'product_prices.price as active_price',
                 'product_inventories.quantity',
             ])
             ->join('product_inventories', 'product_inventories.product_id', 'products.id')
+            ->join('product_prices', 'product_prices.product_id', 'products.id')
             ->where('product_inventories.branch_id', $branch->id)
+            ->where('product_prices.order_source_id', $orderSource->id)
             ->where('product_inventories.quantity', '>', 0)
             ->whereIn('products.id', $lineItemsProductIDs)
             ->get();
@@ -102,9 +105,9 @@ class CreateOrderAction
             $orderLineItems->push(new OrderLineItem([
                 'product_id' => $product->id,
                 'product_name' => $product->name,
-                'price' => $product->price,
+                'price' => $product->active_price,
                 'quantity' => $quantity,
-                'total' => $product->price * $quantity,
+                'total' => $product->active_price * $quantity,
             ]));
         }
 
