@@ -70,13 +70,17 @@ class CreateOrderAction
         $products = Product::query()
             ->select([
                 'products.*',
-                'product_prices.price as active_price',
+                DB::raw('IFNULL(product_prices.price, products.price) as active_price'),
                 'product_inventories.quantity',
             ])
             ->join('product_inventories', 'product_inventories.product_id', 'products.id')
-            ->join('product_prices', 'product_prices.product_id', 'products.id')
+            ->leftJoin('product_prices', function ($join) use ($orderSource) {
+                $join
+                    ->on('products.id', '=', 'product_prices.product_id')
+                    ->where('product_prices.order_source_id', $orderSource->id)
+                    ->where('product_prices.price', '>', 0);
+            })
             ->where('product_inventories.branch_id', $branch->id)
-            ->where('product_prices.order_source_id', $orderSource->id)
             ->where('product_inventories.quantity', '>', 0)
             ->whereIn('products.id', $lineItemsProductIDs)
             ->get();

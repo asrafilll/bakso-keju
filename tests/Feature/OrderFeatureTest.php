@@ -179,6 +179,81 @@ class OrderFeatureTest extends TestCase
      * @test
      * @return void
      */
+    public function shouldCreateOrderWithNoProductPricesDefined()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        /** @var Product */
+        $product = Product::factory()->create();
+        /** @var ProductInventory */
+        $productInventory = ProductInventory::factory()
+            ->state([
+                'quantity' => 10,
+            ])
+            ->for($branch)
+            ->for($product)
+            ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_order())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)->post('/orders', [
+            'created_at' => '2022-01-01 00:00:00',
+            'branch_id' => $branch->id,
+            'order_source_id' => $orderSource->id,
+            'customer_name' => 'John Doe',
+            'line_items' => [
+                [
+                    'product_id' => $product->id,
+                    'quantity' => 2,
+                ],
+            ],
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('orders', [
+            'created_at' => '2022-01-01 00:00:00',
+            'branch_id' => $branch->id,
+            'order_source_id' => $orderSource->id,
+            'reseller_order' => false,
+            'reseller_id' => null,
+            'customer_name' => 'John Doe',
+            'percentage_discount' => 0,
+            'total_discount' => 0,
+            'total_line_items_quantity' => 2,
+            'total_line_items_price' => $product->price * 2,
+            'total_price' => $product->price * 2,
+        ]);
+
+        $this->assertDatabaseHas('order_line_items', [
+            'product_id' => $product->id,
+            'product_name' => $product->name,
+            'price' => $product->price,
+            'quantity' => 2,
+            'total' => $product->price * 2,
+        ]);
+
+        $this->assertDatabaseHas('branches', [
+            'id' => $branch->id,
+            'next_order_number' => $branch->next_order_number + 1,
+        ]);
+
+        $this->assertDatabaseHas('product_inventories', [
+            'id' => $productInventory->id,
+            'quantity' => 8,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function shouldCreateOrderWithResellerAndDiscount()
     {
         /** @var Branch */
