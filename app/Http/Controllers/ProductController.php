@@ -123,7 +123,12 @@ class ProductController extends Controller
         /** @var Collection<OrderSource> */
         $orderSources = OrderSource::query()
             ->orderBy('name')
-            ->get();
+            ->get()
+            ->map(function (OrderSource $orderSource) use ($product) {
+                $orderSource->product_price = $product->productPrices->where('order_source_id', $orderSource->id)->first()->price ?? 0;
+
+                return $orderSource;
+            });
 
         return Response::view('product.show', [
             'product' => $product,

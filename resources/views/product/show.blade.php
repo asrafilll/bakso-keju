@@ -128,7 +128,7 @@
                                                 type="number"
                                                 class="form-control"
                                                 name="prices[{{ $key }}][price]"
-                                                value="{{ $product->productPrices->firstWhere('order_source_id', $orderSource->id)->price }}"
+                                                value="{{ $orderSource->product_price }}"
                                             />
                                         </div>
                                     </div>
