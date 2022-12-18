@@ -19,13 +19,6 @@ class ProductFeatureTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Indicates whether the default seeder should run before each test.
-     *
-     * @var bool
-     */
-    protected $seed = true;
-
-    /**
      * @test
      * @return void
      */
@@ -99,7 +92,7 @@ class ProductFeatureTest extends TestCase
         $user->permissions()->sync($permission->id);
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()
-            ->for(Product::factory(), 'parentProductCategory')
+            ->for(ProductCategory::factory(), 'parentProductCategory')
             ->create();
         /** @var OrderSource */
         $orderSource = OrderSource::factory()->create();
@@ -135,7 +128,7 @@ class ProductFeatureTest extends TestCase
     {
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()
-            ->for(Product::factory(), 'parentProductCategory')
+            ->for(ProductCategory::factory(), 'parentProductCategory')
             ->create();
         /** @var Product */
         $product = Product::factory()
@@ -166,7 +159,7 @@ class ProductFeatureTest extends TestCase
     {
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()
-            ->for(Product::factory(), 'parentProductCategory')
+            ->for(ProductCategory::factory(), 'parentProductCategory')
             ->create();
         /** @var Product */
         $product = Product::factory()
@@ -253,7 +246,7 @@ class ProductFeatureTest extends TestCase
         $branch = Branch::factory()->create();
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()
-            ->for(Product::factory(), 'parentProductCategory')
+            ->for(ProductCategory::factory(), 'parentProductCategory')
             ->create();
         /** @var Product */
         $product = Product::factory()
@@ -295,7 +288,7 @@ class ProductFeatureTest extends TestCase
         $branch = Branch::factory()->create();
         /** @var ProductCategory */
         $productCategory = ProductCategory::factory()
-            ->for(Product::factory(), 'parentProductCategory')
+            ->for(ProductCategory::factory(), 'parentProductCategory')
             ->create();
         /** @var Product */
         $product = Product::factory()

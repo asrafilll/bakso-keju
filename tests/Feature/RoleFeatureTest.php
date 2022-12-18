@@ -14,13 +14,6 @@ class RoleFeatureTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Indicates whether the default seeder should run before each test.
-     *
-     * @var bool
-     */
-    protected $seed = true;
-
-    /**
      * @test
      * @return void
      */
@@ -45,7 +38,7 @@ class RoleFeatureTest extends TestCase
     public function shouldContainsRoleOnRoleIndexPage()
     {
         /** @var Role */
-        $role = Role::create(['name' => 'super admin']);
+        $role = Role::create(['name' => 'super admin 2']);
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::view_roles())
@@ -114,7 +107,7 @@ class RoleFeatureTest extends TestCase
     public function shouldShowRoleDetailPage()
     {
         /** @var Role */
-        $role = Role::create(['name' => 'super admin']);
+        $role = Role::create(['name' => 'super admin 2']);
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::view_roles())
@@ -134,7 +127,7 @@ class RoleFeatureTest extends TestCase
     public function shouldContainsRoleDataOnRoleDetailPage()
     {
         /** @var Role */
-        $role = Role::create(['name' => 'super admin']);
+        $role = Role::create(['name' => 'super admin 2']);
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::view_roles())
@@ -174,7 +167,7 @@ class RoleFeatureTest extends TestCase
         /** @var Permission */
         $permission = Permission::inRandomOrder()->first();
         /** @var Role */
-        $role = Role::create(['name' => 'super admin']);
+        $role = Role::create(['name' => 'super admin 2']);
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::update_role())
@@ -206,7 +199,7 @@ class RoleFeatureTest extends TestCase
     public function shouldDeleteRole()
     {
         /** @var Role */
-        $role = Role::create(['name' => 'super admin']);
+        $role = Role::create(['name' => 'super admin 2']);
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::delete_role())

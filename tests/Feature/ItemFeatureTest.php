@@ -18,13 +18,6 @@ class ItemFeatureTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Indicates whether the default seeder should run before each test.
-     *
-     * @var bool
-     */
-    protected $seed = true;
-
-    /**
      * @test
      * @return void
      */
@@ -98,7 +91,7 @@ class ItemFeatureTest extends TestCase
         $user->permissions()->sync($permission->id);
         /** @var ItemCategory */
         $itemCategory = ItemCategory::factory()
-            ->for(Item::factory(), 'parentItemCategory')
+            ->for(ItemCategory::factory(), 'parentItemCategory')
             ->create();
         $this->actingAs($user)->post('/items', [
             'name' => 'Item 1',
@@ -121,7 +114,7 @@ class ItemFeatureTest extends TestCase
     {
         /** @var ItemCategory */
         $itemCategory = ItemCategory::factory()
-            ->for(Item::factory(), 'parentItemCategory')
+            ->for(ItemCategory::factory(), 'parentItemCategory')
             ->create();
         /** @var Item */
         $item = Item::factory()
@@ -152,7 +145,7 @@ class ItemFeatureTest extends TestCase
     {
         /** @var ItemCategory */
         $itemCategory = ItemCategory::factory()
-            ->for(Item::factory(), 'parentItemCategory')
+            ->for(ItemCategory::factory(), 'parentItemCategory')
             ->create();
         /** @var Item */
         $item = Item::factory()
@@ -212,7 +205,7 @@ class ItemFeatureTest extends TestCase
         $branch = Branch::factory()->create();
         /** @var ItemCategory */
         $itemCategory = ItemCategory::factory()
-            ->for(Item::factory(), 'parentItemCategory')
+            ->for(ItemCategory::factory(), 'parentItemCategory')
             ->create();
         /** @var Item */
         $item = Item::factory()
@@ -254,7 +247,7 @@ class ItemFeatureTest extends TestCase
         $branch = Branch::factory()->create();
         /** @var ItemCategory */
         $itemCategory = ItemCategory::factory()
-            ->for(Item::factory(), 'parentItemCategory')
+            ->for(ItemCategory::factory(), 'parentItemCategory')
             ->create();
         /** @var Item */
         $item = Item::factory()
