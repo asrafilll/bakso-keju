@@ -69,7 +69,8 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col">
+                                    <div class="col-md-6 mb-3">
+                                        <h5>{{ __('View Permissions') }}</h5>
                                         @foreach ($viewPermissions as $permission)
                                             <div class="icheck-primary">
                                                 <input
@@ -85,7 +86,8 @@
                                             </div>
                                         @endforeach
                                     </div>
-                                    <div class="col">
+                                    <div class="col-md-6 mb-3">
+                                        <h5>{{ __('Create Permissions') }}</h5>
                                         @foreach ($createPermissions as $permission)
                                             <div class="icheck-primary">
                                                 <input
@@ -101,7 +103,8 @@
                                             </div>
                                         @endforeach
                                     </div>
-                                    <div class="col">
+                                    <div class="col-md-6 mb-3">
+                                        <h5>{{ __('Update Permissions') }}</h5>
                                         @foreach ($updatePermissions as $permission)
                                             <div class="icheck-primary">
                                                 <input
@@ -117,7 +120,8 @@
                                             </div>
                                         @endforeach
                                     </div>
-                                    <div class="col">
+                                    <div class="col-md-6 mb-3">
+                                        <h5>{{ __('Delete Permissions') }}</h5>
                                         @foreach ($deletePermissions as $permission)
                                             <div class="icheck-primary">
                                                 <input
