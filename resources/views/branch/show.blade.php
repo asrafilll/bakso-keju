@@ -166,6 +166,7 @@
                                             id="user_{{ $user->id }}"
                                             name="users[]"
                                             value="{{ $user->id }}"
+                                            @if ($branch->users->contains('user_id', $user->id)) checked @endif
                                         />
                                         <label for="user_{{ $user->id }}">
                                             {{ $user->name }}

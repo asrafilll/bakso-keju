@@ -80,6 +80,8 @@ class BranchController extends Controller
      */
     public function show(Branch $branch)
     {
+        $branch->load(['users']);
+
         /** @var Collection<User> */
         $users = User::query()
             ->orderBy('name')
