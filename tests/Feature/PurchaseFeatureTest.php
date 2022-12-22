@@ -55,6 +55,8 @@ class PurchaseFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get('/purchases');
 
         $response->assertSee([
@@ -247,6 +249,8 @@ class PurchaseFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get("/purchases/{$purchase->id}");
 
         $response->assertStatus(200);
@@ -271,6 +275,8 @@ class PurchaseFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get("/purchases/{$purchase->id}");
 
         $response->assertSee([

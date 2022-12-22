@@ -39,7 +39,9 @@ class PurchaseController extends Controller
                         'purchases.*',
                         'branches.name as branch_name',
                     ])
-                    ->join('branches', 'purchases.branch_id', 'branches.id');
+                    ->join('branches', 'purchases.branch_id', 'branches.id')
+                    ->join('branch_users', 'purchases.branch_id', 'branch_users.branch_id')
+                    ->where('branch_users.user_id', $request->user()->id);
 
                 if ($request->filled('term')) {
                     $purchaseQuery->where(function ($query) use ($request) {
@@ -177,6 +179,8 @@ class PurchaseController extends Controller
             'purchaseLineItems',
         ]);
 
+        abort_if(!$purchase->branch->hasUser($request->user()), 404);
+
         $actions = [
             'print-invoice' => function () use ($purchase) {
                 $pdf = Pdf::loadView('purchase.invoice', [
@@ -195,10 +199,19 @@ class PurchaseController extends Controller
         return $actions[$request->get('action', 'default')]();
     }
 
+    /**
+     * @param Purchase $purchase
+     * @param DeletePurchaseAction $deletePurchaseAction
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(
         Purchase $purchase,
-        DeletePurchaseAction $deletePurchaseAction
+        DeletePurchaseAction $deletePurchaseAction,
+        Request $request
     ) {
+        abort_if(!$purchase->branch->hasUser($request->user()), 404);
+
         try {
             $deletePurchaseAction->execute($purchase);
 
