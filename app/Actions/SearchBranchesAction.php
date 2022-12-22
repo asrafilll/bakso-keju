@@ -16,6 +16,9 @@ class SearchBranchesAction
     public function execute($term, User $user)
     {
         return Branch::query()
+            ->select([
+                'branches.*',
+            ])
             ->join('branch_users', 'branches.id', 'branch_users.branch_id')
             ->where('branch_users.user_id', $user->id)
             ->where('name', 'LIKE', "%{$term}%")
