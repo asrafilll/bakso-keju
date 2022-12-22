@@ -21,10 +21,10 @@ class CreateOrderAction
 {
     /**
      * @param array $data
-     * @param User $user
+     * @param User $authenticatedUser
      * @return Order
      */
-    public function execute(array $data, User $user)
+    public function execute(array $data, User $authenticatedUser)
     {
         DB::beginTransaction();
 
@@ -39,9 +39,9 @@ class CreateOrderAction
             ]);
         }
 
-        if (!$user->hasRegisteredToBranch($branch)) {
+        if (!$authenticatedUser->hasRegisteredToBranch($branch)) {
             throw new Exception(
-                __("You not registered to this branch"),
+                __("You are not registered to this branch"),
                 422
             );
         }
