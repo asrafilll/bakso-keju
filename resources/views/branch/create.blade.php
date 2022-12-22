@@ -42,9 +42,7 @@
                     >
                         @csrf
                         <div class="card">
-                            <div class="card-header">
-                                <h5 class="card-title">{{ __('Branch Information') }}</h5>
-                            </div>
+
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="name">
@@ -160,11 +158,11 @@
                                     <div class="icheck-primary">
                                         <input
                                             type="checkbox"
-                                            id="user_{{ $user->id }}"
-                                            name="users[]"
+                                            id="user_id_{{ $user->id }}"
+                                            name="user_ids[]"
                                             value="{{ $user->id }}"
                                         />
-                                        <label for="user_{{ $user->id }}">
+                                        <label for="user_id_{{ $user->id }}">
                                             {{ $user->name }}
                                         </label>
                                     </div>
