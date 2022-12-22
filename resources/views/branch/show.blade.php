@@ -163,12 +163,12 @@
                                     <div class="icheck-primary">
                                         <input
                                             type="checkbox"
-                                            id="user_{{ $user->id }}"
-                                            name="users[]"
+                                            id="user_id_{{ $user->id }}"
+                                            name="user_ids[]"
                                             value="{{ $user->id }}"
                                             @if ($branch->users->contains('user_id', $user->id)) checked @endif
                                         />
-                                        <label for="user_{{ $user->id }}">
+                                        <label for="user_id_{{ $user->id }}">
                                             {{ $user->name }}
                                         </label>
                                     </div>

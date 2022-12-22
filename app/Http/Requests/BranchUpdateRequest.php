@@ -54,6 +54,14 @@ class BranchUpdateRequest extends FormRequest
                 'nullable',
                 'boolean',
             ],
+            'user_ids' => [
+                'nullable',
+                'array',
+            ],
+            'user_ids.' => [
+                'nullable',
+                'string',
+            ]
         ];
     }
 

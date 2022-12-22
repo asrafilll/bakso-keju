@@ -353,4 +353,50 @@ class BranchFeatureTest extends TestCase
             'user_id' => $user1->id,
         ]);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldUpdateBranchWithUsers()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()
+            ->main()
+            ->create();
+        /** @var User */
+        $user1 = User::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::update_branch())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $this->actingAs($user)->put("/branches/{$branch->id}", [
+            'name' => 'Branch #2',
+            'phone' => '111222333444',
+            'order_number_prefix' => 'B',
+            'next_order_number' => 2,
+            'purchase_number_prefix' => 'P',
+            'next_purchase_number' => 2,
+            'user_ids' => [$user1->id],
+        ]);
+
+        $this->assertDatabaseHas('branches', [
+            'id' => $branch->id,
+            'phone' => '111222333444',
+            'name' => 'Branch #2',
+            'order_number_prefix' => 'B',
+            'next_order_number' => 2,
+            'purchase_number_prefix' => 'P',
+            'next_purchase_number' => 2,
+            'is_main' => false,
+        ]);
+
+        $this->assertDatabaseHas('branch_users', [
+            'branch_id' => $branch->id,
+            'user_id' => $user1->id,
+        ]);
+    }
 }
