@@ -55,6 +55,8 @@ class ProductInventoryTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get('/product-inventories');
 
         $response->assertSee([
