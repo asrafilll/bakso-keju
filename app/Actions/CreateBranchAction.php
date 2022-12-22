@@ -26,7 +26,7 @@ class CreateBranchAction
 
         $userIDs = data_get($data, 'user_ids');
 
-        if ($userIDs) {
+        if ($userIDs && count($userIDs) > 0) {
             $branch
                 ->users()
                 ->createMany(
