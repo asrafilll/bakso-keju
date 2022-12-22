@@ -68,4 +68,16 @@ class User extends Authenticatable
     {
         return $this->hasMany(BranchUser::class);
     }
+
+    /**
+     * @param Branch $branch
+     * @return boolean
+     */
+    public function hasRegisteredToBranch(Branch $branch)
+    {
+        return $this
+            ->branches()
+            ->where('branch_id', $branch->id)
+            ->exists();
+    }
 }

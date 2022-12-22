@@ -120,6 +120,8 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/orders', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -195,6 +197,8 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/orders', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -279,6 +283,8 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/orders', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -349,11 +355,52 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/orders', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
             'order_source_id' => $orderSource->id,
             'reseller_id' => $reseller->id,
+            'customer_name' => 'John Doe',
+            'line_items' => [
+                [
+                    'product_id' => $product->id,
+                    'quantity' => 2,
+                ],
+            ],
+        ]);
+
+        $response->assertSessionHas(['failed']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedCreateOrderWhenAuthenticatedUserNotRegisteredToBranch()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        /** @var Product */
+        $product = Product::factory()->create();
+        $product->productPrices()->create([
+            'order_source_id' => $orderSource->id,
+            'price' => 15000,
+        ]);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_order())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $response = $this->actingAs($user)->post('/orders', [
+            'created_at' => '2022-01-01 00:00:00',
+            'branch_id' => $branch->id,
+            'order_source_id' => $orderSource->id,
             'customer_name' => 'John Doe',
             'line_items' => [
                 [
@@ -461,7 +508,6 @@ class OrderFeatureTest extends TestCase
                 ],
             ],
         ];
-        $order = resolve(CreateOrderAction::class)->execute($data);
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::delete_order())
@@ -469,6 +515,9 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+        $order = resolve(CreateOrderAction::class)->execute($data, $user);
+
         $response = $this->actingAs($user)->delete("/orders/{$order->id}");
         $response->assertSessionHas(['success']);
 

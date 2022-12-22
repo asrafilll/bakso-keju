@@ -193,7 +193,10 @@ class OrderController extends Controller
         CreateOrderAction $createOrderAction
     ) {
         try {
-            $order = $createOrderAction->execute($orderStoreRequest->all());
+            $order = $createOrderAction->execute(
+                $orderStoreRequest->all(),
+                $orderStoreRequest->user()
+            );
 
             return Response::redirectTo('/orders/' . $order->id)
                 ->with('success', __('crud.created', [

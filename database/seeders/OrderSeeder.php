@@ -6,6 +6,7 @@ use App\Actions\CreateOrderAction;
 use App\Models\Branch;
 use App\Models\OrderSource;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
@@ -19,6 +20,8 @@ class OrderSeeder extends Seeder
      */
     public function run()
     {
+        /** @var User */
+        $user = User::first();
         /** @var EloquentCollection<Branch> */
         $branches = Branch::all();
         /** @var EloquentCollection<OrderSource> */
@@ -49,7 +52,7 @@ class OrderSeeder extends Seeder
                     'order_source_id' => $orderSource->id,
                     'customer_name' => 'John Doe',
                     'line_items' => $lineItems
-                ]);
+                ], $user);
             }
         }
     }

@@ -9,6 +9,7 @@ use App\Models\OrderSource;
 use App\Models\Product;
 use App\Models\ProductInventory;
 use App\Models\Reseller;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Carbon;
@@ -20,9 +21,10 @@ class CreateOrderAction
 {
     /**
      * @param array $data
+     * @param User $user
      * @return Order
      */
-    public function execute(array $data)
+    public function execute(array $data, User $user)
     {
         DB::beginTransaction();
 
@@ -35,6 +37,13 @@ class CreateOrderAction
                     'attribute' => 'branch_id'
                 ]),
             ]);
+        }
+
+        if (!$user->hasRegisteredToBranch($branch)) {
+            throw new Exception(
+                __("You not registered to this branch"),
+                422
+            );
         }
 
         /** @var OrderSource */
