@@ -29,7 +29,8 @@ class InventoryController extends Controller
             'fetch-branches' => function () use ($request, $searchBranchesAction) {
                 return Response::json(
                     $searchBranchesAction->execute(
-                        $request->get('term')
+                        $request->get('term'),
+                        $request->user()
                     )
                 );
             },
@@ -94,7 +95,8 @@ class InventoryController extends Controller
             'fetch-branches' => function () use ($request, $searchBranchesAction) {
                 return Response::json(
                     $searchBranchesAction->execute(
-                        $request->get('term')
+                        $request->get('term'),
+                        $request->user()
                     )
                 );
             },

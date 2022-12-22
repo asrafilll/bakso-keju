@@ -28,7 +28,10 @@ class ManufactureProductController extends Controller
         $actions = [
             'fetch-branches' => function () use ($request, $searchBranchesAction) {
                 return Response::json(
-                    $searchBranchesAction->execute($request->get('term'))
+                    $searchBranchesAction->execute(
+                        $request->get('term'),
+                        $request->user()
+                    )
                 );
             },
             'default' => function () use ($request) {
@@ -114,7 +117,10 @@ class ManufactureProductController extends Controller
         $actions = [
             'fetch-branches' => function () use ($request, $searchBranchesAction) {
                 return Response::json(
-                    $searchBranchesAction->execute($request->get('term'))
+                    $searchBranchesAction->execute(
+                        $request->get('term'),
+                        $request->user()
+                    )
                 );
             },
             'fetch-product-components' => function () use ($request) {
