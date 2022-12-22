@@ -144,9 +144,9 @@
                                     <div class="col">{{ __('Branch') }}</div>
                                     <div class="col">{{ __('Quantity') }}</div>
                                 </div>
-                                @foreach ($product->productInventories as $productInventory)
+                                @foreach ($productInventories as $productInventory)
                                     <div class="row py-3 border-top align-items-center">
-                                        <div class="col">{{ $productInventory->branch->name }}</div>
+                                        <div class="col">{{ $productInventory->branch_name }}</div>
                                         <div class="col">{{ $productInventory->quantity }}</div>
                                     </div>
                                 @endforeach

@@ -266,6 +266,8 @@ class ProductFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get("/products/{$product->id}");
 
         $response->assertSee([

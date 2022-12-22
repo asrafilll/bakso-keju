@@ -9,6 +9,7 @@ use App\Http\Requests\ProductUpdateRequest;
 use App\Models\OrderSource;
 use App\Models\Product;
 use App\Models\ProductCategory;
+use App\Models\ProductInventory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
@@ -108,11 +109,24 @@ class ProductController extends Controller
 
     /**
      * @param Product $product
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Product $product, Request $request)
     {
-        $product->load(['productInventories.branch', 'productPrices']);
+        $product->load(['productPrices']);
+
+        /** @var Collection<ProductInventory> */
+        $productInventories = ProductInventory::query()
+            ->select([
+                'product_inventories.*',
+                'branches.name as branch_name',
+            ])
+            ->join('branches', 'product_inventories.branch_id', 'branches.id')
+            ->join('branch_users', 'product_inventories.branch_id', 'branch_users.branch_id')
+            ->where('branch_users.user_id', $request->user()->id)
+            ->where('product_inventories.product_id', $product->id)
+            ->get();
 
         /** @var Collection<ProductCategory> */
         $productCategories = ProductCategory::query()
@@ -132,6 +146,7 @@ class ProductController extends Controller
 
         return Response::view('product.show', [
             'product' => $product,
+            'productInventories' => $productInventories,
             'productCategories' => $productCategories,
             'orderSources' => $orderSources,
         ]);
