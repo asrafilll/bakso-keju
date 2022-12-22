@@ -39,7 +39,9 @@ class ManufactureProductComponentController extends Controller
                         'manufacture_product_components.*',
                         'branches.name as branch_name',
                     ])
-                    ->join('branches', 'manufacture_product_components.branch_id', 'branches.id');
+                    ->join('branches', 'manufacture_product_components.branch_id', 'branches.id')
+                    ->join('branch_users', 'manufacture_product_components.branch_id', 'branch_users.branch_id')
+                    ->where('branch_users.user_id', $request->user()->id);
 
                 if ($request->filled('term')) {
                     $manufactureProductComponentQuery->where(function ($query) use ($request) {
@@ -156,9 +158,8 @@ class ManufactureProductComponentController extends Controller
     ) {
         try {
             $order = $createmanufactureProductComponentAction->execute(
-                $manufactureProductComponentstoreRequest->all() + [
-                    'created_by' => $manufactureProductComponentstoreRequest->user()->id,
-                ]
+                $manufactureProductComponentstoreRequest->all(),
+                $manufactureProductComponentstoreRequest->user()
             );
 
             return Response::redirectTo('/manufacture-product-components/' . $order->id)
@@ -173,15 +174,20 @@ class ManufactureProductComponentController extends Controller
 
     /**
      * @param ManufactureProductComponent $manufactureProductComponent
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show(ManufactureProductComponent $manufactureProductComponent)
-    {
+    public function show(
+        ManufactureProductComponent $manufactureProductComponent,
+        Request $request
+    ) {
         $manufactureProductComponent->load([
             'branch',
             'manufactureProductComponentLineItems',
             'creator',
         ]);
+
+        abort_if(!$manufactureProductComponent->branch->hasUser($request->user()), 404);
 
         return Response::view('manufacture-product-component.show', [
             'manufactureProductComponent' => $manufactureProductComponent,
@@ -191,12 +197,16 @@ class ManufactureProductComponentController extends Controller
     /**
      * @param ManufactureProductComponent $manufactureProductComponent
      * @param DeleteManufactureProductComponentAction $deletemanufactureProductComponentAction
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(
         ManufactureProductComponent $manufactureProductComponent,
-        DeleteManufactureProductComponentAction $deletemanufactureProductComponentAction
+        DeleteManufactureProductComponentAction $deletemanufactureProductComponentAction,
+        Request $request
     ) {
+        abort_if(!$manufactureProductComponent->branch->hasUser($request->user()), 404);
+
         try {
             $deletemanufactureProductComponentAction->execute($manufactureProductComponent);
 

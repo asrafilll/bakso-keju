@@ -47,8 +47,6 @@ class ManufactureProductComponentFeatureTest extends TestCase
             ->first();
         /** @var User */
         $user = User::factory()->create();
-        $user->permissions()->sync($permission->id);
-
         /** @var Branch */
         $branch = Branch::factory()->create();
         /** @var ManufactureProductComponent */
@@ -57,6 +55,9 @@ class ManufactureProductComponentFeatureTest extends TestCase
             ->create([
                 'created_by' => $user->id,
             ]);
+        $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get('/manufacture-product-components');
 
         $response->assertSee([
@@ -101,6 +102,8 @@ class ManufactureProductComponentFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/manufacture-product-components', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -145,6 +148,40 @@ class ManufactureProductComponentFeatureTest extends TestCase
      * @test
      * @return void
      */
+    public function shouldFailedCreateManufactureProductComponentWhenAuthenticatedUserNotRegisteredToBranch()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var ProductComponent */
+        $productComponent = ProductComponent::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_manufacture_product_component())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+
+        $response = $this->actingAs($user)->post('/manufacture-product-components', [
+            'created_at' => '2022-01-01 00:00:00',
+            'branch_id' => $branch->id,
+            'line_items' => [
+                [
+                    'product_component_id' => $productComponent->id,
+                    'price' => 10000,
+                    'quantity' => 2,
+                    'total_weight' => 3000,
+                ],
+            ],
+        ]);
+
+        $response->assertSessionHas(['failed']);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function shouldShowManufactureProductComponentDetailPage()
     {
         /** @var Permission */
@@ -153,7 +190,6 @@ class ManufactureProductComponentFeatureTest extends TestCase
             ->first();
         /** @var User */
         $user = User::factory()->create();
-        $user->permissions()->sync($permission->id);
         /** @var Branch */
         $branch = Branch::factory()->create();
         /** @var ManufactureProductComponent */
@@ -161,6 +197,9 @@ class ManufactureProductComponentFeatureTest extends TestCase
             ->for($branch)
             ->for($user, 'creator')
             ->create();
+        $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get("/manufacture-product-components/{$manufactureProductComponent->id}");
 
         $response->assertStatus(200);
@@ -185,6 +224,8 @@ class ManufactureProductComponentFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get("/manufacture-product-components/{$manufactureProductComponent->id}");
 
         $response->assertSee([
@@ -205,7 +246,6 @@ class ManufactureProductComponentFeatureTest extends TestCase
             ->first();
         /** @var User */
         $user = User::factory()->create();
-        $user->permissions()->sync($permission->id);
         /** @var Branch */
         $branch = Branch::factory()->create();
         /** @var ProductComponent */
@@ -229,9 +269,9 @@ class ManufactureProductComponentFeatureTest extends TestCase
                 ],
             ],
         ];
-        $manufactureProductComponent = resolve(CreateManufactureProductComponentAction::class)->execute($data + [
-            'created_by' => $user->id,
-        ]);
+        $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+        $manufactureProductComponent = resolve(CreateManufactureProductComponentAction::class)->execute($data, $user);
 
         $response = $this->actingAs($user)->delete("/manufacture-product-components/{$manufactureProductComponent->id}");
         $response->assertSessionHas(['success']);
