@@ -51,7 +51,9 @@ class OrderController extends Controller
                         'branches.name as branch_name',
                     ])
                     ->join('order_sources', 'orders.order_source_id', 'order_sources.id')
-                    ->join('branches', 'orders.branch_id', 'branches.id');
+                    ->join('branches', 'orders.branch_id', 'branches.id')
+                    ->join('branch_users', 'branches.id', 'branch_users.branch_id')
+                    ->where('branch_users.user_id', $request->user()->id);
 
                 if ($request->filled('term')) {
                     $orderQuery->where(function ($query) use ($request) {
@@ -226,6 +228,8 @@ class OrderController extends Controller
             'orderSource',
             'orderLineItems',
         ]);
+
+        abort_if(!$order->branch->hasUser($request->user()), 404);
 
         $actions = [
             'print-invoice' => function () use ($order) {

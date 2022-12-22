@@ -32,4 +32,16 @@ class Branch extends Model
     {
         return $this->hasMany(BranchUser::class);
     }
+
+    /**
+     * @param User $user
+     * @return boolean
+     */
+    public function hasUser(User $user)
+    {
+        return $this
+            ->users()
+            ->where('user_id', $user->id)
+            ->exists();
+    }
 }

@@ -60,6 +60,8 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get('/orders');
 
         $response->assertSee([
@@ -435,6 +437,8 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get("/orders/{$order->id}");
 
         $response->assertStatus(200);
@@ -462,6 +466,8 @@ class OrderFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get("/orders/{$order->id}");
 
         $response->assertSee([
