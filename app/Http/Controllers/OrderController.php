@@ -32,7 +32,10 @@ class OrderController extends Controller
         $actions = [
             'fetch-branches' => function () use ($request, $searchBranchesAction) {
                 return Response::json(
-                    $searchBranchesAction->execute($request->get('term'))
+                    $searchBranchesAction->execute(
+                        $request->get('term'),
+                        $request->user()
+                    )
                 );
             },
             'fetch-order-sources' => function () use ($request, $searchOrderSourcesAction) {
@@ -133,7 +136,10 @@ class OrderController extends Controller
         $actions = [
             'fetch-branches' => function () use ($request, $searchBranchesAction) {
                 return Response::json(
-                    $searchBranchesAction->execute($request->get('term'))
+                    $searchBranchesAction->execute(
+                        $request->get('term'),
+                        $request->user()
+                    )
                 );
             },
             'fetch-order-sources' => function () use ($request, $searchOrderSourcesAction) {
