@@ -150,7 +150,10 @@ class PurchaseController extends Controller
         CreatePurchaseAction $createPurchaseAction
     ) {
         try {
-            $purchase = $createPurchaseAction->execute($purchaseStoreRequest->all());
+            $purchase = $createPurchaseAction->execute(
+                $purchaseStoreRequest->all(),
+                $purchaseStoreRequest->user()
+            );
 
             return Response::redirectTo('/purchases/' . $purchase->id)
                 ->with('success', __('crud.created', [

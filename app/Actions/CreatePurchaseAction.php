@@ -7,6 +7,7 @@ use App\Models\Purchase;
 use App\Models\PurchaseLineItem;
 use App\Models\Item;
 use App\Models\ItemInventory;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Carbon;
@@ -18,9 +19,10 @@ class CreatePurchaseAction
 {
     /**
      * @param array $data
+     * @param User $authenticatedUser
      * @return Purchase
      */
-    public function execute(array $data)
+    public function execute(array $data, User $authenticatedUser)
     {
         DB::beginTransaction();
 
@@ -33,6 +35,13 @@ class CreatePurchaseAction
                     'attribute' => 'branch_id'
                 ]),
             ]);
+        }
+
+        if (!$authenticatedUser->hasRegisteredToBranch($branch)) {
+            throw new Exception(
+                __("You are not registered to this branch"),
+                422
+            );
         }
 
         /** @var Collection */

@@ -100,6 +100,8 @@ class PurchaseFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/purchases', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -169,6 +171,8 @@ class PurchaseFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/purchases', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -188,6 +192,40 @@ class PurchaseFeatureTest extends TestCase
             'id' => $itemInventory->id,
             'quantity' => 7,
         ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedCreatePurchase()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var Item */
+        $item = Item::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_purchase())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+
+        $response = $this->actingAs($user)->post('/purchases', [
+            'created_at' => '2022-01-01 00:00:00',
+            'branch_id' => $branch->id,
+            'customer_name' => 'John Doe',
+            'line_items' => [
+                [
+                    'item_id' => $item->id,
+                    'price' => 10000,
+                    'quantity' => 2,
+                ],
+            ],
+        ]);
+
+        $response->assertSessionHas(['failed']);
     }
 
     /**
@@ -272,7 +310,6 @@ class PurchaseFeatureTest extends TestCase
                 ],
             ],
         ];
-        $purchase = resolve(CreatePurchaseAction::class)->execute($data);
         /** @var Permission */
         $permission = Permission::query()
             ->where('name', PermissionEnum::delete_purchase())
@@ -280,6 +317,9 @@ class PurchaseFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+        $purchase = resolve(CreatePurchaseAction::class)->execute($data, $user);
+
         $response = $this->actingAs($user)->delete("/purchases/{$purchase->id}");
         $response->assertSessionHas(['success']);
 
