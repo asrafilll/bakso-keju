@@ -7,6 +7,8 @@ use App\Actions\UpdateBranchAction;
 use App\Http\Requests\BranchStoreRequest;
 use App\Http\Requests\BranchUpdateRequest;
 use App\Models\Branch;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -45,7 +47,14 @@ class BranchController extends Controller
      */
     public function create()
     {
-        return Response::view('branch.create');
+        /** @var Collection<User> */
+        $users = User::query()
+            ->orderBy('name')
+            ->get();
+
+        return Response::view('branch.create', [
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -71,7 +80,13 @@ class BranchController extends Controller
      */
     public function show(Branch $branch)
     {
+        /** @var Collection<User> */
+        $users = User::query()
+            ->orderBy('name')
+            ->get();
+
         return Response::view('branch.show', [
+            'users' => $users,
             'branch' => $branch,
         ]);
     }

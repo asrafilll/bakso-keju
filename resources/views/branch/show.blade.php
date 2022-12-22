@@ -45,6 +45,9 @@
                             @method('PUT')
                         @endcan
                         <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">{{ __('Branch Information') }}</h5>
+                            </div>
                             <div class="card-body">
                                 <div class="form-group">
                                     <label for="name">
@@ -142,13 +145,33 @@
                                             id="is_main"
                                             name="is_main"
                                             value="1"
-                                            @if(Request::old('is_main') ?? $branch->is_main) checked @endif
+                                            @if (Request::old('is_main') ?? $branch->is_main) checked @endif
                                         >
                                         <label for="is_main">
                                             {{ __('Set as main branch') }}
                                         </label>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">{{ __('Users') }}</h5>
+                            </div>
+                            <div class="card-body">
+                                @foreach ($users as $user)
+                                    <div class="icheck-primary">
+                                        <input
+                                            type="checkbox"
+                                            id="user_{{ $user->id }}"
+                                            name="users[]"
+                                            value="{{ $user->id }}"
+                                        />
+                                        <label for="user_{{ $user->id }}">
+                                            {{ $user->name }}
+                                        </label>
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                         @can(\App\Enums\PermissionEnum::update_branch()->value)
