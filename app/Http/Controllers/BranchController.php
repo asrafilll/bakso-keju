@@ -121,6 +121,7 @@ class BranchController extends Controller
      */
     public function destroy(Branch $branch)
     {
+        $branch->users()->delete();
         $branch->delete();
 
         return Response::redirectTo('/branches')

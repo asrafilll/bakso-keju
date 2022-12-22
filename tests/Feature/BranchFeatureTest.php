@@ -399,4 +399,38 @@ class BranchFeatureTest extends TestCase
             'user_id' => $user1->id,
         ]);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldDeleteBranchWithUsers()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()
+            ->main()
+            ->create();
+        /** @var User */
+        $user1 = User::factory()->create();
+        $branch->users()->create([
+            'user_id' => $user1->id,
+        ]);
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_branch())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $this->actingAs($user)->delete("/branches/{$branch->id}");
+
+        $this->assertDatabaseMissing('branches', [
+            'id' => $branch->id,
+        ]);
+
+        $this->assertDatabaseMissing('branch_users', [
+            'branch_id' => $branch->id,
+            'user_id' => $user1->id,
+        ]);
+    }
 }
