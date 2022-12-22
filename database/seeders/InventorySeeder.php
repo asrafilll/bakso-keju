@@ -33,9 +33,8 @@ class InventorySeeder extends Seeder
                     'branch_id' => $branch->id,
                     'product_id' => $product->id,
                     'quantity' => 1000,
-                    'note' => 'Created from seeder',
-                    'created_by' => $user->id,
-                ]);
+                    'note' => 'Created from seeder'
+                ], $user);
             });
         });
     }

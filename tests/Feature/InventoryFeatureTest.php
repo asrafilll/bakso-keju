@@ -51,6 +51,8 @@ class InventoryFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         /** @var Inventory */
         $inventory = Inventory::factory()
             ->state([
@@ -105,6 +107,8 @@ class InventoryFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $this->actingAs($user)->post('/inventories', [
             'product_id' => $product->id,
             'branch_id' => $branch->id,
@@ -138,6 +142,8 @@ class InventoryFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $this->actingAs($user)->post('/inventories', [
             'product_id' => $product->id,
             'branch_id' => $branch->id,
@@ -177,6 +183,8 @@ class InventoryFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $this->actingAs($user)->post('/inventories', [
             'product_id' => $product->id,
             'branch_id' => $branch->id,
@@ -221,6 +229,8 @@ class InventoryFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync([$permission->id, $negativeQuantityPermission->id]);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $this->actingAs($user)->post('/inventories', [
             'product_id' => $product->id,
             'branch_id' => $branch->id,
@@ -234,5 +244,34 @@ class InventoryFeatureTest extends TestCase
             'branch_id' => $branch->id,
             'quantity' => 1,
         ]);
+    }
+
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedCreateInventoryWhenAuthenticatedUserNotRegisteredToBranch()
+    {
+        /** @var Product */
+        $product = Product::factory()->create();
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_inventory())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+
+        $response = $this->actingAs($user)->post('/inventories', [
+            'product_id' => $product->id,
+            'branch_id' => $branch->id,
+            'quantity' => 10,
+            'note' => 'example note',
+        ]);
+
+        $response->assertSessionHas(['failed']);
     }
 }

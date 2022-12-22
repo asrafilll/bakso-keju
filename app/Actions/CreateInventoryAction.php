@@ -2,19 +2,33 @@
 
 namespace App\Actions;
 
+use App\Models\Branch;
 use App\Models\Inventory;
 use App\Models\ProductInventory;
+use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class CreateInventoryAction
 {
     /**
      * @param array $data
+     * @param User $authenticatedUser
      * @return Inventory
      */
-    public function execute(array $data)
+    public function execute(array $data, User $authenticatedUser)
     {
         DB::beginTransaction();
+
+        /** @var Branch */
+        $branch = Branch::find(data_get($data, 'branch_id'));
+
+        if (!$authenticatedUser->hasRegisteredToBranch($branch)) {
+            throw new Exception(
+                __("You are not registered to this branch"),
+                422
+            );
+        }
 
         /** @var Inventory */
         $inventory = Inventory::create([
@@ -22,7 +36,7 @@ class CreateInventoryAction
             'product_id' => $data['product_id'],
             'quantity' => $data['quantity'],
             'note' => $data['note'],
-            'created_by' => $data['created_by'],
+            'created_by' => $authenticatedUser->id,
         ]);
         /** @var ProductInventory|null */
         $productInventory = ProductInventory::query()

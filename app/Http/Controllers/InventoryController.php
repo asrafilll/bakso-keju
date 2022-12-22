@@ -44,7 +44,9 @@ class InventoryController extends Controller
                     ])
                     ->join('products', 'inventories.product_id', 'products.id')
                     ->join('branches', 'inventories.branch_id', 'branches.id')
-                    ->join('users', 'inventories.created_by', 'users.id');
+                    ->join('branch_users', 'inventories.branch_id', 'branch_users.branch_id')
+                    ->join('users', 'inventories.created_by', 'users.id')
+                    ->where('branch_users.user_id', $request->user()->id);
 
                 if ($request->filled('term')) {
                     $inventoryQuery->where(function ($query) use ($request) {
@@ -126,9 +128,10 @@ class InventoryController extends Controller
         CreateInventoryAction $createInventoryAction
     ) {
         try {
-            $createInventoryAction->execute($inventoryStoreRequest->all() + [
-                'created_by' => $inventoryStoreRequest->user()->id,
-            ]);
+            $createInventoryAction->execute(
+                $inventoryStoreRequest->all(),
+                $inventoryStoreRequest->user()
+            );
 
             return Response::redirectTo('/inventories/create')
                 ->with('success', __('crud.created', [
