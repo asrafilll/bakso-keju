@@ -249,10 +249,19 @@ class OrderController extends Controller
         return $actions[$request->get('action', 'default')]();
     }
 
+    /**
+     * @param Order $order
+     * @param DeleteOrderAction $deleteOrderAction
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(
         Order $order,
-        DeleteOrderAction $deleteOrderAction
+        DeleteOrderAction $deleteOrderAction,
+        Request $request
     ) {
+        abort_if(!$order->branch->hasUser($request->user()), 404);
+
         try {
             $deleteOrderAction->execute($order);
 

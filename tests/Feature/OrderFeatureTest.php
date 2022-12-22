@@ -13,6 +13,7 @@ use App\Models\ProductInventory;
 use App\Models\Reseller;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Response;
 use Illuminate\Support\Carbon;
 use Tests\TestCase;
 
@@ -536,5 +537,57 @@ class OrderFeatureTest extends TestCase
             'id' => $productInventory->id,
             'quantity' => 10,
         ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function shouldFailedDeleteOrderWhenUserNotRegisteredToBranch()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        /** @var Product */
+        $product = Product::factory()->create();
+        $product->productPrices()->create([
+            'order_source_id' => $orderSource->id,
+            'price' => 15000,
+        ]);
+        /** @var ProductInventory */
+        $productInventory = ProductInventory::factory()
+            ->state([
+                'quantity' => 10,
+            ])
+            ->for($branch)
+            ->for($product)
+            ->create();
+        $data = [
+            'created_at' => '2022-01-01 00:00:00',
+            'branch_id' => $branch->id,
+            'order_source_id' => $orderSource->id,
+            'customer_name' => 'John Doe',
+            'line_items' => [
+                [
+                    'product_id' => $product->id,
+                    'quantity' => 2,
+                ],
+            ],
+        ];
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::delete_order())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        /** @var User */
+        $user1 = User::factory()->create();
+        $user1->branches()->create(['branch_id' => $branch->id]);
+        $order = resolve(CreateOrderAction::class)->execute($data, $user1);
+
+        $response = $this->actingAs($user)->delete("/orders/{$order->id}");
+        $response->assertStatus(404);
     }
 }
