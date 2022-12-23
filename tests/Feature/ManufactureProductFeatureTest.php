@@ -49,8 +49,6 @@ class ManufactureProductFeatureTest extends TestCase
             ->first();
         /** @var User */
         $user = User::factory()->create();
-        $user->permissions()->sync($permission->id);
-
         /** @var Branch */
         $branch = Branch::factory()->create();
         /** @var ManufactureProduct */
@@ -59,6 +57,9 @@ class ManufactureProductFeatureTest extends TestCase
             ->create([
                 'created_by' => $user->id,
             ]);
+        $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get('/manufacture-products');
 
         $response->assertSee([
@@ -112,6 +113,8 @@ class ManufactureProductFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/manufacture-products', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -192,6 +195,8 @@ class ManufactureProductFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/manufacture-products', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -265,6 +270,8 @@ class ManufactureProductFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->post('/manufacture-products', [
             'created_at' => '2022-01-01 00:00:00',
             'branch_id' => $branch->id,
@@ -297,7 +304,6 @@ class ManufactureProductFeatureTest extends TestCase
             ->first();
         /** @var User */
         $user = User::factory()->create();
-        $user->permissions()->sync($permission->id);
         /** @var Branch */
         $branch = Branch::factory()->create();
         /** @var ManufactureProduct */
@@ -305,6 +311,9 @@ class ManufactureProductFeatureTest extends TestCase
             ->for($branch)
             ->for($user, 'creator')
             ->create();
+        $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get("/manufacture-products/{$manufactureProduct->id}");
 
         $response->assertStatus(200);
@@ -329,6 +338,8 @@ class ManufactureProductFeatureTest extends TestCase
         /** @var User */
         $user = User::factory()->create();
         $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
         $response = $this->actingAs($user)->get("/manufacture-products/{$manufactureProduct->id}");
 
         $response->assertSee([
@@ -349,7 +360,6 @@ class ManufactureProductFeatureTest extends TestCase
             ->first();
         /** @var User */
         $user = User::factory()->create();
-        $user->permissions()->sync($permission->id);
         /** @var Branch */
         $branch = Branch::factory()->create();
         /** @var ProductComponent */
@@ -387,7 +397,9 @@ class ManufactureProductFeatureTest extends TestCase
                 ],
             ],
         ];
-        $manufactureProduct = resolve(CreateManufactureProductAction::class)->execute($data);
+        $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+        $manufactureProduct = resolve(CreateManufactureProductAction::class)->execute($data, $user);
 
         $response = $this->actingAs($user)->delete("/manufacture-products/{$manufactureProduct->id}");
         $response->assertSessionHas(['success']);

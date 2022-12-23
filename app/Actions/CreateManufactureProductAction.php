@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\ProductComponent;
 use App\Models\ProductComponentInventory;
 use App\Models\ProductInventory;
+use App\Models\User;
 use Exception;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Carbon;
@@ -21,9 +22,10 @@ class CreateManufactureProductAction
 {
     /**
      * @param array $data
+     * @param User $authenticatedUser
      * @return ManufactureProduct
      */
-    public function execute(array $data)
+    public function execute(array $data, User $authenticatedUser)
     {
         DB::beginTransaction();
 
@@ -36,6 +38,13 @@ class CreateManufactureProductAction
                     'attribute' => 'branch_id'
                 ]),
             ]);
+        }
+
+        if (!$authenticatedUser->hasRegisteredToBranch($branch)) {
+            throw new Exception(
+                __("You are not registered to this branch"),
+                422
+            );
         }
 
         /** @var Collection */
@@ -115,7 +124,7 @@ class CreateManufactureProductAction
         /** @var ManufactureProduct */
         $manufactureProduct = new ManufactureProduct([
             'created_at' => $data['created_at'],
-            'created_by' => $data['created_by'],
+            'created_by' => $authenticatedUser->id,
             'branch_id' => $data['branch_id'],
             'order_number' => $orderNumber,
             'total_line_product_components_quantity' => $totalLineProductComponentsQuantity,

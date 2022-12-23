@@ -40,7 +40,9 @@ class ManufactureProductController extends Controller
                         'manufacture_products.*',
                         'branches.name as branch_name',
                     ])
-                    ->join('branches', 'manufacture_products.branch_id', 'branches.id');
+                    ->join('branches', 'manufacture_products.branch_id', 'branches.id')
+                    ->join('branch_users', 'manufacture_products.branch_id', 'branch_users.branch_id')
+                    ->where('branch_users.user_id', $request->user()->id);
 
                 if ($request->filled('term')) {
                     $manufactureProductQuery->where(function ($query) use ($request) {
@@ -169,9 +171,8 @@ class ManufactureProductController extends Controller
     ) {
         try {
             $manufactureOrder = $createManufactureProductAction->execute(
-                $manufactureProductStoreRequest->all() + [
-                    'created_by' => $manufactureProductStoreRequest->user()->id,
-                ]
+                $manufactureProductStoreRequest->all(),
+                $manufactureProductStoreRequest->user()
             );
 
             return Response::redirectTo('/manufacture-products/' . $manufactureOrder->id)
@@ -186,9 +187,10 @@ class ManufactureProductController extends Controller
 
     /**
      * @param ManufactureProduct $manufactureProduct
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show(ManufactureProduct $manufactureProduct)
+    public function show(ManufactureProduct $manufactureProduct, Request $request)
     {
         $manufactureProduct->load([
             'branch',
@@ -196,6 +198,8 @@ class ManufactureProductController extends Controller
             'lineProducts',
             'creator',
         ]);
+
+        abort_if(!$manufactureProduct->branch->hasUser($request->user()), 404);
 
         return Response::view('manufacture-product.show', [
             'manufactureProduct' => $manufactureProduct,
@@ -205,14 +209,18 @@ class ManufactureProductController extends Controller
     /**
      * @param ManufactureProduct $manufactureProduct
      * @param DeleteManufactureProductAction $deletemanufactureProductAction
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
     public function destroy(
         ManufactureProduct $manufactureProduct,
-        DeleteManufactureProductAction $deletemanufactureProductAction
+        DeleteManufactureProductAction $deleteManufactureProductAction,
+        Request $request
     ) {
+        abort_if(!$manufactureProduct->branch->hasUser($request->user()), 404);
+
         try {
-            $deletemanufactureProductAction->execute($manufactureProduct);
+            $deleteManufactureProductAction->execute($manufactureProduct);
 
             return Response::redirectTo('/manufacture-products')
                 ->with('success', __('crud.deleted', [
