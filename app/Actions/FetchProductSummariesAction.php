@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Models\Branch;
 use App\Models\OrderSource;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -12,18 +13,20 @@ use Illuminate\Support\Facades\DB;
 class FetchProductSummariesAction
 {
     /**
+     * @param User $authenticatedUser
      * @param mixed $fromDate
      * @param mixed $toDate
      * @return array<string, mixed>
      */
     public function execute(
+        User $authenticatedUser,
         $fromDate = null,
         $toDate = null
     ) {
         $fromDate = $fromDate ?: Carbon::now()->format('Y-m-d');
         $toDate = $toDate ?: Carbon::now()->format('Y-m-d');
-        $productSummaries = $this->getProductSummaries($fromDate, $toDate);
-        $branchesWithOrderSources = $this->getBranchesWithOrderSources();
+        $productSummaries = $this->getProductSummaries($authenticatedUser, $fromDate, $toDate);
+        $branchesWithOrderSources = $this->getBranchesWithOrderSources($authenticatedUser);
 
         return [
             'branches' => $branchesWithOrderSources,
@@ -34,12 +37,16 @@ class FetchProductSummariesAction
     }
 
     /**
+     * @param User $authenticatedUser
      * @param string $fromDate
      * @param string $toDate
      * @return Collection
      */
-    private function getProductSummaries($fromDate, $toDate)
-    {
+    private function getProductSummaries(
+        User $authenticatedUser,
+        $fromDate,
+        $toDate
+    ) {
         return Collection::make(
             DB::select("
                 SELECT
@@ -70,12 +77,15 @@ class FetchProductSummariesAction
                         order_line_items
                     JOIN orders ON
                         order_line_items.order_id = orders.id
-                    JOIN branches on
+                    JOIN branches ON
                         orders.branch_id = branches.id
-                    JOIN order_sources on
+                    JOIN order_sources ON
                         orders.order_source_id = order_sources.id
+                    JOIN branch_users ON
+                        orders.branch_id = branch_users.branch_id
                     WHERE
-                        orders.deleted_at IS NULL
+                        branch_users.user_id = ?
+                        AND orders.deleted_at IS NULL
                         AND DATE(orders.created_at) >= ?
                         AND DATE(orders.created_at) <= ?
                         ) as order_summaries ON
@@ -90,6 +100,7 @@ class FetchProductSummariesAction
                     branch_name ASC,
                     order_source_name ASC;
             ", [
+                $authenticatedUser->id,
                 $fromDate,
                 $toDate
             ]),
@@ -97,13 +108,20 @@ class FetchProductSummariesAction
     }
 
     /**
+     * @param User $authenticatedUser
      * @return array<string, mixed>
      */
-    private function getBranchesWithOrderSources()
-    {
+    private function getBranchesWithOrderSources(
+        User $authenticatedUser,
+    ) {
         /** @var EloquentCollection<Branch> */
         $branchCollection = Branch::query()
-            ->orderBy('name')
+            ->select([
+                'branches.*',
+            ])
+            ->join('branch_users', 'branches.id', 'branch_users.branch_id')
+            ->where('branch_users.user_id', $authenticatedUser->id)
+            ->orderBy('branches.name')
             ->get();
         /** @var EloquentCollection<OrderSource> */
         $orderSourceCollection = OrderSource::query()

@@ -18,6 +18,7 @@ class DashboardController extends Controller
         FetchProductSummariesAction $fetchProductSummariesAction
     ) {
         $productSummaries = $fetchProductSummariesAction->execute(
+            $request->user(),
             $request->get('from_date'),
             $request->get('to_date')
         );
