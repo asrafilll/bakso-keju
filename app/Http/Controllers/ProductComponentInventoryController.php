@@ -35,7 +35,9 @@ class ProductComponentInventoryController extends Controller
                         'branches.name as branch_name',
                     ])
                     ->join('product_components', 'product_component_inventories.product_component_id', 'product_components.id')
-                    ->join('branches', 'product_component_inventories.branch_id', 'branches.id');
+                    ->join('branches', 'product_component_inventories.branch_id', 'branches.id')
+                    ->join('branch_users', 'product_component_inventories.branch_id', 'branch_users.branch_id')
+                    ->where('branch_users.user_id', $request->user()->id);
 
                 if ($request->filled('term')) {
                     $productComponentInventoryQuery->where(function ($query) use ($request) {
