@@ -6,15 +6,19 @@ use App\Actions\CreateOrderAction;
 use App\Actions\DeleteOrderAction;
 use App\Actions\SearchBranchesAction;
 use App\Actions\SearchOrderSourcesAction;
+use App\Exports\OrderLineItemsExport;
 use App\Http\Requests\OrderStoreRequest;
 use App\Models\Order;
+use App\Models\OrderLineItem;
 use App\Models\Product;
 use App\Models\Reseller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -41,6 +45,14 @@ class OrderController extends Controller
             'fetch-order-sources' => function () use ($request, $searchOrderSourcesAction) {
                 return Response::json(
                     $searchOrderSourcesAction->execute($request->get('term'))
+                );
+            },
+            'export' => function () use ($request) {
+                return Excel::download(
+                    new OrderLineItemsExport($request->all() + [
+                        'user_id' => $request->user()->id,
+                    ]),
+                    'orders-' . Carbon::now()->unix() . '.xlsx'
                 );
             },
             'default' => function () use ($request) {
