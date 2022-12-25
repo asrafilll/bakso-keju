@@ -495,6 +495,7 @@
                                         <th>{{ __('Branch') }}</th>
                                         <th>{{ __('Order source') }}</th>
                                         <th>{{ __('Customer name') }}</th>
+                                        <th>{{ __('Customer phone number') }}</th>
                                         <th>{{ __('Percentage discount') }}</th>
                                         <th>{{ __('Total discount') }}</th>
                                         <th>{{ __('Total line items quantity') }}</th>
@@ -515,6 +516,7 @@
                                             <td class="align-middle">{{ $order->branch_name }}</td>
                                             <td class="align-middle">{{ $order->order_source_name }}</td>
                                             <td class="align-middle">{{ $order->customer_name }}</td>
+                                            <td class="align-middle">{{ $order->customer_phone_number ?? '-' }}</td>
                                             <td class="align-middle">{{ $order->percentage_discount }}</td>
                                             <td class="align-middle">{{ $order->idr_total_discount }}</td>
                                             <td class="align-middle">{{ $order->idr_total_line_items_quantity }}</td>

@@ -146,10 +146,11 @@ class CreateOrderAction
 
         /** @var Order */
         $order = new Order([
-            'created_at' => $data['created_at'],
-            'branch_id' => $data['branch_id'],
-            'order_source_id' => $data['order_source_id'],
-            'customer_name' => $data['customer_name'],
+            'created_at' => data_get($data, 'created_at'),
+            'branch_id' => data_get($data, 'branch_id'),
+            'order_source_id' => data_get($data, 'order_source_id'),
+            'customer_name' => data_get($data, 'customer_name'),
+            'customer_phone_number' => data_get($data, 'customer_phone_number'),
             'reseller_order' => $resellerOrder,
             'reseller_id' => $resellerId,
             'order_number' => $orderNumber,

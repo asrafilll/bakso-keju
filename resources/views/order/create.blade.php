@@ -43,7 +43,6 @@
                     <form
                         action="{{ url('/orders') }}"
                         method="POST"
-                        novalidate
                     >
                         @csrf
                         <div class="card">
@@ -261,12 +260,14 @@
                                 >
                                     <label for="customer_name">
                                         <span>{{ __('Customer name') }}</span>
-                                        <span class="text-danger">*</span></label>
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <input
                                         type="text"
                                         id="customer_name"
                                         name="customer_name"
                                         class="form-control @error('customer_name') is-invalid @enderror"
+                                        value="{{ Request::old('customer_name') }}"
                                     />
                                     @error('customer_name')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -286,6 +287,23 @@
                                         };
                                     })();
                                 </script>
+                                <div class="form-group">
+                                    <label for="customer_phone_number">
+                                        <span>{{ __('Customer Phone Number') }}</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="customer_phone_number"
+                                        name="customer_phone_number"
+                                        class="form-control @error('customer_phone_number') is-invalid @enderror"
+                                        value="{{ Request::old('customer_phone_number') }}"
+                                        pattern="[0-9]+"
+                                        title="Number only allowed"
+                                    />
+                                    @error('customer_phone_number')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         <div class="card">

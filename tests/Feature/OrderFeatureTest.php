@@ -420,6 +420,89 @@ class OrderFeatureTest extends TestCase
      * @test
      * @return void
      */
+    public function shouldCreateOrderWithCustomerPhoneNumber()
+    {
+        /** @var Branch */
+        $branch = Branch::factory()->create();
+        /** @var OrderSource */
+        $orderSource = OrderSource::factory()->create();
+        /** @var Product */
+        $product = Product::factory()->create();
+        $product->productPrices()->create([
+            'order_source_id' => $orderSource->id,
+            'price' => 15000,
+        ]);
+        /** @var ProductInventory */
+        $productInventory = ProductInventory::factory()
+            ->state([
+                'quantity' => 10,
+            ])
+            ->for($branch)
+            ->for($product)
+            ->create();
+        /** @var Permission */
+        $permission = Permission::query()
+            ->where('name', PermissionEnum::create_order())
+            ->first();
+        /** @var User */
+        $user = User::factory()->create();
+        $user->permissions()->sync($permission->id);
+        $user->branches()->create(['branch_id' => $branch->id]);
+
+        $response = $this->actingAs($user)->post('/orders', [
+            'created_at' => '2022-01-01 00:00:00',
+            'branch_id' => $branch->id,
+            'order_source_id' => $orderSource->id,
+            'customer_name' => 'John Doe',
+            'customer_phone_number' => '081321321321',
+            'line_items' => [
+                [
+                    'product_id' => $product->id,
+                    'quantity' => 2,
+                ],
+            ],
+        ]);
+
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('orders', [
+            'created_at' => '2022-01-01 00:00:00',
+            'branch_id' => $branch->id,
+            'order_source_id' => $orderSource->id,
+            'reseller_order' => false,
+            'reseller_id' => null,
+            'customer_name' => 'John Doe',
+            'customer_phone_number' => '081321321321',
+            'percentage_discount' => 0,
+            'total_discount' => 0,
+            'total_line_items_quantity' => 2,
+            'total_line_items_price' => 15000 * 2,
+            'total_price' => 15000 * 2,
+        ]);
+
+        $this->assertDatabaseHas('order_line_items', [
+            'product_id' => $product->id,
+            'product_name' => $product->name,
+            'price' => 15000,
+            'quantity' => 2,
+            'total' => 15000 * 2,
+        ]);
+
+        $this->assertDatabaseHas('branches', [
+            'id' => $branch->id,
+            'next_order_number' => $branch->next_order_number + 1,
+        ]);
+
+        $this->assertDatabaseHas('product_inventories', [
+            'id' => $productInventory->id,
+            'quantity' => 8,
+        ]);
+    }
+
+    /**
+     * @test
+     * @return void
+     */
     public function shouldShowOrderDetailPage()
     {
         /** @var Branch */

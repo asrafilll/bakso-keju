@@ -55,6 +55,12 @@
                                         <dd>{{ $order->customer_name }}</dd>
                                     </dl>
                                 </div>
+                                <div class="col">
+                                    <dl>
+                                        <dt>{{ __('Customer phone number') }}</dt>
+                                        <dd>{{ $order->customer_phone_number ?? '-' }}</dd>
+                                    </dl>
+                                </div>
                             </div>
                         </div>
                     </div>

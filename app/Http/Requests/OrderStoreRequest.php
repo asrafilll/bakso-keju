@@ -44,6 +44,10 @@ class OrderStoreRequest extends FormRequest
                 'required',
                 'string',
             ],
+            'customer_phone_number' => [
+                'nullable',
+                'numeric',
+            ],
             'line_items' => [
                 'required',
                 'array',

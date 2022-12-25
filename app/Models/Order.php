@@ -24,6 +24,7 @@ class Order extends Model
         'reseller_order',
         'reseller_id',
         'customer_name',
+        'customer_phone_number',
         'percentage_discount',
         'total_discount',
         'total_line_items_quantity',
