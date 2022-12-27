@@ -379,6 +379,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-auto">
+                                    <a
+                                        href="{{ Request::fullUrlWithQuery([
+                                            'action' => 'export',
+                                        ]) }}"
+                                        class="btn btn-default"
+                                    >
+                                        <i class="fas fa-download"></i>
+                                        <span>{{ __('Export') }}</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -406,7 +417,8 @@
                                             <td class="align-middle">{{ $purchase->created_at }}</td>
                                             <td class="align-middle">{{ $purchase->branch_name }}</td>
                                             <td class="align-middle">{{ $purchase->customer_name }}</td>
-                                            <td class="align-middle">{{ $purchase->idr_total_line_items_quantity }}</td>
+                                            <td class="align-middle">{{ $purchase->idr_total_line_items_quantity }}
+                                            </td>
                                             <td class="align-middle">{{ $purchase->idr_total_line_items_price }}</td>
                                             <td class="align-middle">{{ $purchase->idr_total_price }}</td>
                                             <td class="align-middle">

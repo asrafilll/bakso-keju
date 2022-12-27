@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Actions\CreatePurchaseAction;
 use App\Actions\DeletePurchaseAction;
 use App\Actions\SearchBranchesAction;
+use App\Exports\PurchaseLineItemsExport;
 use App\Http\Requests\PurchaseStoreRequest;
 use App\Models\Purchase;
 use App\Models\Item;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PurchaseController extends Controller
 {
@@ -31,6 +34,14 @@ class PurchaseController extends Controller
                         $request->get('term'),
                         $request->user()
                     )
+                );
+            },
+            'export' => function () use ($request) {
+                return Excel::download(
+                    new PurchaseLineItemsExport($request->all() + [
+                        'user_id' => $request->user()->id,
+                    ]),
+                    'purchases-' . Carbon::now()->unix() . '.xlsx'
                 );
             },
             'default' => function () use ($request) {
