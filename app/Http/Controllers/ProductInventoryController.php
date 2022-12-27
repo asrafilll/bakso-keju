@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Actions\SearchBranchesAction;
+use App\Exports\ProductInventoriesExport;
 use App\Models\ProductInventory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductInventoryController extends Controller
 {
@@ -25,6 +28,14 @@ class ProductInventoryController extends Controller
                         $request->get('term'),
                         $request->user()
                     )
+                );
+            },
+            'export' => function () use ($request) {
+                return Excel::download(
+                    new ProductInventoriesExport($request->all() + [
+                        'user_id' => $request->user()->id,
+                    ]),
+                    'product-inventories-' . Carbon::now()->unix() . '.xlsx'
                 );
             },
             'default' => function () use ($request) {

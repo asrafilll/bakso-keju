@@ -141,7 +141,7 @@
                                                                 });
 
                                                                 $branchId.on('select2:clear', function() {
-                                                                    setTimeout(function () {
+                                                                    setTimeout(function() {
                                                                         $branchId.select2('close');
                                                                     }, 0);
                                                                 });
@@ -189,6 +189,17 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="col-auto">
+                                    <a
+                                        href="{{ Request::fullUrlWithQuery([
+                                            'action' => 'export',
+                                        ]) }}"
+                                        class="btn btn-default"
+                                    >
+                                        <i class="fas fa-download"></i>
+                                        <span>{{ __('Export') }}</span>
+                                    </a>
                                 </div>
                             </div>
                         </div>
