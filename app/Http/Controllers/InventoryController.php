@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\CreateInventoryAction;
 use App\Actions\SearchBranchesAction;
+use App\Exports\InventoriesExport;
 use App\Http\Requests\InventoryStoreRequest;
 use App\Models\Branch;
 use App\Models\Inventory;
@@ -11,8 +12,10 @@ use App\Models\Product;
 use App\Models\ProductInventory;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class InventoryController extends Controller
 {
@@ -32,6 +35,14 @@ class InventoryController extends Controller
                         $request->get('term'),
                         $request->user()
                     )
+                );
+            },
+            'export' => function () use ($request) {
+                return Excel::download(
+                    new InventoriesExport($request->all() + [
+                        'user_id' => $request->user()->id,
+                    ]),
+                    'inventories-' . Carbon::now()->unix() . '.xlsx'
                 );
             },
             'default' => function () use ($request) {
