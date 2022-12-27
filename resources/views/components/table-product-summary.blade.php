@@ -50,14 +50,20 @@
             <tr>
                 <td class="text-right">{{ $loop->iteration }}</td>
                 <td>{{ $product['product_name'] }}</td>
-                <td class="text-right">{{ $product['idr_total_quantity'] }}</td>
-                <td class="text-right">{{ $product['idr_total_price'] }}</td>
+                <td class="text-right">
+                    {{ Request::get('action') === 'export' ? $product['total_quantity'] : $product['idr_total_quantity'] }}
+                </td>
+                <td class="text-right">
+                    {{ Request::get('action') === 'export' ? $product['total_price'] : $product['idr_total_price'] }}
+                </td>
                 @foreach ($product['branches'] as $branch)
                     @foreach ($branch['order_sources'] as $orderSource)
                         <td class="text-right">
-                            {{ $orderSource['idr_total_quantity'] }}
+                            {{ Request::get('action') === 'export' ? $orderSource['total_quantity'] : $orderSource['idr_total_quantity'] }}
                         </td>
-                        <td class="text-right">{{ $orderSource['idr_total_price'] }}</td>
+                        <td class="text-right">
+                            {{ Request::get('action') === 'export' ? $orderSource['total_price'] : $orderSource['idr_total_price'] }}
+                        </td>
                     @endforeach
                 @endforeach
             </tr>
@@ -66,15 +72,18 @@
     <tfoot>
         <tr>
             <th colspan="2">{{ __('Total') }}</th>
-            <th class="text-right">{{ $summary['idr_total_quantity'] }}</th>
-            <th class="text-right">{{ $summary['idr_total_price'] }}</th>
+            <th class="text-right">
+                {{ Request::get('action') === 'export' ? $summary['total_quantity'] : $summary['idr_total_quantity'] }}
+            </th>
+            <th class="text-right">
+                {{ Request::get('action') === 'export' ? $summary['total_price'] : $summary['idr_total_price'] }}</th>
             @foreach ($summary['branches'] as $branch)
                 @foreach ($branch['order_sources'] as $orderSource)
                     <td class="text-right">
-                        {{ $orderSource['idr_total_quantity'] }}
+                        {{ Request::get('action') === 'export' ? $orderSource['total_quantity'] : $orderSource['idr_total_quantity'] }}
                     </td>
                     <td class="text-right">
-                        {{ $orderSource['idr_total_price'] }}
+                        {{ Request::get('action') === 'export' ? $orderSource['total_price'] : $orderSource['idr_total_price'] }}
                     </td>
                 @endforeach
             @endforeach
