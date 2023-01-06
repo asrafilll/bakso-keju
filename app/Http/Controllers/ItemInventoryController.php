@@ -36,7 +36,7 @@ class ItemInventoryController extends Controller
                     ])
                     ->join('items', 'item_inventories.item_id', 'items.id')
                     ->join('branches', 'item_inventories.branch_id', 'branches.id')
-                    ->join('branch_users', 'items.branch_id', 'branch_users.branch_id')
+                    ->join('branch_users', 'item_inventories.branch_id', 'branch_users.branch_id')
                     ->where('branch_users.user_id', $request->user()->id);
 
                 if ($request->filled('term')) {
@@ -54,7 +54,7 @@ class ItemInventoryController extends Controller
                 }
 
                 $filterables = [
-                    'items.branch_id' => 'branch_id',
+                    'item_inventories.branch_id' => 'branch_id',
                 ];
 
                 foreach ($filterables as $field => $filterable) {
