@@ -35,7 +35,9 @@ class ItemInventoryController extends Controller
                         'branches.name as branch_name',
                     ])
                     ->join('items', 'item_inventories.item_id', 'items.id')
-                    ->join('branches', 'item_inventories.branch_id', 'branches.id');
+                    ->join('branches', 'item_inventories.branch_id', 'branches.id')
+                    ->join('branch_users', 'items.branch_id', 'branch_users.branch_id')
+                    ->where('branch_users.user_id', $request->user()->id);
 
                 if ($request->filled('term')) {
                     $itemInventoryQuery->where(function ($query) use ($request) {
@@ -52,12 +54,12 @@ class ItemInventoryController extends Controller
                 }
 
                 $filterables = [
-                    'branch_id',
+                    'items.branch_id' => 'branch_id',
                 ];
 
-                foreach ($filterables as $filterable) {
+                foreach ($filterables as $field => $filterable) {
                     if ($request->filled($filterable)) {
-                        $itemInventoryQuery->where($filterable, $request->get($filterable));
+                        $itemInventoryQuery->where($field, $request->get($filterable));
                     }
                 }
 
