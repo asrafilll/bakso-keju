@@ -58,12 +58,12 @@ class ManufactureProductController extends Controller
                 }
 
                 $filterables = [
-                    'branch_id',
+                    'manufacture_products.branch_id' => 'branch_id',
                 ];
 
-                foreach ($filterables as $filterable) {
+                foreach ($filterables as $field => $filterable) {
                     if ($request->filled($filterable)) {
-                        $manufactureProductQuery->where($filterable, $request->get($filterable));
+                        $manufactureProductQuery->where($field, $request->get($filterable));
                     }
                 }
 

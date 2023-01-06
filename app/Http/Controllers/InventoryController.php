@@ -75,10 +75,10 @@ class InventoryController extends Controller
                 }
 
                 $filterables = [
-                    'branch_id',
+                    'inventories.branch_id' => 'branch_id',
                 ];
 
-                foreach ($filterables as $filterable) {
+                foreach ($filterables as $field => $filterable) {
                     if ($request->filled($filterable)) {
                         $inventoryQuery->where($filterable, $request->get($filterable));
                     }

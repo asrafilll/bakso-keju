@@ -54,12 +54,12 @@ class ProductComponentInventoryController extends Controller
                 }
 
                 $filterables = [
-                    'branch_id',
+                    'product_component_inventories.branch_id' => 'branch_id',
                 ];
 
-                foreach ($filterables as $filterable) {
+                foreach ($filterables as $field => $filterable) {
                     if ($request->filled($filterable)) {
-                        $productComponentInventoryQuery->where($filterable, $request->get($filterable));
+                        $productComponentInventoryQuery->where($field, $request->get($filterable));
                     }
                 }
 

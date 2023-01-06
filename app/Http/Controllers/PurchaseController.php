@@ -69,12 +69,12 @@ class PurchaseController extends Controller
                 }
 
                 $filterables = [
-                    'branch_id',
+                    'purchases.branch_id' => 'branch_id',
                 ];
 
-                foreach ($filterables as $filterable) {
+                foreach ($filterables as $field => $filterable) {
                     if ($request->filled($filterable)) {
-                        $purchaseQuery->where($filterable, $request->get($filterable));
+                        $purchaseQuery->where($field, $request->get($filterable));
                     }
                 }
 

@@ -83,13 +83,13 @@ class OrderController extends Controller
                 }
 
                 $filterables = [
-                    'branch_id',
-                    'order_source_id',
+                    'orders.branch_id' => 'branch_id',
+                    'orders.order_source_id' => 'order_source_id',
                 ];
 
-                foreach ($filterables as $filterable) {
+                foreach ($filterables as $field => $filterable) {
                     if ($request->filled($filterable)) {
-                        $orderQuery->where($filterable, $request->get($filterable));
+                        $orderQuery->where($field, $request->get($filterable));
                     }
                 }
 
