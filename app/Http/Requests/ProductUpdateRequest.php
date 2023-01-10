@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\OrderSource;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -45,7 +46,7 @@ class ProductUpdateRequest extends FormRequest
             ],
         ];
 
-        if (Branch::count()) {
+        if (OrderSource::count()) {
             $rules += [
                 'prices.*.order_source_id' => [
                     'required',
