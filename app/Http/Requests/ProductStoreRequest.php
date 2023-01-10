@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Branch;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -24,7 +25,7 @@ class ProductStoreRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => [
                 'required',
                 'string',
@@ -43,15 +44,22 @@ class ProductStoreRequest extends FormRequest
                 'required',
                 'array',
             ],
-            'prices.*.order_source_id' => [
-                'required',
-                'string',
-            ],
-            'prices.*.price' => [
-                'required',
-                'integer',
-                'min:0',
-            ],
         ];
+
+        if (Branch::count()) {
+            $rules += [
+                'prices.*.order_source_id' => [
+                    'required',
+                    'string',
+                ],
+                'prices.*.price' => [
+                    'required',
+                    'integer',
+                    'min:0',
+                ],
+            ];
+        }
+
+        return $rules;
     }
 }

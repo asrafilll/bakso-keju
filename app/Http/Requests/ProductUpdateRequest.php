@@ -24,7 +24,7 @@ class ProductUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'name' => [
                 'required',
                 'string',
@@ -43,15 +43,22 @@ class ProductUpdateRequest extends FormRequest
                 'required',
                 'array',
             ],
-            'prices.*.order_source_id' => [
-                'required',
-                'string',
-            ],
-            'prices.*.price' => [
-                'required',
-                'integer',
-                'min:0',
-            ],
         ];
+
+        if (Branch::count()) {
+            $rules += [
+                'prices.*.order_source_id' => [
+                    'required',
+                    'string',
+                ],
+                'prices.*.price' => [
+                    'required',
+                    'integer',
+                    'min:0',
+                ],
+            ];
+        }
+
+        return $rules;
     }
 }
