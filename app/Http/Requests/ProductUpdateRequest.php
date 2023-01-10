@@ -46,7 +46,7 @@ class ProductUpdateRequest extends FormRequest
             ],
         ];
 
-        if (OrderSource::count()) {
+        if (OrderSource::count() > 0) {
             $rules += [
                 'prices.*.order_source_id' => [
                     'required',
