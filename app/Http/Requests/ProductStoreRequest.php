@@ -40,14 +40,15 @@ class ProductStoreRequest extends FormRequest
                 'string',
                 Rule::exists('product_categories', 'id'),
             ],
-            'prices' => [
-                'required',
-                'array',
-            ],
+
         ];
 
-        if (OrderSource::count() > 0) {
+        if (OrderSource::count()) {
             $rules += [
+                'prices' => [
+                    'required',
+                    'array',
+                ],
                 'prices.*.order_source_id' => [
                     'required',
                     'string',
