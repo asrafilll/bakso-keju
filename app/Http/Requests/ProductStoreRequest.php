@@ -32,7 +32,7 @@ class ProductStoreRequest extends FormRequest
             'price' => [
                 'required',
                 'integer',
-                'min:1',
+                'min:0',
             ],
             'product_category_id' => [
                 'nullable',
@@ -50,7 +50,7 @@ class ProductStoreRequest extends FormRequest
             'prices.*.price' => [
                 'required',
                 'integer',
-                'min:1',
+                'min:0',
             ],
         ];
     }
