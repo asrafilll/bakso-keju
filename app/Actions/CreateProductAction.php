@@ -23,7 +23,7 @@ class CreateProductAction
             array_map(fn ($price) => [
                 'order_source_id' => data_get($price, 'order_source_id'),
                 'price' => data_get($price, 'price'),
-            ], data_get($data, 'prices'))
+            ], data_get($data, 'prices', []))
         );
 
         return $product;
