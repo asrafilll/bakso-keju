@@ -53,7 +53,7 @@ class FetchProductSummariesAction
                     products.id as product_id,
                     products.product_category_id as sub_product_category_id,
                     IFNULL(sub_product_categories.name, 'Uncategorized') as sub_product_category_name,
-                    CONCAT_WS(' - ', IFNULL(sub_product_categories.name, 'Uncategorized'), products.name) as product_name,
+                    products.name as product_name,
                     order_summaries.branch_id,
                     order_summaries.branch_name,
                     order_summaries.order_source_id,

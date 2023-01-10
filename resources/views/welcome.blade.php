@@ -121,6 +121,7 @@
                                         <th
                                             rowspan="3"
                                             class="align-middle text-center"
+                                            width="10"
                                         >{{ __('No') }}</th>
                                         <th
                                             rowspan="3"
