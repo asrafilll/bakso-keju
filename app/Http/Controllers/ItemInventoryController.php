@@ -35,7 +35,7 @@ class ItemInventoryController extends Controller
                     new ItemInventoriesExport($request->all() + [
                         'user_id' => $request->user()->id,
                     ]),
-                    'inventories-' . Carbon::now()->unix() . '.xlsx'
+                    'item_inventories-' . Carbon::now()->unix() . '.xlsx'
                 );
             },
             'default' => function () use ($request) {
