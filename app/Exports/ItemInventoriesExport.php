@@ -30,7 +30,7 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
                 'items.name as items_name',
                 'branches.name as branch_name',
             ])
-            ->join('items', 'item_inventories.id', 'items.id')
+            ->join('items', 'item_inventories.item_id', 'items.id')
             ->join('branches', 'item_inventories.branch_id', 'branches.id')
             ->join('branch_users', 'item_inventories.branch_id', 'branch_users.branch_id')
             ->where('branch_users.user_id', data_get($this->data, 'user_id'));
@@ -66,7 +66,6 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
         $itemInventoryQuery->orderByDesc('items.id');
 
         return $itemInventoryQuery;
-        dd($itemInventoryQuery);
     }
 
     /**
@@ -77,10 +76,9 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             $row->created_at->format('m/d/Y H:i'),
-            $row->items_name,
             $row->branch_name,
-            $row->created_by_name,
-            $row->quantity,
+            $row->items_name,
+            $row->quantity, 
         ];
 
  
@@ -96,8 +94,6 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
             __('Branch'),
             __('Product'),
             __('Quantity'),
-            __('Note'),
-            __('Created by'),
         ];
     }
 }
