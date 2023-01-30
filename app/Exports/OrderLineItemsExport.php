@@ -31,6 +31,9 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
                 'branches.name as branch_name',
                 'order_sources.name as order_source_name',
                 'orders.customer_name',
+                'orders.customer_phone_number',
+                'orders.percentage_discount',
+                'orders.total_discount',
                 'order_line_items.product_name',
                 'order_line_items.price',
                 'order_line_items.quantity',
@@ -105,9 +108,12 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
             $row->branch_name,
             $row->order_source_name,
             $row->customer_name,
+            $row->customer_phone_number,
             $row->product_name,
             $row->price,
             $row->quantity,
+            $row->percentage_discount,
+            $row->total_discount,
             $row->total,
         ];
     }
@@ -123,9 +129,12 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
             __('Branch'),
             __('Order source'),
             __('Customer name'),
+            __('Customer phone'),
             __('Product'),
             __('Price'),
             __('Quantity'),
+            __('Percentage Discount'),
+            __('Total Discount'),
             __('Total'),
         ];
     }
