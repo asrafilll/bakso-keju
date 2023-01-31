@@ -63,19 +63,6 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
         }
 
         $filterables = [
-            'branch_id',
-            'order_source_id',
-        ];
-
-        foreach ($filterables as $filterable) {
-            $filterValue = data_get($this->data, $filterable);
-
-            if ($filterValue) {
-                $orderLineItemQuery->where($filterable, $filterValue);
-            }
-        }
-
-        $filterables = [
             'orders.branch_id' => 'branch_id',
             'orders.order_source_id' => 'order_source_id',
         ];
