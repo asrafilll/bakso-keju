@@ -50,10 +50,10 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
         if ($term) {
             $orderLineItemQuery->where(function ($query) use ($term) {
                 $searchables = [
-                    'orders.order_number',
-                    'branches.name',
-                    'order_sources.name',
-                    'orders.customer_name',
+                    'order_number',
+                    'branch_name',
+                    'order_source_name',
+                    'customer_name',
                 ];
 
                 foreach ($searchables as $searchable) {
@@ -72,6 +72,19 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
 
             if ($filterValue) {
                 $orderLineItemQuery->where($filterable, $filterValue);
+            }
+        }
+
+        $filterables = [
+            'orders.branch_id' => 'branch_id',
+            'orders.order_source_id' => 'order_source_id',
+        ];
+
+        foreach ($filterables as $field => $filterable) {
+            $filterValue = data_get($this->data, $filterable);
+
+            if ($filterValue) {
+                $orderLineItemQuery->where($field, $filterValue);
             }
         }
 
