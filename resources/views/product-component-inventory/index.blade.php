@@ -190,6 +190,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-auto">
+                                    <a
+                                        href="{{ Request::fullUrlWithQuery([
+                                            'action' => 'export',
+                                        ]) }}"
+                                        class="btn btn-default"
+                                    >
+                                        <i class="fas fa-download"></i>
+                                        <span>{{ __('Export') }}</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -197,7 +208,7 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __('Branch') }}</th>
-                                        <th>{{ __('Product componnt') }}</th>
+                                        <th>{{ __('Product component') }}</th>
                                         <th>{{ __('Quantity') }}</th>
                                         <th>{{ __('Date updated') }}</th>
                                     </tr>
