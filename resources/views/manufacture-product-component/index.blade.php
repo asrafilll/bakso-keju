@@ -379,6 +379,17 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-auto">
+                                    <a
+                                        href="{{ Request::fullUrlWithQuery([
+                                            'action' => 'export',
+                                        ]) }}"
+                                        class="btn btn-default"
+                                    >
+                                        <i class="fas fa-download"></i>
+                                        <span>{{ __('Export') }}</span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body table-responsive p-0">
@@ -397,15 +408,21 @@
                                     @forelse ($manufactureProductComponents as $manufactureProductComponent)
                                         <tr>
                                             <td class="align-middle">
-                                                <a href="{{ url('/manufacture-product-components/' . $manufactureProductComponent->id) }}">
+                                                <a
+                                                    href="{{ url('/manufacture-product-components/' . $manufactureProductComponent->id) }}">
                                                     {{ $manufactureProductComponent->order_number }}
                                                 </a>
                                             </td>
-                                            <td class="align-middle">{{ $manufactureProductComponent->created_at }}</td>
-                                            <td class="align-middle">{{ $manufactureProductComponent->branch_name }}</td>
-                                            <td class="align-middle">{{ $manufactureProductComponent->idr_total_line_items_quantity }}</td>
-                                            <td class="align-middle">{{ $manufactureProductComponent->idr_total_line_items_weight }}</td>
-                                            <td class="align-middle">{{ $manufactureProductComponent->idr_total_line_items_price }}</td>
+                                            <td class="align-middle">{{ $manufactureProductComponent->created_at }}
+                                            </td>
+                                            <td class="align-middle">{{ $manufactureProductComponent->branch_name }}
+                                            </td>
+                                            <td class="align-middle">
+                                                {{ $manufactureProductComponent->idr_total_line_items_quantity }}</td>
+                                            <td class="align-middle">
+                                                {{ $manufactureProductComponent->idr_total_line_items_weight }}</td>
+                                            <td class="align-middle">
+                                                {{ $manufactureProductComponent->idr_total_line_items_price }}</td>
                                         </tr>
                                     @empty
                                         <tr>

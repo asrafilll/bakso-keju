@@ -5,13 +5,16 @@ namespace App\Http\Controllers;
 use App\Actions\CreateManufactureProductComponentAction;
 use App\Actions\DeleteManufactureProductComponentAction;
 use App\Actions\SearchBranchesAction;
+use App\Exports\ManufactureProductComponentLineItemsExport;
 use App\Http\Requests\ManufactureProductComponentStoreRequest;
 use App\Models\Branch;
 use App\Models\ManufactureProductComponent;
 use App\Models\ProductComponent;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ManufactureProductComponentController extends Controller
 {
@@ -31,6 +34,14 @@ class ManufactureProductComponentController extends Controller
                         $request->get('term'),
                         $request->user()
                     )
+                );
+            },
+            'export' => function () use ($request) {
+                return Excel::download(
+                    new ManufactureProductComponentLineItemsExport($request->all() + [
+                        'user_id' => $request->user()->id,
+                    ]),
+                    'manufacture_product_components-' . Carbon::now()->unix() . '.xlsx'
                 );
             },
             'default' => function () use ($request) {
@@ -67,13 +78,13 @@ class ManufactureProductComponentController extends Controller
                 }
 
                 if ($request->filled('start_created_at')) {
-                    $manufactureProductComponentQuery->whereRaw('DATE(orders.created_at) >= ?', [
+                    $manufactureProductComponentQuery->whereRaw('DATE(manufacture_product_components.created_at) >= ?', [
                         $request->get('start_created_at'),
                     ]);
                 }
 
                 if ($request->filled('end_created_at')) {
-                    $manufactureProductComponentQuery->whereRaw('DATE(orders.created_at) <= ?', [
+                    $manufactureProductComponentQuery->whereRaw('DATE(manufacture_product_components.created_at) <= ?', [
                         $request->get('end_created_at'),
                     ]);
                 }
