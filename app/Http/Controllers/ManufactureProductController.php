@@ -68,13 +68,13 @@ class ManufactureProductController extends Controller
                 }
 
                 if ($request->filled('start_created_at')) {
-                    $manufactureProductQuery->whereRaw('DATE(orders.created_at) >= ?', [
+                    $manufactureProductQuery->whereRaw('DATE(manufacture_products.created_at) >= ?', [
                         $request->get('start_created_at'),
                     ]);
                 }
 
                 if ($request->filled('end_created_at')) {
-                    $manufactureProductQuery->whereRaw('DATE(orders.created_at) <= ?', [
+                    $manufactureProductQuery->whereRaw('DATE(manufacture_products.created_at) <= ?', [
                         $request->get('end_created_at'),
                     ]);
                 }

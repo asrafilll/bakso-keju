@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ManufactureComponentInventoriesExport;
 use App\Actions\SearchBranchesAction;
 use App\Models\ProductComponentInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductComponentInventoryController extends Controller
 {
@@ -25,6 +28,14 @@ class ProductComponentInventoryController extends Controller
                         $request->get('term'),
                         $request->user()
                     )
+                );
+            },
+            'export' => function () use ($request) {
+                return Excel::download(
+                    new ManufactureComponentInventoriesExport($request->all() + [
+                        'user_id' => $request->user()->id,
+                    ]),
+                    'product_component_inventories-' . Carbon::now()->unix() . '.xlsx'
                 );
             },
             'default' => function () use ($request) {
