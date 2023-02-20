@@ -35,7 +35,7 @@ class ProductComponentInventoryController extends Controller
                     new ManufactureComponentInventoriesExport($request->all() + [
                         'user_id' => $request->user()->id,
                     ]),
-                    'item_inventories-' . Carbon::now()->unix() . '.xlsx'
+                    'product_component_inventories-' . Carbon::now()->unix() . '.xlsx'
                 );
             },
             'default' => function () use ($request) {
