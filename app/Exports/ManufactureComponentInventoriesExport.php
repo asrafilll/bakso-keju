@@ -25,42 +25,43 @@ class ManufactureComponentInventoriesExport implements FromQuery, WithHeadings, 
     public function query()
     {
         $productComponentInventoryQuery = ProductComponentInventory::query()
-        ->select([
-            'product_component_inventories.*',
-            'product_components.name as product_component_name',
-            'branches.name as branch_name',
-        ])
-        ->join('product_components', 'product_component_inventories.product_component_id', 'product_components.id')
-        ->join('branches', 'product_component_inventories.branch_id', 'branches.id')
-        ->join('branch_users', 'product_component_inventories.branch_id', 'branch_users.branch_id')
-        ->where('branch_users.user_id', data_get($this->data, 'user_id'));
+            ->select([
+                'product_component_inventories.*',
+                'product_components.name as product_component_name',
+                'branches.name as branch_name',
+            ])
+            ->join('product_components', 'product_component_inventories.product_component_id', 'product_components.id')
+            ->join('branches', 'product_component_inventories.branch_id', 'branches.id')
+            ->join('branch_users', 'product_component_inventories.branch_id', 'branch_users.branch_id')
+            ->where('branch_users.user_id', data_get($this->data, 'user_id'));
 
         $term = data_get($this->data, 'term');
+
         if ($term) {
-        $productComponentInventoryQuery->where(function ($query) use ($term) {
-            $searchables = [
-                'product_components.name',
-                'branches.name',
-                'product_component_inventories.quantity',
-            ];
+            $productComponentInventoryQuery->where(function ($query) use ($term) {
+                $searchables = [
+                    'product_components.name',
+                    'branches.name',
+                    'product_component_inventories.quantity',
+                ];
 
-            foreach ($searchables as $searchable) {
-                $query->orWhere($searchable, 'LIKE', "%{$term}%");
-            }
-        });
-    }
-
-    $filterables = [
-        'product_component_inventories.branch_id' => 'branch_id',
-    ];
-
-    foreach ($filterables as $filterable) {
-        $filterValue = data_get($this->data, $filterable);
-
-        if ($filterValue) {
-            $productComponentInventoryQuery->where($filterable, $filterValue);
+                foreach ($searchables as $searchable) {
+                    $query->orWhere($searchable, 'LIKE', "%{$term}%");
+                }
+            });
         }
-    }
+
+        $filterables = [
+            'product_component_inventories.branch_id' => 'branch_id',
+        ];
+
+        foreach ($filterables as $filterable) {
+            $filterValue = data_get($this->data, $filterable);
+
+            if ($filterValue) {
+                $productComponentInventoryQuery->where($filterable, $filterValue);
+            }
+        }
 
         $productComponentInventoryQuery->orderByDesc('product_components.id');
 
@@ -77,10 +78,8 @@ class ManufactureComponentInventoriesExport implements FromQuery, WithHeadings, 
             $row->created_at->format('m/d/Y H:i'),
             $row->branch_name,
             $row->product_component_name,
-            $row->quantity, 
+            $row->quantity,
         ];
-
- 
     }
 
     /**
