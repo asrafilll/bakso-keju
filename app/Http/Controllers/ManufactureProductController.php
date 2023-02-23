@@ -36,6 +36,10 @@ class ManufactureProductController extends Controller
             },
             'default' => function () use ($request) {
                 $manufactureProductQuery = ManufactureProduct::query()
+                    ->with([
+                        'lineProductComponents',
+                        'lineProducts',
+                    ])
                     ->select([
                         'manufacture_products.*',
                         'branches.name as branch_name',
