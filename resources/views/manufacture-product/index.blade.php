@@ -372,6 +372,8 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __('Order number') }}</th>
+                                        <th>{{ __('Components') }}</th>
+                                        <th>{{ __('Products') }}</th>
                                         <th>{{ __('Date created') }}</th>
                                         <th>{{ __('Branch') }}</th>
                                         <th>{{ __('Total line product components quantity') }}</th>
@@ -381,20 +383,38 @@
                                 <tbody>
                                     @forelse ($manufactureProducts as $manufactureProduct)
                                         <tr>
-                                            <td class="align-middle">
-                                                <a href="{{ url('/manufacture-products/' . $manufactureProduct->id) }}">
+                                            <td class="align-top">
+                                                <a
+                                                    href="{{ url('/manufacture-products/' . $manufactureProduct->id) }}">
                                                     {{ $manufactureProduct->order_number }}
                                                 </a>
                                             </td>
-                                            <td class="align-middle">{{ $manufactureProduct->created_at }}</td>
-                                            <td class="align-middle">{{ $manufactureProduct->branch_name }}</td>
-                                            <td class="align-middle">{{ $manufactureProduct->idr_total_line_product_components_quantity }}</td>
-                                            <td class="align-middle">{{ $manufactureProduct->idr_total_line_products_quantity }}</td>
+                                            <td class="align-top">
+                                                <ul>
+                                                    @foreach ($manufactureProduct->lineProductComponents as $productComponent)
+                                                        <li>{{ $productComponent->product_component_name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+                                            <td class="align-top">
+                                                <ul>
+                                                    @foreach ($manufactureProduct->lineProducts as $product)
+                                                        <li>{{ $product->product_name }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </td>
+                                            <td class="align-top">{{ $manufactureProduct->created_at }}</td>
+                                            <td class="align-top">{{ $manufactureProduct->branch_name }}</td>
+                                            <td class="align-top">
+                                                {{ $manufactureProduct->idr_total_line_product_components_quantity }}
+                                            </td>
+                                            <td class="align-top">
+                                                {{ $manufactureProduct->idr_total_line_products_quantity }}</td>
                                         </tr>
                                     @empty
                                         <tr>
                                             <td
-                                                colspan="5"
+                                                colspan="7"
                                                 class="text-center"
                                             >{{ __('Data not found') }}</td>
                                         </tr>
