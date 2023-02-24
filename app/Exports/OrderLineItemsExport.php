@@ -67,11 +67,11 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
             'orders.order_source_id' => 'order_source_id',
         ];
 
-        foreach ($filterables as $field => $filterable) {
+        foreach ($filterables as $filterKey => $filterable) {
             $filterValue = data_get($this->data, $filterable);
 
             if ($filterValue) {
-                $orderLineItemQuery->where($field, $filterValue);
+                $orderLineItemQuery->where($filterKey, $filterValue);
             }
         }
 

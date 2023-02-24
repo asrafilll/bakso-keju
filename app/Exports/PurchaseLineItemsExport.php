@@ -57,14 +57,14 @@ class PurchaseLineItemsExport implements FromQuery, WithHeadings, WithMapping
         }
 
         $filterables = [
-            'branch_id',
+            'purchases.branch_id' => 'branch_id',
         ];
 
-        foreach ($filterables as $filterable) {
+        foreach ($filterables as $filterKey => $filterable) {
             $filterValue = data_get($this->data, $filterable);
 
             if ($filterValue) {
-                $purchaseLineItemQuery->where($filterable, $filterValue);
+                $purchaseLineItemQuery->where($filterKey, $filterValue);
             }
         }
 

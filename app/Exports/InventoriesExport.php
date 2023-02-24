@@ -55,14 +55,14 @@ class InventoriesExport implements FromQuery, WithHeadings, WithMapping
         }
 
         $filterables = [
-            'branch_id',
+            'inventories.branch_id' => 'branch_id',
         ];
 
-        foreach ($filterables as $filterable) {
+        foreach ($filterables as $filterKey => $filterable) {
             $filterValue = data_get($this->data, $filterable);
 
             if ($filterValue) {
-                $inventoryQuery->where($filterable, $filterValue);
+                $inventoryQuery->where($filterKey, $filterValue);
             }
         }
 

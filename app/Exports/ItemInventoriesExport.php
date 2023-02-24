@@ -52,14 +52,14 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
         }
 
         $filterables = [
-            'branch_id',
+            'item_inventories.branch_id' => 'branch_id',
         ];
 
-        foreach ($filterables as $filterable) {
+        foreach ($filterables as $filterKey => $filterable) {
             $filterValue = data_get($this->data, $filterable);
 
             if ($filterValue) {
-                $itemInventoryQuery->where($filterable, $filterValue);
+                $itemInventoryQuery->where($filterKey, $filterValue);
             }
         }
 
@@ -78,10 +78,10 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
             $row->created_at->format('m/d/Y H:i'),
             $row->branch_name,
             $row->items_name,
-            $row->quantity, 
+            $row->quantity,
         ];
 
- 
+
     }
 
     /**

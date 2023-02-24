@@ -55,11 +55,11 @@ class ManufactureComponentInventoriesExport implements FromQuery, WithHeadings, 
             'product_component_inventories.branch_id' => 'branch_id',
         ];
 
-        foreach ($filterables as $filterable) {
+        foreach ($filterables as $filterKey => $filterable) {
             $filterValue = data_get($this->data, $filterable);
 
             if ($filterValue) {
-                $productComponentInventoryQuery->where($filterable, $filterValue);
+                $productComponentInventoryQuery->where($filterKey, $filterValue);
             }
         }
 
