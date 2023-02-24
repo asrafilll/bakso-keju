@@ -80,7 +80,7 @@ class InventoryController extends Controller
 
                 foreach ($filterables as $field => $filterable) {
                     if ($request->filled($filterable)) {
-                        $inventoryQuery->where($filterable, $request->get($filterable));
+                        $inventoryQuery->where($field, $request->get($filterable));
                     }
                 }
 
