@@ -34,6 +34,7 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
                 'orders.customer_phone_number',
                 'orders.percentage_discount',
                 'orders.total_discount',
+                'orders.deleted_at',
                 'order_line_items.product_name',
                 'order_line_items.price',
                 'order_line_items.quantity',
@@ -115,6 +116,7 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
             $row->percentage_discount,
             $row->total_discount,
             $row->total,
+            $row->deleted_at ? 'Deleted' : 'Active',
         ];
     }
 
@@ -136,6 +138,8 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
             __('Percentage Discount'),
             __('Total Discount'),
             __('Total'),
+            __('Status'),
+            
         ];
     }
 }
