@@ -51,15 +51,23 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
         if ($term) {
             $orderLineItemQuery->where(function ($query) use ($term) {
                 $searchables = [
-                    'order_number',
-                    'branch_name',
-                    'order_source_name',
-                    'customer_name',
+                    'orders.order_number',
+                    'branches.name',
+                    'order_sources.name',
+                    'orders.customer_name',
                 ];
 
                 foreach ($searchables as $searchable) {
                     $query->orWhere($searchable, 'LIKE', "%{$term}%");
                 }
+
+                $query->orWhereExists(
+                    fn ($query) => $query
+                        ->selectRaw(1)
+                        ->from('order_line_items')
+                        ->whereColumn('order_line_items.order_id', 'orders.id')
+                        ->where('order_line_items.product_name', 'LIKE', "%{$term}%")
+                );
             });
         }
 
@@ -139,7 +147,7 @@ class OrderLineItemsExport implements FromQuery, WithHeadings, WithMapping
             __('Total Discount'),
             __('Total'),
             __('Status'),
-            
+
         ];
     }
 }

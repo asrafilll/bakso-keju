@@ -79,6 +79,14 @@ class OrderController extends Controller
                         foreach ($searchables as $searchable) {
                             $query->orWhere($searchable, 'LIKE', "%{$request->get('term')}%");
                         }
+
+                        $query->orWhereExists(
+                            fn ($query) => $query
+                                ->selectRaw(1)
+                                ->from('order_line_items')
+                                ->whereColumn('order_line_items.order_id', 'orders.id')
+                                ->where('order_line_items.product_name', 'LIKE', "%{$request->get('term')}%")
+                        );
                     });
                 }
 
