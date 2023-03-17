@@ -49,6 +49,7 @@ use Spatie\Enum\Laravel\Enum;
  * @method static self update_item()
  * @method static self delete_item()
  * @method static self view_item_inventories()
+ * @method static self create_item_inventories()
  * @method static self view_purchases()
  * @method static self create_purchase()
  * @method static self delete_purchase()

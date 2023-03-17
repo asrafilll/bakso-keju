@@ -23,6 +23,7 @@ class CreateItemsTable extends Migration
                 ->nullable()
                 ->constrained()
                 ->nullOnDelete();
+            $table->bigInteger('quantity')->default(0);
         });
     }
 
