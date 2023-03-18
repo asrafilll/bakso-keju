@@ -134,9 +134,9 @@ Route::group([
 
     Route::get('/product-component-inventories', [\App\Http\Controllers\ProductComponentInventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_component_inventories());
 
-    Route::get('/component-inventories', [\App\Http\Controllers\ComponentInventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_component_inventories());
-    Route::get('/component-inventories/create', [\App\Http\Controllers\ComponentInventoryController::class, 'create'])->can(\App\Enums\PermissionEnum::view_product_component_inventories());
-    Route::post('/component-inventories', [\App\Http\Controllers\ComponentInventoryController::class, 'store'])->can(\App\Enums\PermissionEnum::view_product_component_inventories());
+    Route::get('/component-inventories', [\App\Http\Controllers\ComponentInventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_component_inventories());
+    Route::get('/component-inventories/create', [\App\Http\Controllers\ComponentInventoryController::class, 'create'])->can(\App\Enums\PermissionEnum::create_component_inventories());
+    Route::post('/component-inventories', [\App\Http\Controllers\ComponentInventoryController::class, 'store'])->can(\App\Enums\PermissionEnum::create_component_inventories());
 
     Route::get('/manufacture-products', [\App\Http\Controllers\ManufactureProductController::class, 'index'])->can(\App\Enums\PermissionEnum::view_manufacture_products());
     Route::get('/manufacture-products/create', [\App\Http\Controllers\ManufactureProductController::class, 'create'])->can(\App\Enums\PermissionEnum::create_manufacture_product());
