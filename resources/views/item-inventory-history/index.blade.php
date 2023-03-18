@@ -12,6 +12,12 @@
                 <div class="col-auto">
                     <h1 class="m-0">{{ __('Item inventories') }}</h1>
                 </div><!-- /.col -->
+                @can(\App\Enums\PermissionEnum::create_inventory()->value)
+                    <div class="col-auto">
+                        <a href="{{ url('/item-inventory-histories/create') }}"
+                            class="btn btn-primary">{{ __('Create inventory') }}</a>
+                    </div><!-- /.col -->
+                @endcan
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>

@@ -20,12 +20,12 @@
         <div class="container">
             <div class="row mb-2">
                 <div class="col-auto">
-                    <a href="{{ url('/item-inventories') }}" class="btn btn-default">
+                    <a href="{{ url('/item-inventory-histories') }}" class="btn btn-default">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                 </div>
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('Create item inventory') }}</h1>
+                    <h1 class="m-0">{{ __('Create inventory') }}</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -37,7 +37,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <form action="{{ url('/item-inventories') }}" method="POST" novalidate>
+                    <form action="{{ url('/item-inventory-histories') }}" method="POST" novalidate>
                         @csrf
                         <div class="card">
                             <div class="card-body">
@@ -58,7 +58,7 @@
                                         $('#branch_id').select2({
                                             theme: 'bootstrap4',
                                             ajax: {
-                                                url: '/inventories/create?action=fetch-branches',
+                                                url: '/item-inventory-histories/create?action=fetch-branches',
                                                 dataType: 'json',
                                                 delay: 250,
                                                 processResults: function(branches) {
@@ -91,7 +91,7 @@
                                         $('#item_id').select2({
                                             theme: 'bootstrap4',
                                             ajax: {
-                                                url: '/item-inventories/create?action=fetch-items',
+                                                url: '/item-inventory-histories/create?action=fetch-items',
                                                 dataType: 'json',
                                                 delay: 250,
                                                 processResults: function(items) {

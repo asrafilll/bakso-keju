@@ -79,6 +79,12 @@
                         <p>{{ __('Purchases') }}</p>
                     </x-nav-item>
                 @endcan
+                @can(\App\Enums\PermissionEnum::view_item_inventory_histories()->value)
+                    <x-nav-item :href="url('/item-inventory-histories')" activeHref="item-inventory-histories">
+                        <i class="nav-icon fas fa-exchange-alt"></i>
+                        <p>{{ __('Inventories') }}</p>
+                    </x-nav-item>
+                @endcan
                 @can(\App\Enums\PermissionEnum::view_item_inventories()->value)
                     <x-nav-item :href="url('/item-inventories')" activeHref="item-inventories">
                         <i class="nav-icon fas fa-box-open"></i>

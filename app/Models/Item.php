@@ -18,7 +18,6 @@ class Item extends Model
         'name',
         'price',
         'item_category_id',
-        'quantity',
     ];
 
     /**

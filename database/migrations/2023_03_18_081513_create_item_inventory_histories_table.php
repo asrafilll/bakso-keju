@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateItemsTable extends Migration
+class CreateItemInventoryHistoriesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,13 @@ class CreateItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('items', function (Blueprint $table) {
+        Schema::create('item_inventory_histories', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->string('name');
-            $table->unsignedBigInteger('price');
-            $table->foreignUuid('item_category_id')
-                ->nullable()
-                ->constrained()
-                ->nullOnDelete();
+            $table->foreignUuid('item_id')->constrained();
+            $table->foreignUuid('branch_id')->constrained();
+            $table->bigInteger('quantity');
         });
     }
 
@@ -33,6 +30,6 @@ class CreateItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('items');
+        Schema::dropIfExists('item_inventory_histories');
     }
 }

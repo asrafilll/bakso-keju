@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\CreateItemInventoryAction;
 use App\Actions\SearchBranchesAction;
 use App\Exports\ItemInventoriesExport;
-use App\Http\Requests\ItemInventoryStoreRequest;
-use App\Models\Item;
 use App\Models\ItemInventory;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Carbon;
@@ -87,64 +83,5 @@ class ItemInventoryController extends Controller
         ];
 
         return $actions[$request->get('action', 'default')]();
-    }
-
-    /**
-     * @param Request
-     * @param SearchBranchesAction $searchBranchesAction
-     * @return \Illuminate\Http\Response
-     */
-    public function create(
-        Request $request,
-        SearchBranchesAction $searchBranchesAction
-    ) {
-        $actions = [
-            'fetch-branches' => function () use ($request, $searchBranchesAction) {
-                return Response::json(
-                    $searchBranchesAction->execute(
-                        $request->get('term'),
-                        $request->user()
-                    )
-                );
-            },
-            'fetch-items' => function () use ($request) {
-                $items = Item::query()
-                    ->where('name', 'LIKE', "%{$request->get('term')}%")
-                    ->orderBy('name')
-                    ->get();
-
-                return Response::json($items);
-            },
-            'default' => function () {
-                return Response::view('item-inventory.create');
-            },
-        ];
-
-        return $actions[$request->get('action', 'default')]();
-    }
-
-    /**
-     * @param ItemInventoryStoreRequest $inventoryStoreRequest
-     * @param CreateItemInventoryAction $createInventoryAction
-     * @return \Illuminate\Http\Response
-     */
-    public function store(
-        ItemInventoryStoreRequest $inventoryStoreRequest,
-        CreateItemInventoryAction $createInventoryAction
-    ) {
-        try {
-            $createInventoryAction->execute(
-                $inventoryStoreRequest->all(),
-                $inventoryStoreRequest->user()
-            );
-
-            return Response::redirectTo('/item-inventories/create')
-                ->with('success', __('crud.created', [
-                    'resource' => 'item_inventories',
-                ]));
-        } catch (Exception $e) {
-            return Response::redirectTo('/item-inventories/create')
-                ->with('failed', $e->getMessage());
-        }
     }
 }

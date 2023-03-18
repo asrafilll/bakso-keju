@@ -110,8 +110,10 @@ Route::group([
     Route::delete('/items/{item}', [\App\Http\Controllers\ItemController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_item());
 
     Route::get('/item-inventories', [\App\Http\Controllers\ItemInventoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_item_inventories());
-    Route::get('/item-inventories/create', [\App\Http\Controllers\ItemInventoryController::class, 'create'])->can(\App\Enums\PermissionEnum::create_item_inventories());
-    Route::post('/item-inventories', [\App\Http\Controllers\ItemInventoryController::class, 'store'])->can(\App\Enums\PermissionEnum::create_item_inventories());
+
+    Route::get('/item-inventory-histories', [\App\Http\Controllers\ItemInventoryHistoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_item_inventory_histories());
+    Route::get('/item-inventory-histories/create', [\App\Http\Controllers\ItemInventoryHistoryController::class, 'create'])->can(\App\Enums\PermissionEnum::create_item_inventory_histories());
+    Route::post('/item-inventory-histories', [\App\Http\Controllers\ItemInventoryHistoryController::class, 'store'])->can(\App\Enums\PermissionEnum::create_item_inventory_histories());
 
     Route::get('/purchases', [\App\Http\Controllers\PurchaseController::class, 'index'])->can(\App\Enums\PermissionEnum::view_purchases());
     Route::get('/purchases/create', [\App\Http\Controllers\PurchaseController::class, 'create'])->can(\App\Enums\PermissionEnum::create_purchase());
