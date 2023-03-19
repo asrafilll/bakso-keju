@@ -66,6 +66,8 @@ Route::group([
     Route::put('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'update'])->can(\App\Enums\PermissionEnum::update_product_category());
     Route::delete('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_product_category());
 
+    Route::get('/product-hampers', [\App\Http\Controllers\ProductCategoryController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_categories());
+
     Route::get('/order-sources', [\App\Http\Controllers\OrderSourceController::class, 'index'])->can(\App\Enums\PermissionEnum::view_order_sources());
     Route::get('/order-sources/create', [\App\Http\Controllers\OrderSourceController::class, 'create'])->can(\App\Enums\PermissionEnum::create_order_source());
     Route::post('/order-sources', [\App\Http\Controllers\OrderSourceController::class, 'store'])->can(\App\Enums\PermissionEnum::create_order_source());
