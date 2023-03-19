@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
+class ItemInventoryHistoriesExport implements FromQuery, WithHeadings, WithMapping
 {
     /**
      * @var array<int, string>
@@ -26,13 +26,13 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
     {
         $itemInventoryQuery = ItemInventory::query()
             ->select([
-                'item_inventories.*',
+                'item_inventory_histories.*',
                 'items.name as items_name',
                 'branches.name as branch_name',
             ])
-            ->join('items', 'item_inventories.item_id', 'items.id')
-            ->join('branches', 'item_inventories.branch_id', 'branches.id')
-            ->join('branch_users', 'item_inventories.branch_id', 'branch_users.branch_id')
+            ->join('items', 'item_inventory_histories.item_id', 'items.id')
+            ->join('branches', 'item_inventory_histories.branch_id', 'branches.id')
+            ->join('branch_users', 'item_inventory_histories.branch_id', 'branch_users.branch_id')
             ->where('branch_users.user_id', data_get($this->data, 'user_id'));
 
         $term = data_get($this->data, 'term');
@@ -42,7 +42,7 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
                     'items.name',
                     'branches.name',
                     'users.name',
-                    'item_inventories.quantity',
+                    'item_inventory_histories.quantity',
                 ];
 
                 foreach ($searchables as $searchable) {
@@ -52,7 +52,7 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
         }
 
         $filterables = [
-            'item_inventories.branch_id' => 'branch_id',
+            'item_inventory_histories.branch_id' => 'branch_id',
         ];
 
         foreach ($filterables as $filterKey => $filterable) {

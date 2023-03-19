@@ -2,12 +2,12 @@
 
 namespace App\Exports;
 
-use App\Models\ItemInventory;
+use App\Models\ComponentInventory;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
+class ComponentInventoriesExport implements FromQuery, WithHeadings, WithMapping
 {
     /**
      * @var array<int, string>
@@ -24,25 +24,25 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
      */
     public function query()
     {
-        $itemInventoryQuery = ItemInventory::query()
+        $itemInventoryQuery = ComponentInventory::query()
             ->select([
-                'item_inventories.*',
-                'items.name as items_name',
+                'component_inventories.*',
+                'product_components.name as product_components_name',
                 'branches.name as branch_name',
             ])
-            ->join('items', 'item_inventories.item_id', 'items.id')
-            ->join('branches', 'item_inventories.branch_id', 'branches.id')
-            ->join('branch_users', 'item_inventories.branch_id', 'branch_users.branch_id')
+            ->join('product_components', 'component_inventories.product_component_id', 'product_components.id')
+            ->join('branches', 'component_inventories.branch_id', 'branches.id')
+            ->join('branch_users', 'component_inventories.branch_id', 'branch_users.branch_id')
             ->where('branch_users.user_id', data_get($this->data, 'user_id'));
 
         $term = data_get($this->data, 'term');
         if ($term) {
             $itemInventoryQuery->where(function ($query) use ($term) {
                 $searchables = [
-                    'items.name',
+                    'product_components.name',
                     'branches.name',
                     'users.name',
-                    'item_inventories.quantity',
+                    'component_inventories.quantity',
                 ];
 
                 foreach ($searchables as $searchable) {
@@ -52,7 +52,7 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
         }
 
         $filterables = [
-            'item_inventories.branch_id' => 'branch_id',
+            'component_inventories.branch_id' => 'branch_id',
         ];
 
         foreach ($filterables as $filterKey => $filterable) {
@@ -63,7 +63,7 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
             }
         }
 
-        $itemInventoryQuery->orderByDesc('items.id');
+        $itemInventoryQuery->orderByDesc('product_components.id');
 
         return $itemInventoryQuery;
     }
@@ -90,7 +90,7 @@ class ItemInventoriesExport implements FromQuery, WithHeadings, WithMapping
         return [
             __('Date created'),
             __('Branch'),
-            __('Item'),
+            __('Component'),
             __('Quantity'),
         ];
     }

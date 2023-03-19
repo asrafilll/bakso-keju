@@ -10,8 +10,14 @@
         <div class="container">
             <div class="row justify-content-between mb-2">
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('Item inventories') }}</h1>
+                    <h1 class="m-0">{{ __('Inventories') }}</h1>
                 </div><!-- /.col -->
+                @can(\App\Enums\PermissionEnum::create_inventory()->value)
+                    <div class="col-auto">
+                        <a href="{{ url('/component-inventories/create') }}"
+                            class="btn btn-primary">{{ __('Create inventory') }}</a>
+                    </div><!-- /.col -->
+                @endcan
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
@@ -161,18 +167,19 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __('Branch') }}</th>
-                                        <th>{{ __('Item') }}</th>
+                                        <th>{{ __('Component') }}</th>
                                         <th>{{ __('Quantity') }}</th>
                                         <th>{{ __('Date updated') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($itemInventories as $itemInventory)
+                                    @forelse ($componentInventories as $componentInventory)
                                         <tr>
-                                            <td class="align-middle">{{ $itemInventory->branch_name }}</td>
-                                            <td class="align-middle">{{ $itemInventory->item_name }}</td>
-                                            <td class="align-middle">{{ $itemInventory->quantity }}</td>
-                                            <td class="align-middle">{{ $itemInventory->updated_at }}</td>
+                                            <td class="align-middle">{{ $componentInventory->branch_name }}</td>
+                                            <td class="align-middle">{{ $componentInventory->product_component_name }}
+                                            </td>
+                                            <td class="align-middle">{{ $componentInventory->quantity }}</td>
+                                            <td class="align-middle">{{ $componentInventory->updated_at }}</td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -183,7 +190,7 @@
                             </table>
                         </div>
                         <div class="card-footer d-flex justify-content-center">
-                            {!! $itemInventories->withQueryString()->links() !!}
+                            {!! $componentInventories->withQueryString()->links() !!}
                         </div>
                     </div>
                 </div>
