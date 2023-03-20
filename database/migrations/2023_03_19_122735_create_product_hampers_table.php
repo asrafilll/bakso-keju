@@ -18,6 +18,7 @@ class CreateProductHampersTable extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->string('name');
+            $table->unsignedBigInteger('price')->default(0);
         });
     }
 

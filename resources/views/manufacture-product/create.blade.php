@@ -20,10 +20,7 @@
         <div class="container">
             <div class="row mb-2">
                 <div class="col-auto">
-                    <a
-                        href="{{ url('/manufacture-products') }}"
-                        class="btn btn-default"
-                    >
+                    <a href="{{ url('/manufacture-products') }}" class="btn btn-default">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                 </div>
@@ -37,33 +34,21 @@
 
     <!-- Main content -->
     <section class="content">
-        <form
-            action="{{ url('/manufacture-products') }}"
-            method="POST"
-            novalidate
-        >
+        <form action="{{ url('/manufacture-products') }}" method="POST" novalidate>
             @csrf
             <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
-                                <div
-                                    class="form-group"
-                                    id="created_at-module"
-                                >
+                                <div class="form-group" id="created_at-module">
                                     <label for="created_at">
                                         <span>{{ __('Date') }}</span>
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <input
-                                        id="created_at"
-                                        type="text"
-                                        name="created_at"
-                                        class="form-control datetimepicker-input"
-                                        data-target="#created_at"
-                                        data-toggle="datetimepicker"
-                                    />
+                                    <input id="created_at" type="text" name="created_at"
+                                        class="form-control datetimepicker-input" data-target="#created_at"
+                                        data-toggle="datetimepicker" />
                                 </div>
                                 <script>
                                     var CreatedAtModule = (function() {
@@ -82,25 +67,17 @@
                                         init();
                                     })();
                                 </script>
-                                <div
-                                    class="form-group"
-                                    id="branch-module"
-                                >
+                                <div class="form-group" id="branch-module">
                                     <label for="branch_id">
                                         <span>{{ __('Branch') }}</span>
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <select
-                                        id="branch_id"
-                                        name="branch_id"
+                                    <select id="branch_id" name="branch_id"
                                         class="form-control @error('branch_id') is-invalid @enderror"
-                                        style="width: 100%;"
-                                    >
+                                        style="width: 100%;">
                                         @if ($mainBranch)
-                                            <option
-                                                value="{{ $mainBranch->id }}"
-                                                selected
-                                            >{{ $mainBranch->name }}</option>
+                                            <option value="{{ $mainBranch->id }}" selected>{{ $mainBranch->name }}
+                                            </option>
                                         @endif
                                     </select>
                                     @error('branch_id')
@@ -153,16 +130,10 @@
                                 <h5 class="card-title">{{ __('Product components') }}</h5>
                             </div>
                             <div class="card-body">
-                                <div
-                                    class="form-group"
-                                    id="product-component-module"
-                                >
-                                    <select
-                                        id="product_component_id"
-                                        name="product_component_id"
+                                <div class="form-group" id="product-component-module">
+                                    <select id="product_component_id" name="product_component_id"
                                         class="form-control @error('product_component_id') is-invalid @enderror"
-                                        style="width: 100%;"
-                                    >
+                                        style="width: 100%;">
                                         <option></option>
                                     </select>
                                     @error('product_component_id')
@@ -193,7 +164,8 @@
 
                                             if (branchId) {
                                                 config.ajax = {
-                                                    url: '/manufacture-products/create?action=fetch-product-components&branch_id=' + branchId,
+                                                    url: '/manufacture-products/create?action=fetch-product-components&branch_id=' +
+                                                        branchId,
                                                     dataType: 'json',
                                                     delay: 250,
                                                     processResults: function(productComponents) {
@@ -213,7 +185,7 @@
                                             $productComponentId.select2(config);
                                         }
 
-                                        @if($mainBranch)
+                                        @if ($mainBranch)
                                             init('{{ $mainBranch->id }}');
                                         @else
                                             init();
@@ -224,18 +196,12 @@
                                         };
                                     })();
                                 </script>
-                                <div
-                                    class="table-responsive"
-                                    id="line-product-components-module"
-                                >
+                                <div class="table-responsive" id="line-product-components-module">
                                     <table class="table text-nowrap">
                                         <thead>
                                             <tr>
                                                 <th>{{ __('Product component') }}</th>
-                                                <th
-                                                    width="100px"
-                                                    class="text-right"
-                                                >{{ __('Quantity') }}</th>
+                                                <th width="100px" class="text-right">{{ __('Quantity') }}</th>
                                                 <th width="10px"></th>
                                             </tr>
                                         </thead>
@@ -399,16 +365,10 @@
                                 <h5 class="card-title">{{ __('Products') }}</h5>
                             </div>
                             <div class="card-body">
-                                <div
-                                    class="form-group"
-                                    id="product-module"
-                                >
-                                    <select
-                                        id="product_id"
-                                        name="product_id"
+                                <div class="form-group" id="product-module">
+                                    <select id="product_id" name="product_id"
                                         class="form-control @error('product_id') is-invalid @enderror"
-                                        style="width: 100%;"
-                                    >
+                                        style="width: 100%;">
                                         <option></option>
                                     </select>
                                     @error('product_id')
@@ -462,18 +422,12 @@
                                         };
                                     })();
                                 </script>
-                                <div
-                                    class="table-responsive"
-                                    id="line-products-module"
-                                >
+                                <div class="table-responsive" id="line-products-module">
                                     <table class="table text-nowrap">
                                         <thead>
                                             <tr>
                                                 <th>{{ __('Product') }}</th>
-                                                <th
-                                                    width="100px"
-                                                    class="text-right"
-                                                >{{ __('Quantity') }}</th>
+                                                <th width="100px" class="text-right">{{ __('Quantity') }}</th>
                                                 <th width="10px"></th>
                                             </tr>
                                         </thead>
@@ -632,10 +586,7 @@
                         </div>
                     </div>
                     <div class="col-12">
-                        <button
-                            type="submit"
-                            class="btn btn-primary"
-                        >{{ __('Save') }}</button>
+                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
                     </div>
                 </div>
             </div>

@@ -10,10 +10,18 @@ class ProductHamper extends Model
 {
     use HasFactory, HasUuid;
 
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'price'];
 
     public function productHamperLines()
     {
         return $this->hasMany(ProductHamperLine::class);
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdrPriceAttribute()
+    {
+        return number_format($this->price, 0, ',', '.');
     }
 }

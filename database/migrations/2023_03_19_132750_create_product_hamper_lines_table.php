@@ -19,6 +19,7 @@ class CreateProductHamperLinesTable extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->foreignUuid('product_id')->constrained('products');
             $table->foreignUuid('product_hamper_id')->constrained('product_hampers');
+            $table->integer('quantity');
         });
     }
 
