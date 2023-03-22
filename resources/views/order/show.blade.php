@@ -9,10 +9,7 @@
         <div class="container">
             <div class="row align-items-center mb-2">
                 <div class="col-auto">
-                    <a
-                        href="{{ url('/orders') }}"
-                        class="btn btn-default"
-                    >
+                    <a href="{{ url('/orders') }}" class="btn btn-default">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                 </div>
@@ -74,10 +71,7 @@
                                     <thead>
                                         <tr>
                                             <th>{{ __('Product') }}</th>
-                                            <th
-                                                width="100px"
-                                                class="text-right"
-                                            >{{ __('Quantity') }}</th>
+                                            <th width="100px" class="text-right">{{ __('Quantity') }}</th>
                                             <th width="250px"class="text-right">{{ __('Total') }}</th>
                                         </tr>
                                     </thead>
@@ -90,6 +84,32 @@
                                                 </td>
                                                 <td class="text-right">{{ $orderLineItem->idr_quantity }}</td>
                                                 <td class="text-right">{{ $orderLineItem->idr_total }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <thead>
+                                        <tr>
+                                            <th>{{ __('Hampers') }}</th>
+                                            <th width="100px" class="text-right">{{ __('Quantity') }}</th>
+                                            <th width="250px"class="text-right">{{ __('Total') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($order->orderLineHampers as $orderLineHamper)
+                                            <tr>
+                                                <td>
+                                                    <div>{{ $orderLineHamper->hamper_name }}</div>
+                                                    <div>{{ $orderLineHamper->idr_price }}</div>
+                                                </td>
+                                                <td class="text-right">
+                                                    @foreach ($orderLineHamper->productHamper->productHamperLines as $item)
+                                                        <div>
+                                                            {{ $item->product->name }}
+                                                            ({{ $item->quantity }})
+                                                        </div>
+                                                    @endforeach
+                                                </td>
+                                                <td class="text-right">{{ $orderLineHamper->idr_total }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -131,20 +151,12 @@
                             </div>
                         </div>
                     </div>
-                    <a
-                        href="{{ Request::fullUrlWithQuery(['action' => 'print-invoice']) }}"
-                        class="btn btn-primary"
-                        target="_blank"
-                    >{{ __('Print invoice') }}</a>
+                    <a href="{{ Request::fullUrlWithQuery(['action' => 'print-invoice']) }}" class="btn btn-primary"
+                        target="_blank">{{ __('Print invoice') }}</a>
                     @can(\App\Enums\PermissionEnum::delete_order()->value)
                         @if (is_null($order->deleted_at))
-                            <button
-                                type="button"
-                                class="btn btn-danger"
-                                data-toggle="modal"
-                                data-target="#modal-delete"
-                                data-action="{{ url('/orders/' . $order->id) }}"
-                            >{{ __('Delete') }}</button>
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-delete"
+                                data-action="{{ url('/orders/' . $order->id) }}">{{ __('Delete') }}</button>
                         @endif
                     @endcan
                 </div>

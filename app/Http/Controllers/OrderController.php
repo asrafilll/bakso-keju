@@ -11,6 +11,7 @@ use App\Http\Requests\OrderStoreRequest;
 use App\Models\Order;
 use App\Models\OrderLineItem;
 use App\Models\Product;
+use App\Models\ProductHamper;
 use App\Models\Reseller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
@@ -203,6 +204,15 @@ class OrderController extends Controller
 
                 return Response::json($products);
             },
+            'fetch-hampers' => function () use ($request) {
+                $productHampers = ProductHamper::query()
+                    ->where('name', 'LIKE', "%{$request->get('term')}%")
+                    ->where('branch_id', $request->get('branch_id'))
+                    ->orderBy('name')
+                    ->get();
+
+                return Response::json($productHampers);
+            },
             'default' => function () {
                 return Response::view('order.create');
             },
@@ -247,6 +257,7 @@ class OrderController extends Controller
             'branch',
             'orderSource',
             'orderLineItems',
+            'orderLineHampers',
         ]);
 
         abort_if(!$order->branch->hasUser($request->user()), 404);

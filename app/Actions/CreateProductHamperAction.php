@@ -32,6 +32,7 @@ class CreateProductHamperAction
         DB::beginTransaction();
 
         $productHampers = ProductHamper::Create([
+            'branch_id' => $data['branch_id'],
             'name' => $data['name'],
             'price' => $data['price'],
         ]);

@@ -58,6 +58,14 @@ class Order extends Model
     }
 
     /**
+     * @return HasMany
+     */
+    public function orderLineHampers()
+    {
+        return $this->hasMany(OrderLineHamper::class);
+    }
+
+    /**
      * @return string
      */
     public function getIdrTotalDiscountAttribute()

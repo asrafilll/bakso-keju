@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateProductHampersTable extends Migration
+class CreateOrderLineHampersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,16 @@ class CreateProductHampersTable extends Migration
      */
     public function up()
     {
-        Schema::create('product_hampers', function (Blueprint $table) {
+        Schema::create('order_line_hampers', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-            $table->foreignUuid('branch_id')->constrained();
-            $table->string('name');
-            $table->unsignedBigInteger('price')->default(0);
+            $table->foreignUuid('order_id')->constrained();
+            $table->uuid('product_hamper_id');
+            $table->string('hamper_name');
+            $table->unsignedBigInteger('price');
+            $table->unsignedInteger('quantity');
+            $table->unsignedBigInteger('total');
         });
     }
 
@@ -30,6 +33,6 @@ class CreateProductHampersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_hampers');
+        Schema::dropIfExists('order_line_hampers');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductHamperStoreRequest extends FormRequest
 {
@@ -24,6 +25,11 @@ class ProductHamperStoreRequest extends FormRequest
     public function rules()
     {
         return [
+            'branch_id' => [
+                'required',
+                'string',
+                Rule::exists('branches', 'id'),
+            ],
             'name' => [
                 'required',
                 'string',

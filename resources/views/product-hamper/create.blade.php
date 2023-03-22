@@ -36,6 +36,54 @@
                         @csrf
                         <div class="card">
                             <div class="card-body">
+                                <div class="form-group" id="branch-module">
+                                    <label for="branch_id">
+                                        <span>{{ __('Branch') }}</span>
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <select id="branch_id" name="branch_id"
+                                        class="form-control @error('branch_id') is-invalid @enderror"
+                                        style="width: 100%;"></select>
+                                    @error('branch_id')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <script>
+                                    var BranchModule = (function() {
+                                        var $el = $('#branch-module');
+                                        var $branchId = $el.find('#branch_id')
+
+                                        $branchId.on('select2:select', function(e) {
+                                            var branch = e.params.data.branch;
+                                            ProductModule.setBranchId(branch.id);
+                                            LineProductsModule.deleteAllLineProductComponents();
+                                        });
+
+                                        function init() {
+                                            $branchId.select2({
+                                                theme: 'bootstrap4',
+                                                ajax: {
+                                                    url: '/product-hampers/create?action=fetch-branches',
+                                                    dataType: 'json',
+                                                    delay: 250,
+                                                    processResults: function(branches) {
+                                                        return {
+                                                            results: branches.map(function(branch) {
+                                                                return {
+                                                                    id: branch.id,
+                                                                    text: branch.name,
+                                                                    branch: branch,
+                                                                };
+                                                            }),
+                                                        };
+                                                    },
+                                                },
+                                            });
+                                        }
+
+                                        init();
+                                    })()
+                                </script>
                                 <div class="form-group">
                                     <label for="name">
                                         <span>{{ __('Name') }}</span>
@@ -79,6 +127,7 @@
                                     var ProductModule = (function() {
                                         var $el = $('#product-module');
                                         var $productId = $el.find('#product_id');
+                                        var branchId;
 
                                         $productId.on('select2:select', function(e) {
                                             var product = e.params.data.product;
@@ -91,12 +140,22 @@
                                             );
                                         });
 
-                                        function init(branchId = null) {
+                                        function setBranchId(value) {
+                                            branchId = value;
+
+                                            init();
+                                        }
+
+                                        function init() {
                                             var config = {
                                                 theme: 'bootstrap4',
                                                 placeholder: '{{ __('Search products') }}',
-                                                ajax: {
-                                                    url: '/product-hampers/create?action=fetch-products',
+                                                ajax: null,
+                                            };
+
+                                            if (branchId) {
+                                                config.ajax = {
+                                                    url: '/product-hampers/create?action=fetch-products&branch_id=' + branchId,
                                                     dataType: 'json',
                                                     delay: 250,
                                                     processResults: function(products) {
@@ -110,8 +169,8 @@
                                                             }),
                                                         };
                                                     },
-                                                },
-                                            };
+                                                };
+                                            }
 
                                             $productId.select2(config);
                                         }
@@ -120,6 +179,7 @@
 
                                         return {
                                             init: init,
+                                            setBranchId: setBranchId,
                                         };
                                     })();
                                 </script>

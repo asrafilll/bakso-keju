@@ -10,7 +10,12 @@ class ProductHamper extends Model
 {
     use HasFactory, HasUuid;
 
-    protected $fillable = ['name', 'price'];
+    protected $fillable = ['branch_id', 'name', 'price'];
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class);
+    }
 
     public function productHamperLines()
     {
