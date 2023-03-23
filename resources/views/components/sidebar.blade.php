@@ -53,7 +53,7 @@
                 @can(\App\Enums\PermissionEnum::view_product_hampers()->value)
                     <x-nav-item :href="url('/product-hampers')" activeHref="product-hampers">
                         <i class="nav-icon fas fa-toolbox"></i>
-                        <p>{{ __('Product Hampers') }} <span class="badge bg-primary">New</span></p>
+                        <p>{{ __('Product Bundle') }} <span class="badge bg-primary">New</span></p>
                     </x-nav-item>
                 @endcan
                 @can(\App\Enums\PermissionEnum::view_product_categories()->value)

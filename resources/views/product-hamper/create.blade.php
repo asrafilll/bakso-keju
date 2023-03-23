@@ -20,7 +20,7 @@
                     </a>
                 </div>
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('New hampers') }}</h1>
+                    <h1 class="m-0">{{ __('New bundle') }}</h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->

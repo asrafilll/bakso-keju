@@ -549,7 +549,7 @@
                                         function init() {
                                             var config = {
                                                 theme: 'bootstrap4',
-                                                placeholder: '{{ __('Search hampers') }}',
+                                                placeholder: '{{ __('Search bundle') }}',
                                                 ajax: null,
                                             };
 

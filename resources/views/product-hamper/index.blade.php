@@ -19,7 +19,7 @@
                 </div><!-- /.col -->
                 @can(\App\Enums\PermissionEnum::view_product_hampers()->value)
                     <div class="col-auto">
-                        <a href="{{ url('/product-hampers/create') }}" class="btn btn-primary">{{ __('Create hampers') }}</a>
+                        <a href="{{ url('/product-hampers/create') }}" class="btn btn-primary">{{ __('Create bundle') }}</a>
                     </div><!-- /.col -->
                 @endcan
             </div><!-- /.row -->
@@ -45,7 +45,7 @@
                                             </div>
                                             <input type="search" name="term" class="form-control"
                                                 value="{{ Request::get('term') }}"
-                                                placeholder="{{ __('Search hampers') }}" />
+                                                placeholder="{{ __('Search bundles') }}" />
                                         </div>
                                     </form>
                                 </div>
