@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Models\Branch;
+use App\Models\Order;
 use App\Models\OrderSource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -32,7 +33,9 @@ class FetchProductSummariesAction
             'branches' => $branchesWithOrderSources,
         ] + $this->generate(
             $productSummaries,
-            $branchesWithOrderSources
+            $branchesWithOrderSources,
+            $fromDate,
+            $toDate
         );
     }
 
@@ -138,6 +141,7 @@ class FetchProductSummariesAction
                 'idr_total_quantity' => '0',
                 'total_price' => 0,
                 'idr_total_price' => '0',
+                'total_discount' => '0',
                 'order_sources' => [],
             ];
             foreach ($orderSourceCollection as $orderSourceItem) {
@@ -162,7 +166,9 @@ class FetchProductSummariesAction
      */
     private function generate(
         $productSummaries,
-        $branchesWithOrderSources
+        $branchesWithOrderSources,
+        $fromDate,
+        $toDate
     ) {
         $productSummariesMap = [];
         $summary = [
@@ -278,6 +284,31 @@ class FetchProductSummariesAction
                 $summaryPerProductCategory[$productSummary->sub_product_category_id]['branches'][$productSummary->branch_id]['order_sources'][$productSummary->order_source_id]['total_price']
             );
         }
+
+        $newBranches = [];
+        $totalDiscount = 0;
+
+        foreach ($summary['branches'] as $item) {
+            $totalDiscountPerBranch = Order::query()
+                ->where('branch_id', '=', $item['id'])
+                ->sum('total_discount');
+
+            $totalDiscount += $totalDiscountPerBranch;
+
+            $newBranches[$item['id']] = [
+                'id' => $item['id'],
+                'name' => $item['name'],
+                'total_quantity' => $item['total_quantity'],
+                'idr_total_quantity' => $item['idr_total_quantity'],
+                'total_price' => $item['total_price'],
+                'idr_total_price' => $this->getIdrCurrency($item['total_price'] - $totalDiscountPerBranch),
+                'total_discount' => $totalDiscountPerBranch,
+                'order_sources' => $item['order_sources'],
+            ];
+        }
+        $summary['branches'] = $newBranches;
+        $summary['idr_total_price'] = $this->getIdrCurrency($summary['total_price'] - $totalDiscount);
+        $summary['total_price'] = $summary['total_price'] - $totalDiscount;
 
         return [
             'products' => $productSummariesMap,
