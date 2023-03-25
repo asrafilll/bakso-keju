@@ -289,11 +289,11 @@ class FetchProductSummariesAction
         $totalDiscount = 0;
 
         foreach ($summary['branches'] as $item) {
-            $orders = Order::query()
+            $totalDiscountPerBranch = Order::query()
                 ->where('branch_id', '=', $item['id'])
                 ->sum('total_discount');
 
-            $totalDiscount += $orders;
+            $totalDiscount += $totalDiscountPerBranch;
 
             $newBranches[$item['id']] = [
                 'id' => $item['id'],
@@ -301,8 +301,8 @@ class FetchProductSummariesAction
                 'total_quantity' => $item['total_quantity'],
                 'idr_total_quantity' => $item['idr_total_quantity'],
                 'total_price' => $item['total_price'],
-                'idr_total_price' => $this->getIdrCurrency($item['total_price'] - $orders),
-                'total_discount' => $orders,
+                'idr_total_price' => $this->getIdrCurrency($item['total_price'] - $totalDiscountPerBranch),
+                'total_discount' => $totalDiscountPerBranch,
                 'order_sources' => $item['order_sources'],
             ];
         }
