@@ -18,54 +18,32 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form
-                                action="{{ '/dashboard' }}"
-                                method="GET"
-                            >
+                            <form action="{{ '/dashboard' }}" method="GET">
                                 <div class="form-row align-items-center">
                                     <div class="form-group row col-sm-4">
-                                        <label
-                                            for="from_date"
-                                            class="col-form-label col-4 col-sm-auto text-right"
-                                        >{{ __('From date') }}</label>
+                                        <label for="from_date"
+                                            class="col-form-label col-4 col-sm-auto text-right">{{ __('From date') }}</label>
                                         <div class="col">
-                                            <input
-                                                type="date"
-                                                name="from_date"
-                                                id="from_date"
-                                                class="form-control"
+                                            <input type="date" name="from_date" id="from_date" class="form-control"
                                                 value="{{ Request::get('from_date', \Illuminate\Support\Carbon::now()->format('Y-m-d')) }}"
-                                                onchange="document.getElementById('to_date').setAttribute('min', this.value)"
-                                            />
+                                                onchange="document.getElementById('to_date').setAttribute('min', this.value)" />
                                         </div>
                                     </div>
                                     <div class="form-group row col-sm-4">
-                                        <label
-                                            for="to_date"
-                                            class="col-form-label col-4 col-sm-auto text-right"
-                                        >{{ __('To date') }}</label>
+                                        <label for="to_date"
+                                            class="col-form-label col-4 col-sm-auto text-right">{{ __('To date') }}</label>
                                         <div class="col">
-                                            <input
-                                                type="date"
-                                                name="to_date"
-                                                id="to_date"
-                                                class="form-control"
+                                            <input type="date" name="to_date" id="to_date" class="form-control"
                                                 value="{{ Request::get('to_date', \Illuminate\Support\Carbon::now()->format('Y-m-d')) }}"
-                                                onchange="document.getElementById('from_date').setAttribute('max', this.value)"
-                                            />
+                                                onchange="document.getElementById('from_date').setAttribute('max', this.value)" />
                                         </div>
                                     </div>
                                     <div class="form-group col-sm-auto text-right">
-                                        <button
-                                            type="submit"
-                                            class="btn btn-primary"
-                                        >{{ __('Filter') }}</button>
-                                        <a
-                                            href="{{ Request::fullUrlWithQuery([
-                                                'action' => 'export',
-                                            ]) }}"
-                                            class="btn btn-secondary"
-                                        >
+                                        <button type="submit" class="btn btn-primary">{{ __('Filter') }}</button>
+                                        <a href="{{ Request::fullUrlWithQuery([
+                                            'action' => 'export',
+                                        ]) }}"
+                                            class="btn btn-secondary">
                                             <span>{{ __('Export') }}</span>
                                         </a>
                                     </div>
@@ -81,10 +59,7 @@
                             <table class="table table-bordered table-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th
-                                            class="text-center"
-                                            width="10"
-                                        >{{ __('No') }}</th>
+                                        <th class="text-center" width="10">{{ __('No') }}</th>
                                         <th class="text-center">{{ __('Branch') }}</th>
                                         <th class="text-center">{{ __('In Pcs') }}</th>
                                         <th class="text-center">{{ __('In Value') }}</th>
@@ -118,37 +93,20 @@
                             <table class="table table-bordered table-hover text-nowrap">
                                 <thead>
                                     <tr>
-                                        <th
-                                            rowspan="3"
-                                            class="align-middle text-center"
-                                            width="10"
-                                        >{{ __('No') }}</th>
-                                        <th
-                                            rowspan="3"
-                                            class="align-middle"
-                                        >{{ __('Product') }}</th>
-                                        <th
-                                            rowspan="3"
-                                            class="align-middle text-center"
-                                        >{{ __('In Pcs') }}</th>
-                                        <th
-                                            rowspan="3"
-                                            class="align-middle text-center"
-                                        >{{ __('In Value') }}</th>
+                                        <th rowspan="3" class="align-middle text-center" width="10">
+                                            {{ __('No') }}</th>
+                                        <th rowspan="3" class="align-middle">{{ __('Product') }}</th>
+                                        <th rowspan="3" class="align-middle text-center">{{ __('In Pcs') }}</th>
+                                        <th rowspan="3" class="align-middle text-center">{{ __('In Value') }}</th>
                                         @foreach ($branches as $branch)
-                                            <th
-                                                colspan="{{ count($branch['order_sources']) * 2 }}"
-                                                class="text-center"
-                                            >{{ $branch['name'] }}</th>
+                                            <th colspan="{{ count($branch['order_sources']) * 2 }}"
+                                                class="text-center">{{ $branch['name'] }}</th>
                                         @endforeach
                                     </tr>
                                     <tr>
                                         @foreach ($branches as $branch)
                                             @foreach ($branch['order_sources'] as $orderSource)
-                                                <th
-                                                    colspan="2"
-                                                    class="text-center"
-                                                >{{ $orderSource['name'] }}</th>
+                                                <th colspan="2" class="text-center">{{ $orderSource['name'] }}</th>
                                             @endforeach
                                         @endforeach
                                     </tr>
@@ -203,11 +161,7 @@
                             <h3 class="card-title">{{ __('Summary per Product') }}</h3>
                         </div>
                         <div class="card-body table-responsive p-0">
-                            <x-table-product-summary
-                                :branches="$branches"
-                                :products="$products"
-                                :summary="$summary"
-                            />
+                            <x-table-product-summary :branches="$branches" :products="$products" :summary="$summary" />
                         </div>
                     </div>
                 </div>
