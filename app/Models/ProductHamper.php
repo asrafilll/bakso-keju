@@ -10,7 +10,7 @@ class ProductHamper extends Model
 {
     use HasFactory, HasUuid;
 
-    protected $fillable = ['branch_id', 'name', 'price'];
+    protected $fillable = ['branch_id', 'name', 'charge'];
 
     public function branch()
     {
@@ -27,6 +27,6 @@ class ProductHamper extends Model
      */
     public function getIdrPriceAttribute()
     {
-        return number_format($this->price, 0, ',', '.');
+        return number_format($this->charge, 0, ',', '.');
     }
 }

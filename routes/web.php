@@ -67,11 +67,11 @@ Route::group([
     Route::delete('/product-categories/{productCategory}', [\App\Http\Controllers\ProductCategoryController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_product_category());
 
     Route::get('/product-hampers', [\App\Http\Controllers\ProductHamperController::class, 'index'])->can(\App\Enums\PermissionEnum::view_product_hampers());
-    Route::get('/product-hampers/create', [\App\Http\Controllers\ProductHamperController::class, 'create'])->can(\App\Enums\PermissionEnum::view_product_hampers());
-    Route::post('/product-hampers', [\App\Http\Controllers\ProductHamperController::class, 'store'])->can(\App\Enums\PermissionEnum::view_product_hampers());
-    Route::get('/product-hampers/{productHamper}', [\App\Http\Controllers\ProductHamperController::class, 'show'])->can(\App\Enums\PermissionEnum::view_product_hampers());
-    Route::delete('/product-hampers/{productHamper}', [\App\Http\Controllers\ProductHamperController::class, 'destroy'])->can(\App\Enums\PermissionEnum::view_product_hampers());
-    Route::put('/product-hampers/{productHamper}', [\App\Http\Controllers\ProductHamperController::class, 'update'])->can(\App\Enums\PermissionEnum::view_product_hampers());
+    Route::get('/product-hampers/create', [\App\Http\Controllers\ProductHamperController::class, 'create'])->can(\App\Enums\PermissionEnum::create_product_hampers());
+    Route::post('/product-hampers', [\App\Http\Controllers\ProductHamperController::class, 'store'])->can(\App\Enums\PermissionEnum::store_product_hampers());
+    Route::get('/product-hampers/{productHamper}', [\App\Http\Controllers\ProductHamperController::class, 'show'])->can(\App\Enums\PermissionEnum::detail_product_hampers());
+    Route::delete('/product-hampers/{productHamper}', [\App\Http\Controllers\ProductHamperController::class, 'destroy'])->can(\App\Enums\PermissionEnum::delete_product_hampers());
+    Route::put('/product-hampers/{productHamper}', [\App\Http\Controllers\ProductHamperController::class, 'update'])->can(\App\Enums\PermissionEnum::update_product_hampers());
 
     Route::get('/order-sources', [\App\Http\Controllers\OrderSourceController::class, 'index'])->can(\App\Enums\PermissionEnum::view_order_sources());
     Route::get('/order-sources/create', [\App\Http\Controllers\OrderSourceController::class, 'create'])->can(\App\Enums\PermissionEnum::create_order_source());

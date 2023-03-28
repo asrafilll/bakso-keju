@@ -34,7 +34,7 @@ class ProductHamperStoreRequest extends FormRequest
                 'required',
                 'string',
             ],
-            'price' => [
+            'charge' => [
                 'required',
                 'integer',
                 'min:0',

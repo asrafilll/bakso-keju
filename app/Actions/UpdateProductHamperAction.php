@@ -13,7 +13,7 @@ class UpdateProductHamperAction
 
         $product->update([
             'name' => data_get($data, 'name'),
-            'price' => data_get($data, 'price'),
+            'charge' => data_get($data, 'charge'),
         ]);
 
         DB::commit();

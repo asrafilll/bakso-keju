@@ -19,7 +19,7 @@ class CreateProductHampersTable extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->foreignUuid('branch_id')->constrained();
             $table->string('name');
-            $table->unsignedBigInteger('price')->default(0);
+            $table->unsignedBigInteger('charge')->default(0);
         });
     }
 

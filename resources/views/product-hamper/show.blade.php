@@ -54,10 +54,10 @@
                                         <span>{{ __('Default Price') }}</span>
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <input type="number" name="price"
-                                        class="form-control @error('price') is-invalid @enderror"
-                                        value="{{ Request::old('price', $productHamper->price) }}" />
-                                    @error('price')
+                                    <input type="number" name="charge"
+                                        class="form-control @error('charge') is-invalid @enderror"
+                                        value="{{ Request::old('charge', $productHamper->charge) }}" />
+                                    @error('charge')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

@@ -97,14 +97,14 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">
-                                        <span>{{ __('Default Price') }}</span>
+                                    <label for="charge">
+                                        <span>{{ __('Charge price') }}</span>
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <input type="number" name="price"
-                                        class="form-control @error('price') is-invalid @enderror"
-                                        value="{{ Request::old('price') }}" />
-                                    @error('price')
+                                    <input type="number" name="charge"
+                                        class="form-control @error('charge') is-invalid @enderror"
+                                        value="{{ Request::old('charge') }}" />
+                                    @error('charge')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
@@ -213,7 +213,7 @@
                                                         name="products[<%= index %>][product_id]"
                                                         value="<%= lineProduct.product_id %>"
                                                     >
-                                                    <div><%= lineProduct.product_price %></div>
+                                                    <div><%= lineProduct.product_price * lineProduct.quantity %></div>
                                                 </td>
                                                 <td class="text-right">
                                                     <input
