@@ -50,8 +50,8 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="price">
-                                        <span>{{ __('Default Price') }}</span>
+                                    <label for="charge">
+                                        <span>{{ __('Charge price') }}</span>
                                         <span class="text-danger">*</span>
                                     </label>
                                     <input type="number" name="charge"

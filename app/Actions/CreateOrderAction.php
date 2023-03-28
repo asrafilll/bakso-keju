@@ -4,8 +4,6 @@ namespace App\Actions;
 
 use App\Models\Branch;
 use App\Models\Order;
-use App\Models\OrderLineHamper;
-use App\Models\OrderLineHampers;
 use App\Models\OrderLineItem;
 use App\Models\OrderSource;
 use App\Models\Product;
@@ -131,35 +129,50 @@ class CreateOrderAction
             }
         }
 
-        /** @var Collection */
-        $orderLineHampers = new Collection();
-        $qtyHamperProduct = 0;
-        $totalHamperProduct = 0;
+        if (!empty($data['line_hampers'])) {
+            foreach ($data['line_hampers'] as $hamper) {
+                $productHampers = ProductHamper::where('id', $hamper['product_hamper_id'])
+                    ->first();
+                $price = $productHampers->charge;
+                foreach ($productHampers->productHamperLines as $item) {
+                    $price = $price +  ($item->product->price * $item->quantity);
+                    $productInventory = ProductInventory::query()
+                        ->where([
+                            'branch_id' => $branch->id,
+                            'product_id' => $item->product_id,
+                        ])
+                        ->first();
 
-        if (!empty($data['products'])) {
-            $lineHampers = new Collection($data['products']);
 
-            foreach ($lineHampers as $hamper) {
-                $hamperId = $hamper['product_hamper_id'];
-                $qty = $hamper['quantity'];
-
-                $productHamper = ProductHamper::find($hamperId);
-
-                $items = $productHamper->productHamperLines;
-
-                foreach ($items as $item) {
-                    $qtyHamperProduct += $item->quantity;
+                    $productInventory->quantity -= ($item->quantity * intval($hamper['quantity']));
+                    $productInventory->save();
                 }
 
-                $totalHamperProduct += $productHamper->price * $qty;
+                $productCheck = Product::where('product_hamper_id', $productHampers->id)->first();
+                if ($productCheck == null) {
+                    $product = Product::create([
+                        'name' => $productHampers->name,
+                        'price' => $price,
+                        'product_category_id' => $productHampers->productHamperLines->first()->product->product_category_id,
+                        'product_hamper_id' => $productHampers->id,
+                    ]);
 
-                $orderLineHampers->push(new OrderLineHamper([
-                    'product_hamper_id' => $productHamper->id,
-                    'hamper_name' => $productHamper->name,
-                    'price' => $productHamper->price,
-                    'quantity' => $qty,
-                    'total' => $productHamper->price * $qty,
-                ]));
+                    $orderLineItems->push(new OrderLineItem([
+                        'product_id' => $product->id,
+                        'product_name' => $product->name,
+                        'price' => $price,
+                        'quantity' => intval($hamper['quantity']),
+                        'total' => $price * intval($hamper['quantity']),
+                    ]));
+                } else {
+                    $orderLineItems->push(new OrderLineItem([
+                        'product_id' => $productCheck->id,
+                        'product_name' => $productCheck->name,
+                        'price' => $price,
+                        'quantity' => intval($hamper['quantity']),
+                        'total' => $price * intval($hamper['quantity']),
+                    ]));
+                }
             }
         }
 
@@ -178,8 +191,8 @@ class CreateOrderAction
         $resellerOrder = !is_null($reseller);
         $resellerId = $resellerOrder ? $reseller->id : null;
         $percentageDiscount = $resellerOrder ? $reseller->percentage_discount : 0;
-        $totalLineItemsQuantity = $orderLineItems->isEmpty() ? $qtyHamperProduct : ($orderLineItems->sum('quantity') + $qtyHamperProduct);
-        $totalLineItemsPrice = $orderLineItems->isEmpty() ? $totalHamperProduct : ($orderLineItems->sum('total') + $totalHamperProduct);
+        $totalLineItemsQuantity = $orderLineItems->sum('quantity');
+        $totalLineItemsPrice = $orderLineItems->sum('total');
         $totalDiscount = round($totalLineItemsPrice * ($percentageDiscount / 100));
         $totalPrice = $totalLineItemsPrice - $totalDiscount;
 
@@ -213,31 +226,8 @@ class CreateOrderAction
                 ])
                 ->first();
 
-            $productInventory->quantity -= $orderLineItem->quantity;
-            $productInventory->save();
-        });
-
-        $orderLineHampers->each(function ($orderLineHamper) use ($order) {
-            $orderLineHamper->order_id = $order->id;
-            $orderLineHamper->save();
-
-            /** @var ProductHamper */
-            $productHampers = ProductHamper::query()
-                ->where([
-                    'branch_id' => $order->branch_id,
-                    'id' => $orderLineHamper->product_hamper_id,
-                ])->first();
-
-            foreach ($productHampers->productHamperLines as $product) {
-                /** @var ProductInventory */
-                $productInventory = ProductInventory::query()
-                    ->where([
-                        'branch_id' => $order->branch_id,
-                        'product_id' => $product->product_id,
-                    ])
-                    ->first();
-
-                $productInventory->quantity -= $product->quantity;
+            if ($productInventory) {
+                $productInventory->quantity -= $orderLineItem->quantity;
                 $productInventory->save();
             }
         });

@@ -57,7 +57,7 @@
                                     <tr>
                                         <th>{{ __('Name') }}</th>
                                         <th>{{ __('Products') }}</th>
-                                        <th>{{ __('Price') }}</th>
+                                        <th>{{ __('Charge') }}</th>
                                         <th>{{ __('Date created') }}</th>
                                         <th width="10"></th>
                                     </tr>

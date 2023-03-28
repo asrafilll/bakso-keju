@@ -60,16 +60,16 @@ class OrderStoreRequest extends FormRequest
                 'required_with:line_items',
                 'integer',
             ],
-            'products' => [
+            'line_hampers' => [
                 'nullable',
                 'array',
             ],
-            'products.*.product_hamper_id' => [
-                'required_with:products',
+            'line_hampers.*.product_hamper_id' => [
+                'required_with:line_hampers',
                 'string',
             ],
-            'products.*.quantity' => [
-                'required_with:products',
+            'line_hampers.*.quantity' => [
+                'required_with:line_hampers',
                 'integer',
             ],
         ];

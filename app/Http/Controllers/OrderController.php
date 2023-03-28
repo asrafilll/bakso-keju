@@ -206,9 +206,13 @@ class OrderController extends Controller
             },
             'fetch-hampers' => function () use ($request) {
                 $productHampers = ProductHamper::query()
-                    ->where('name', 'LIKE', "%{$request->get('term')}%")
-                    ->where('branch_id', $request->get('branch_id'))
-                    ->orderBy('name')
+                    ->select('product_hampers.*', DB::raw('SUM(product_hamper_lines.quantity * products.price) as total_price'))
+                    ->join('product_hamper_lines', 'product_hampers.id', '=', 'product_hamper_lines.product_hamper_id')
+                    ->join('products', 'product_hamper_lines.product_id', '=', 'products.id')
+                    ->where('product_hampers.name', 'LIKE', "%{$request->get('term')}%")
+                    ->where('product_hampers.branch_id', $request->get('branch_id'))
+                    ->orderBy('product_hampers.name')
+                    ->groupBy('product_hampers.id')
                     ->get();
 
                 return Response::json($productHampers);
@@ -257,7 +261,6 @@ class OrderController extends Controller
             'branch',
             'orderSource',
             'orderLineItems',
-            'orderLineHampers',
         ]);
 
         abort_if(!$order->branch->hasUser($request->user()), 404);

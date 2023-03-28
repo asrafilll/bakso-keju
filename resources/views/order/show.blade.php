@@ -87,32 +87,6 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-                                    <thead>
-                                        <tr>
-                                            <th>{{ __('Product bundle') }}</th>
-                                            <th width="100px" class="text-right">{{ __('Quantity') }}</th>
-                                            <th width="250px"class="text-right">{{ __('Total') }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($order->orderLineHampers as $orderLineHamper)
-                                            <tr>
-                                                <td>
-                                                    <div>{{ $orderLineHamper->hamper_name }}</div>
-                                                    <div>{{ $orderLineHamper->idr_price }}</div>
-                                                </td>
-                                                <td class="text-right">
-                                                    @foreach ($orderLineHamper->productHamper->productHamperLines as $item)
-                                                        <div>
-                                                            {{ $item->product->name }}
-                                                            ({{ $item->quantity }})
-                                                        </div>
-                                                    @endforeach
-                                                </td>
-                                                <td class="text-right">{{ $orderLineHamper->idr_total }}</td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
                                     <tfoot>
                                         <tr>
                                             <th>{{ __('Sub Total') }}</th>

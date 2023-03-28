@@ -536,7 +536,7 @@
                                             LineProductHampersModule.addLineProductHamper(
                                                 product.id,
                                                 product.name,
-                                                product.price
+                                                parseInt(product.total_price) + product.charge
                                             );
                                         });
 
@@ -561,6 +561,7 @@
                                                     processResults: function(products) {
                                                         return {
                                                             results: products.map(function(product) {
+                                                                console.table(product);
                                                                 return {
                                                                     id: product.id,
                                                                     text: product.name,
@@ -602,7 +603,7 @@
                                                 <td>
                                                     <input
                                                         type="hidden"
-                                                        name="products[<%= index %>][product_hamper_id]"
+                                                        name="line_hampers[<%= index %>][product_hamper_id]"
                                                         value="<%= lineProduct.product_hamper_id %>"
                                                     >
                                                     <div><%= lineProduct.product_name %></div>
@@ -610,7 +611,7 @@
                                                 <td class="text-right">
                                                     <input
                                                         type="number"
-                                                        name="products[<%= index %>][quantity]"
+                                                        name="line_hampers[<%= index %>][quantity]"
                                                         class="form-control text-right line-product-quantity"
                                                         value="<%= lineProduct.quantity %>"
                                                         min="1"
