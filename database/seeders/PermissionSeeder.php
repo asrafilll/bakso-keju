@@ -20,22 +20,10 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         Collection::make(PermissionEnum::toValues())
-            ->tap(function () {
-                if (!App::environment('testing')) {
-                    Schema::disableForeignKeyConstraints();
-                    app(PermissionRegistrar::class)->forgetCachedPermissions();
-                    Permission::truncate();
-                }
-            })
             ->each(function ($permission) {
-                Permission::create([
+                Permission::firstOrCreate([
                     'name' => $permission,
                 ]);
-            })
-            ->tap(function () {
-                if (!App::environment('testing')) {
-                    Schema::enableForeignKeyConstraints();
-                }
             });
     }
 }
