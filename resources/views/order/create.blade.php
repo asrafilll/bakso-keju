@@ -819,7 +819,8 @@
                                         }
 
                                         function getTotalDiscount() {
-                                            return Math.round(totalLineItemsPrice * (percentageDiscount / 100));
+                                            return Math.round((totalLineItemsPrice + totalLineProductHampersQuantity) * (percentageDiscount /
+                                                100));
                                         }
 
                                         function getTotalPrice() {
