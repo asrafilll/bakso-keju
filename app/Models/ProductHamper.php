@@ -10,7 +10,12 @@ class ProductHamper extends Model
 {
     use HasFactory, HasUuid;
 
-    protected $fillable = ['branch_id', 'name', 'charge'];
+    protected $fillable = [
+        'branch_id',
+        'name',
+        'charge',
+        'product_hamper_id',
+    ];
 
     public function branch()
     {

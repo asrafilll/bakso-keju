@@ -148,14 +148,14 @@ class CreateOrderAction
                     $productInventory->save();
                 }
 
-                $productCheck = Product::where('product_hamper_id', $productHampers->id)->first();
-                if ($productCheck == null) {
+                if ($productHampers->product_id == null) {
                     $product = Product::create([
                         'name' => $productHampers->name,
                         'price' => $price,
                         'product_category_id' => $productHampers->productHamperLines->first()->product->product_category_id,
-                        'product_hamper_id' => $productHampers->id,
                     ]);
+
+                    $productHampers->update(['product_id' => $product->id]);
 
                     $orderLineItems->push(new OrderLineItem([
                         'product_id' => $product->id,
@@ -166,8 +166,8 @@ class CreateOrderAction
                     ]));
                 } else {
                     $orderLineItems->push(new OrderLineItem([
-                        'product_id' => $productCheck->id,
-                        'product_name' => $productCheck->name,
+                        'product_id' => $productHampers->product_id,
+                        'product_name' => $productHampers->name,
                         'price' => $price,
                         'quantity' => intval($hamper['quantity']),
                         'total' => $price * intval($hamper['quantity']),

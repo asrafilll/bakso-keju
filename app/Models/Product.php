@@ -20,7 +20,6 @@ class Product extends Model
         'name',
         'price',
         'product_category_id',
-        'product_hamper_id',
     ];
 
     /**

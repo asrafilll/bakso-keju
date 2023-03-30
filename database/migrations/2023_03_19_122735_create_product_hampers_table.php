@@ -20,6 +20,7 @@ class CreateProductHampersTable extends Migration
             $table->foreignUuid('branch_id')->constrained();
             $table->string('name');
             $table->unsignedBigInteger('charge')->default(0);
+            $table->string('product_id')->nullable();
         });
     }
 

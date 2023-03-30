@@ -19,7 +19,6 @@ class CreateProductsTable extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
             $table->string('name');
             $table->unsignedBigInteger('price');
-            $table->string('product_hamper_id')->nullable();
         });
     }
 
