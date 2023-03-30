@@ -148,7 +148,7 @@ class CreateOrderAction
                     $productInventory->save();
                 }
 
-                if ($productHampers->product_id == null) {
+                if (!$productHampers->product_id) {
                     $product = Product::create([
                         'name' => $productHampers->name,
                         'price' => $price,

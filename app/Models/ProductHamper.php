@@ -14,7 +14,7 @@ class ProductHamper extends Model
         'branch_id',
         'name',
         'charge',
-        'product_hamper_id',
+        'product_id',
     ];
 
     public function branch()
