@@ -11,6 +11,7 @@ use App\Http\Requests\OrderStoreRequest;
 use App\Models\Order;
 use App\Models\OrderLineItem;
 use App\Models\Product;
+use App\Models\ProductHamper;
 use App\Models\Reseller;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
@@ -202,6 +203,19 @@ class OrderController extends Controller
                     ->get();
 
                 return Response::json($products);
+            },
+            'fetch-hampers' => function () use ($request) {
+                $productHampers = ProductHamper::query()
+                    ->select('product_hampers.*', DB::raw('SUM(product_hamper_lines.quantity * products.price) as total_price'))
+                    ->join('product_hamper_lines', 'product_hampers.id', '=', 'product_hamper_lines.product_hamper_id')
+                    ->join('products', 'product_hamper_lines.product_id', '=', 'products.id')
+                    ->where('product_hampers.name', 'LIKE', "%{$request->get('term')}%")
+                    ->where('product_hampers.branch_id', $request->get('branch_id'))
+                    ->orderBy('product_hampers.name')
+                    ->groupBy('product_hampers.id')
+                    ->get();
+
+                return Response::json($productHampers);
             },
             'default' => function () {
                 return Response::view('order.create');

@@ -79,7 +79,7 @@
                                     <tr>
                                         <th colspan="2">{{ __('Total') }}</th>
                                         <th class="text-right">{{ $summary['idr_total_quantity'] }}</th>
-                                        <th class="text-right">{{ $summary['idr_total_price'] }}</th>
+                                        <th class="text-right">{{ $summary['idr_total_price_discount'] }}</th>
                                     </tr>
                                 </tfoot>
                             </table>

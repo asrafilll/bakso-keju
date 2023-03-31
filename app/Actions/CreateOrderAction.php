@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderLineItem;
 use App\Models\OrderSource;
 use App\Models\Product;
+use App\Models\ProductHamper;
 use App\Models\ProductInventory;
 use App\Models\Reseller;
 use App\Models\User;
@@ -71,57 +72,106 @@ class CreateOrderAction
             }
         }
 
-        /** @var Collection */
-        $lineItems = new Collection($data['line_items']);
-        /** @var array<string> */
-        $lineItemsProductIDs = $lineItems->pluck('product_id')->toArray();
-        /** @var EloquentCollection<Product> */
-        $products = Product::query()
-            ->select([
-                'products.*',
-                DB::raw('IFNULL(product_prices.price, products.price) as active_price'),
-                'product_inventories.quantity',
-            ])
-            ->join('product_inventories', 'product_inventories.product_id', 'products.id')
-            ->leftJoin('product_prices', function ($join) use ($orderSource) {
-                $join
-                    ->on('products.id', '=', 'product_prices.product_id')
-                    ->where('product_prices.order_source_id', $orderSource->id)
-                    ->where('product_prices.price', '>', 0);
-            })
-            ->where('product_inventories.branch_id', $branch->id)
-            ->where('product_inventories.quantity', '>', 0)
-            ->whereIn('products.id', $lineItemsProductIDs)
-            ->get();
+
         /** @var Collection */
         $orderLineItems = new Collection();
 
-        foreach ($lineItems as $lineItem) {
-            $product = $products->firstWhere('id', $lineItem['product_id']);
+        if (!empty($data['line_items'])) {
+            /** @var Collection */
+            $lineItems = new Collection($data['line_items']);
+            /** @var array<string> */
+            $lineItemsProductIDs = $lineItems->pluck('product_id')->toArray();
+            /** @var EloquentCollection<Product> */
+            $products = Product::query()
+                ->select([
+                    'products.*',
+                    DB::raw('IFNULL(product_prices.price, products.price) as active_price'),
+                    'product_inventories.quantity',
+                ])
+                ->join('product_inventories', 'product_inventories.product_id', 'products.id')
+                ->leftJoin('product_prices', function ($join) use ($orderSource) {
+                    $join
+                        ->on('products.id', '=', 'product_prices.product_id')
+                        ->where('product_prices.order_source_id', $orderSource->id)
+                        ->where('product_prices.price', '>', 0);
+                })
+                ->where('product_inventories.branch_id', $branch->id)
+                ->where('product_inventories.quantity', '>', 0)
+                ->whereIn('products.id', $lineItemsProductIDs)
+                ->get();
 
-            if (!$product) {
-                throw new Exception(
-                    __("Some product not found"),
-                    422
-                );
+            foreach ($lineItems as $lineItem) {
+                $product = $products->firstWhere('id', $lineItem['product_id']);
+
+                if (!$product) {
+                    throw new Exception(
+                        __("Some product not found"),
+                        422
+                    );
+                }
+
+                $quantity = intval($lineItem['quantity']);
+
+                if ($product->quantity < $quantity) {
+                    throw new Exception(
+                        __("{$product->name} doesn't have enough quantity"),
+                        422
+                    );
+                }
+
+                $orderLineItems->push(new OrderLineItem([
+                    'product_id' => $product->id,
+                    'product_name' => $product->name,
+                    'price' => $product->active_price,
+                    'quantity' => $quantity,
+                    'total' => $product->active_price * $quantity,
+                ]));
             }
+        }
 
-            $quantity = intval($lineItem['quantity']);
+        if (!empty($data['line_hampers'])) {
+            foreach ($data['line_hampers'] as $hamper) {
+                $productHampers = ProductHamper::find($hamper['product_hamper_id']);
+                $price = $productHampers->charge;
+                foreach ($productHampers->productHamperLines as $item) {
+                    $price = $price +  ($item->product->price * $item->quantity);
+                    $productInventory = ProductInventory::query()
+                        ->where([
+                            'branch_id' => $branch->id,
+                            'product_id' => $item->product_id,
+                        ])
+                        ->first();
 
-            if ($product->quantity < $quantity) {
-                throw new Exception(
-                    __("{$product->name} doesn't have enough quantity"),
-                    422
-                );
+
+                    $productInventory->quantity -= ($item->quantity * intval($hamper['quantity']));
+                    $productInventory->save();
+                }
+
+                if (!$productHampers->product_id) {
+                    $product = Product::create([
+                        'name' => $productHampers->name,
+                        'price' => $price,
+                    ]);
+
+                    $productHampers->update(['product_id' => $product->id]);
+
+                    $orderLineItems->push(new OrderLineItem([
+                        'product_id' => $product->id,
+                        'product_name' => $product->name,
+                        'price' => $price,
+                        'quantity' => intval($hamper['quantity']),
+                        'total' => $price * intval($hamper['quantity']),
+                    ]));
+                } else {
+                    $orderLineItems->push(new OrderLineItem([
+                        'product_id' => $productHampers->product_id,
+                        'product_name' => $productHampers->name,
+                        'price' => $price,
+                        'quantity' => intval($hamper['quantity']),
+                        'total' => $price * intval($hamper['quantity']),
+                    ]));
+                }
             }
-
-            $orderLineItems->push(new OrderLineItem([
-                'product_id' => $product->id,
-                'product_name' => $product->name,
-                'price' => $product->active_price,
-                'quantity' => $quantity,
-                'total' => $product->active_price * $quantity,
-            ]));
         }
 
         $orderNumber = implode('', [
@@ -174,9 +224,12 @@ class CreateOrderAction
                 ])
                 ->first();
 
-            $productInventory->quantity -= $orderLineItem->quantity;
-            $productInventory->save();
+            if ($productInventory) {
+                $productInventory->quantity -= $orderLineItem->quantity;
+                $productInventory->save();
+            }
         });
+
         $branch->next_order_number++;
         $branch->save();
 

@@ -24,7 +24,7 @@ class FetchProductSummariesAction
         $fromDate = null,
         $toDate = null
     ) {
-        $fromDate = $fromDate ?: Carbon::now()->format('Y-m-d');
+        $fromDate = ($fromDate ?: Carbon::now()->format('Y-m-d'));
         $toDate = $toDate ?: Carbon::now()->format('Y-m-d');
         $productSummaries = $this->getProductSummaries($authenticatedUser, $fromDate, $toDate);
         $branchesWithOrderSources = $this->getBranchesWithOrderSources($authenticatedUser);
@@ -290,7 +290,7 @@ class FetchProductSummariesAction
 
         $orders = DB::table('orders')
             ->select('branch_id', DB::raw('SUM(total_discount) as total_discount'))
-            ->whereBetween('created_at', [$fromDate, $toDate])
+            ->whereBetween('created_at', [$fromDate . ' 00:00:00', $toDate . ' 23:59:59'])
             ->groupBy('branch_id')
             ->get();
 
@@ -318,7 +318,8 @@ class FetchProductSummariesAction
         }
 
         $summary['branches'] = $newBranches;
-        $summary['idr_total_price'] = $this->getIdrCurrency($summary['total_price'] - $totalDiscount);
+        $summary['idr_total_price'] = $this->getIdrCurrency($summary['total_price']);
+        $summary['idr_total_price_discount'] = $this->getIdrCurrency($summary['total_price'] - $totalDiscount);
         $summary['total_price'] = $summary['total_price'] - $totalDiscount;
 
         return [
