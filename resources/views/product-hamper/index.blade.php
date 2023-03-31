@@ -15,7 +15,7 @@
         <div class="container">
             <div class="row justify-content-between mb-2">
                 <div class="col-auto">
-                    <h1 class="m-0">{{ __('Order Sources') }}</h1>
+                    <h1 class="m-0">{{ __('Product bundle') }}</h1>
                 </div><!-- /.col -->
                 @can(\App\Enums\PermissionEnum::view_product_hampers()->value)
                     <div class="col-auto">
