@@ -131,8 +131,7 @@ class CreateOrderAction
 
         if (!empty($data['line_hampers'])) {
             foreach ($data['line_hampers'] as $hamper) {
-                $productHampers = ProductHamper::where('id', $hamper['product_hamper_id'])
-                    ->first();
+                $productHampers = ProductHamper::find($hamper['product_hamper_id']);
                 $price = $productHampers->charge;
                 foreach ($productHampers->productHamperLines as $item) {
                     $price = $price +  ($item->product->price * $item->quantity);
@@ -152,7 +151,6 @@ class CreateOrderAction
                     $product = Product::create([
                         'name' => $productHampers->name,
                         'price' => $price,
-                        'product_category_id' => $productHampers->productHamperLines->first()->product->product_category_id,
                     ]);
 
                     $productHampers->update(['product_id' => $product->id]);
