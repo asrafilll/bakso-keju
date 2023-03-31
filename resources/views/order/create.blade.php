@@ -588,7 +588,7 @@
                                     <table class="table text-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>{{ __('Hampers') }}</th>
+                                                <th>{{ __('Product bundle') }}</th>
                                                 <th width="100px" class="text-right">{{ __('Quantity') }}</th>
                                                 <th width="250px"class="text-right">{{ __('Total') }}</th>
                                                 <th width="10px"></th>
