@@ -111,6 +111,7 @@ class CreateOrderAction
                 }
 
                 $quantity = intval($lineItem['quantity']);
+                $discount = intval($lineItem['discount']);
 
                 if ($product->quantity < $quantity) {
                     throw new Exception(
@@ -124,7 +125,8 @@ class CreateOrderAction
                     'product_name' => $product->name,
                     'price' => $product->active_price,
                     'quantity' => $quantity,
-                    'total' => $product->active_price * $quantity,
+                    'discount' => $discount,
+                    'total' => ($product->active_price * $quantity) - ($product->active_price * $quantity * $discount / 100),
                 ]));
             }
         }

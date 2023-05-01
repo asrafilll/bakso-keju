@@ -22,6 +22,7 @@ class OrderLineItem extends Model
         'price',
         'quantity',
         'total',
+        'discount',
     ];
 
     /**

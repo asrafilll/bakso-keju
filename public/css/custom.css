@@ -1,0 +1,13 @@
+.line-item-discount-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.line-item-discount {
+    width: 100px;
+    margin-right: 10px;
+}
+
+.item-discount {
+    font-size: 16px;
+}
