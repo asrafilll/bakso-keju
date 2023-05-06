@@ -22,8 +22,6 @@
     <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="/css/alt/adminlte.light.min.css">
-    <!-- Custom style -->
-    <link rel="stylesheet" href="/css/custom.css">
     <!-- overlayScrollbars -->
     <link rel="stylesheet" href="/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
 

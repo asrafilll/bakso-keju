@@ -382,18 +382,18 @@
                                                     >
                                                 </td>
                                                 <td class="text-right">
-                                                    <div class="line-item-discount-wrapper">
+                                                    <div class="d-flex align-items-start">
                                                         <input
                                                         type="number"
                                                         name="line_items[<%= index %>][discount]"
-                                                        class="form-control text-right line-item-discount"
+                                                        class="form-control text-right line-item-discount mr-2"
                                                         value="<%= lineItem.discount %>"
                                                         min="0"
                                                         max="100"
                                                         style="width: 100px;"
                                                         data-product-id="<%= lineItem.product_id %>"
                                                     >
-                                                    <div class="item-discount">%</div>
+                                                    <div class="pt-2">%</div>
                                                     </div>
                                                 </td>
                                                 <td class="text-right"><%= lineItem.total.toLocaleString('id') %></td>
