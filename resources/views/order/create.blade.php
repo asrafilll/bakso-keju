@@ -350,6 +350,7 @@
                                             <tr>
                                                 <th>{{ __('Product') }}</th>
                                                 <th width="100px" class="text-right">{{ __('Quantity') }}</th>
+                                                <th width="100px" class="text-right">{{ __('Discount') }}</th>
                                                 <th width="250px"class="text-right">{{ __('Total') }}</th>
                                                 <th width="10px"></th>
                                             </tr>
@@ -380,6 +381,21 @@
                                                         data-product-id="<%= lineItem.product_id %>"
                                                     >
                                                 </td>
+                                                <td class="text-right">
+                                                    <div class="d-flex align-items-start">
+                                                        <input
+                                                        type="number"
+                                                        name="line_items[<%= index %>][discount]"
+                                                        class="form-control text-right line-item-discount mr-2"
+                                                        value="<%= lineItem.discount %>"
+                                                        min="0"
+                                                        max="100"
+                                                        style="width: 100px;"
+                                                        data-product-id="<%= lineItem.product_id %>"
+                                                    >
+                                                    <div class="pt-2">%</div>
+                                                    </div>
+                                                </td>
                                                 <td class="text-right"><%= lineItem.total.toLocaleString('id') %></td>
                                                 <td>
                                                     <button
@@ -397,6 +413,7 @@
                                         <tr>
                                             <th>{{ __('Sub Total') }}</th>
                                             <th class="text-right"><%= totalLineItemsQuantity.toLocaleString('id') %></th>
+                                            <th class="text-right"></th>
                                             <th class="text-right"><%= totalLineItemsPrice.toLocaleString('id') %></th>
                                             <th></th>
                                         </tr>
@@ -423,6 +440,14 @@
                                             updateLineItem(productId, +quantity);
                                         });
 
+                                        $('body').on('blur', '.line-item-discount', function() {
+                                            var $this = $(this);
+                                            var discount = $this.val();
+                                            var productId = $this.data('product-id');
+
+                                            updateLineItemDiscount(productId, +discount);
+                                        });
+
                                         $('body').on('click', '.line-item-delete', function() {
                                             var $this = $(this);
                                             var productId = $(this).data('product-id');
@@ -433,12 +458,14 @@
                                         function addLineItem(product_id, product_name, product_price) {
                                             var existingLineItem = lineItems.get(product_id);
                                             var quantity = existingLineItem ? existingLineItem.quantity + 1 : 1;
+                                            var discount = existingLineItem ? existingLineItem.discount : 0;
 
                                             lineItems.set(product_id, {
                                                 product_id: product_id,
                                                 product_name: product_name,
                                                 product_price: product_price,
                                                 quantity: quantity,
+                                                discount: discount,
                                                 total: product_price * quantity,
                                             });
 
@@ -452,12 +479,28 @@
                                             } else {
                                                 var lineItem = lineItems.get(product_id);
                                                 lineItem.quantity = quantity;
-                                                lineItem.total = lineItem.product_price * lineItem.quantity;
+                                                lineItem.total = (lineItem.product_price * lineItem.quantity) - ((lineItem.product_price *
+                                                    lineItem
+                                                    .quantity) * lineItem.discount / 100);
                                                 lineItems.set(product_id, lineItem);
                                             }
 
                                             calculateTotal();
                                             render();
+                                        }
+
+                                        function updateLineItemDiscount(product_id, discount) {
+                                            if (discount <= 100 && discount > 0) {
+                                                var lineItem = lineItems.get(product_id);
+                                                lineItem.discount = discount;
+                                                lineItem.total = (lineItem.product_price * lineItem.quantity) - ((lineItem.product_price *
+                                                    lineItem
+                                                    .quantity) * lineItem.discount / 100);
+                                                lineItems.set(product_id, lineItem);
+
+                                                calculateTotal();
+                                                render();
+                                            }
                                         }
 
                                         function deleteLineItem(product_id) {
@@ -588,7 +631,7 @@
                                     <table class="table text-nowrap">
                                         <thead>
                                             <tr>
-                                                <th>{{ __('Hampers') }}</th>
+                                                <th>{{ __('Product bundle') }}</th>
                                                 <th width="100px" class="text-right">{{ __('Quantity') }}</th>
                                                 <th width="250px"class="text-right">{{ __('Total') }}</th>
                                                 <th width="10px"></th>

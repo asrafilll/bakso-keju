@@ -72,6 +72,7 @@
                                         <tr>
                                             <th>{{ __('Product') }}</th>
                                             <th width="100px" class="text-right">{{ __('Quantity') }}</th>
+                                            <th width="100px" class="text-right">{{ __('Discount') }}</th>
                                             <th width="250px"class="text-right">{{ __('Total') }}</th>
                                         </tr>
                                     </thead>
@@ -83,6 +84,7 @@
                                                     <div>{{ $orderLineItem->idr_price }}</div>
                                                 </td>
                                                 <td class="text-right">{{ $orderLineItem->idr_quantity }}</td>
+                                                <td class="text-right">{{ $orderLineItem->discount }} %</td>
                                                 <td class="text-right">{{ $orderLineItem->idr_total }}</td>
                                             </tr>
                                         @endforeach
@@ -91,6 +93,7 @@
                                         <tr>
                                             <th>{{ __('Sub Total') }}</th>
                                             <th class="text-right">{{ $order->idr_total_line_items_quantity }}</th>
+                                            <th class="text-right"></th>
                                             <th class="text-right">{{ $order->idr_total_line_items_price }}</th>
                                         </tr>
                                     </tfoot>

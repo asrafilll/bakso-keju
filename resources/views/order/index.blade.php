@@ -14,10 +14,7 @@
                 </div><!-- /.col -->
                 @can(\App\Enums\PermissionEnum::create_order()->value)
                     <div class="col-auto">
-                        <a
-                            href="{{ url('/orders/create') }}"
-                            class="btn btn-primary"
-                        >{{ __('Create order') }}</a>
+                        <a href="{{ url('/orders/create') }}" class="btn btn-primary">{{ __('Create order') }}</a>
                     </div><!-- /.col -->
                 @endcan
             </div><!-- /.row -->
@@ -34,60 +31,35 @@
                         <div class="card-header">
                             <div class="row">
                                 <div class="col">
-                                    <form
-                                        action=""
-                                        method="GET"
-                                    >
+                                    <form action="" method="GET">
                                         <div class="input-group">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
                                                     <i class="fas fa-search"></i>
                                                 </span>
                                             </div>
-                                            <input
-                                                type="search"
-                                                name="term"
-                                                class="form-control"
+                                            <input type="search" name="term" class="form-control"
                                                 value="{{ Request::get('term') }}"
-                                                placeholder="{{ __('Filter orders') }}"
-                                            />
+                                                placeholder="{{ __('Filter orders') }}" />
                                         </div>
                                     </form>
                                 </div>
                                 <div class="col-auto">
-                                    <button
-                                        type="button"
-                                        class="btn btn-default"
-                                        data-toggle="modal"
-                                        data-target="#filterModal"
-                                    >
+                                    <button type="button" class="btn btn-default" data-toggle="modal"
+                                        data-target="#filterModal">
                                         <i class="fas fa-filter"></i>
                                         <span>{{ __('Filter') }}</span>
                                     </button>
-                                    <div
-                                        class="modal fade"
-                                        id="filterModal"
-                                        tabindex="-1"
-                                        aria-labelledby="filterModalLabel"
-                                        aria-hidden="true"
-                                    >
+                                    <div class="modal fade" id="filterModal" tabindex="-1"
+                                        aria-labelledby="filterModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
-                                                <form
-                                                    action=""
-                                                    method="GET"
-                                                >
+                                                <form action="" method="GET">
                                                     <div class="modal-header">
-                                                        <h5
-                                                            class="modal-title"
-                                                            id="filterModalLabel"
-                                                        >{{ __('Filter') }}</h5>
-                                                        <button
-                                                            type="button"
-                                                            class="close"
-                                                            data-dismiss="modal"
-                                                            aria-label="Close"
-                                                        >
+                                                        <h5 class="modal-title" id="filterModalLabel">
+                                                            {{ __('Filter') }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
@@ -96,31 +68,21 @@
                                                             <label for="term">
                                                                 <span>{{ __('Filter orders') }}</span>
                                                             </label>
-                                                            <input
-                                                                type="search"
-                                                                name="term"
-                                                                class="form-control"
-                                                                value="{{ Request::get('term') }}"
-                                                            />
+                                                            <input type="search" name="term" class="form-control"
+                                                                value="{{ Request::get('term') }}" />
                                                         </div>
                                                         <div class="row">
-                                                            <div
-                                                                class="form-group col"
-                                                                id="start_created_at-module"
-                                                            >
+                                                            <div class="form-group col" id="start_created_at-module">
                                                                 <label for="start_created_at">
                                                                     <span>{{ __('Start date') }}</span>
                                                                     <span class="text-danger">*</span>
                                                                 </label>
-                                                                <input
-                                                                    id="start_created_at"
-                                                                    type="text"
+                                                                <input id="start_created_at" type="text"
                                                                     name="start_created_at"
                                                                     class="form-control datetimepicker-input"
                                                                     data-target="#start_created_at"
                                                                     data-toggle="datetimepicker"
-                                                                    value="{{ Request::get('start_created_at') }}"
-                                                                />
+                                                                    value="{{ Request::get('start_created_at') }}" />
                                                             </div>
                                                             <script>
                                                                 var StartCreatedAtModule = (function() {
@@ -151,23 +113,17 @@
                                                                     };
                                                                 })();
                                                             </script>
-                                                            <div
-                                                                class="form-group col"
-                                                                id="end_created_at-module"
-                                                            >
+                                                            <div class="form-group col" id="end_created_at-module">
                                                                 <label for="end_created_at">
                                                                     <span>{{ __('End date') }}</span>
                                                                     <span class="text-danger">*</span>
                                                                 </label>
-                                                                <input
-                                                                    id="end_created_at"
-                                                                    type="text"
+                                                                <input id="end_created_at" type="text"
                                                                     name="end_created_at"
                                                                     class="form-control datetimepicker-input"
                                                                     data-target="#end_created_at"
                                                                     data-toggle="datetimepicker"
-                                                                    value="{{ Request::get('end_created_at') }}"
-                                                                />
+                                                                    value="{{ Request::get('end_created_at') }}" />
                                                             </div>
                                                             <script>
                                                                 var EndCreatedAtModule = (function() {
@@ -200,33 +156,22 @@
                                                                 })();
                                                             </script>
                                                         </div>
-                                                        <div
-                                                            class="form-group"
-                                                            id="branch-module"
-                                                        >
+                                                        <div class="form-group" id="branch-module">
                                                             <label for="branch_id">
                                                                 <span>{{ __('Branch') }}</span>
                                                             </label>
-                                                            <select
-                                                                id="branch_id"
-                                                                name="branch_id"
+                                                            <select id="branch_id" name="branch_id"
                                                                 class="form-control @error('branch_id') is-invalid @enderror"
-                                                                style="width: 100%;"
-                                                            >
+                                                                style="width: 100%;">
                                                                 <option></option>
                                                                 @if (Request::get('branch_id') && Request::get('branch_name'))
-                                                                    <option
-                                                                        value="{{ Request::get('branch_id') }}"
-                                                                        selected
-                                                                    >{{ Request::get('branch_name') }}</option>
+                                                                    <option value="{{ Request::get('branch_id') }}"
+                                                                        selected>{{ Request::get('branch_name') }}
+                                                                    </option>
                                                                 @endif
                                                             </select>
-                                                            <input
-                                                                type="hidden"
-                                                                id="branch_name"
-                                                                name="branch_name"
-                                                                value="{{ Request::get('branch_name') }}"
-                                                            />
+                                                            <input type="hidden" id="branch_name" name="branch_name"
+                                                                value="{{ Request::get('branch_name') }}" />
                                                             @error('branch_id')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
@@ -278,33 +223,25 @@
                                                                 init();
                                                             })()
                                                         </script>
-                                                        <div
-                                                            class="form-group"
-                                                            id="order-source-module"
-                                                        >
+                                                        <div class="form-group" id="order-source-module">
                                                             <label for="order_source_id">
                                                                 <span>{{ __('Order source') }}</span>
                                                             </label>
-                                                            <select
-                                                                id="order_source_id"
-                                                                name="order_source_id"
+                                                            <select id="order_source_id" name="order_source_id"
                                                                 class="form-control @error('order_source_id') is-invalid @enderror"
-                                                                style="width: 100%;"
-                                                            >
+                                                                style="width: 100%;">
                                                                 <option></option>
                                                                 @if (Request::get('order_source_id') && Request::get('order_source_name'))
                                                                     <option
                                                                         value="{{ Request::get('order_source_id') }}"
-                                                                        selected
-                                                                    >{{ Request::get('order_source_name') }}</option>
+                                                                        selected>
+                                                                        {{ Request::get('order_source_name') }}
+                                                                    </option>
                                                                 @endif
                                                             </select>
-                                                            <input
-                                                                type="hidden"
-                                                                id="order_source_name"
+                                                            <input type="hidden" id="order_source_name"
                                                                 name="order_source_name"
-                                                                value="{{ Request::get('order_source_name') }}"
-                                                            />
+                                                                value="{{ Request::get('order_source_name') }}" />
                                                             @error('order_source_id')
                                                                 <div class="invalid-feedback">{{ $message }}</div>
                                                             @enderror
@@ -357,15 +294,10 @@
                                                         </script>
                                                     </div>
                                                     <div class="modal-footer">
-                                                        <button
-                                                            type="button"
-                                                            class="btn btn-default"
-                                                            data-dismiss="modal"
-                                                        >{{ __('Close') }}</button>
-                                                        <button
-                                                            type="submit"
-                                                            class="btn btn-primary"
-                                                        >{{ __('Save') }}</button>
+                                                        <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">{{ __('Close') }}</button>
+                                                        <button type="submit"
+                                                            class="btn btn-primary">{{ __('Save') }}</button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -374,123 +306,89 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="dropdown">
-                                        <button
-                                            type="button"
-                                            class="btn btn-default"
-                                            data-toggle="dropdown"
-                                        >
+                                        <button type="button" class="btn btn-default" data-toggle="dropdown">
                                             <i class="fas fa-sort"></i>
                                             <span>{{ __('Sort') }}</span>
                                         </button>
                                         <div class="dropdown-menu dropdown-menu-right">
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'order_number',
-                                                    'direction' => 'asc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'order_number' && Request::get('direction') == 'asc' ? 'active' : '' }}"
-                                            >{{ __('Order number ascending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'order_number',
-                                                    'direction' => 'desc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'order_number' && Request::get('direction') == 'desc' ? 'active' : '' }}"
-                                            >{{ __('Order number descending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'created_at',
-                                                    'direction' => 'asc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'created_at' && Request::get('direction') == 'asc' ? 'active' : '' }}"
-                                            >{{ __('Date created ascending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'created_at',
-                                                    'direction' => 'desc',
-                                                ]) }}"
-                                                class="dropdown-item {{ (Request::get('sort') == 'created_at' && Request::get('direction') == 'desc') || (!Request::filled('sort') && !Request::filled('direction')) ? 'active' : '' }}"
-                                            >{{ __('Date created descending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'percentage_discount',
-                                                    'direction' => 'asc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'percentage_discount' && Request::get('direction') == 'asc' ? 'active' : '' }}"
-                                            >{{ __('Percentage discount ascending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'percentage_discount',
-                                                    'direction' => 'desc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'percentage_discount' && Request::get('direction') == 'desc' ? 'active' : '' }}"
-                                            >{{ __('Percentage discount descending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'total_discount',
-                                                    'direction' => 'asc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'total_discount' && Request::get('direction') == 'asc' ? 'active' : '' }}"
-                                            >{{ __('Total discount ascending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'total_discount',
-                                                    'direction' => 'desc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'total_discount' && Request::get('direction') == 'desc' ? 'active' : '' }}"
-                                            >{{ __('Total discount descending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'total_line_items_quantity',
-                                                    'direction' => 'asc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_quantity' && Request::get('direction') == 'asc' ? 'active' : '' }}"
-                                            >{{ __('Total line items quantity ascending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'total_line_items_quantity',
-                                                    'direction' => 'desc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_quantity' && Request::get('direction') == 'desc' ? 'active' : '' }}"
-                                            >{{ __('Total line items quantity descending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'total_line_items_price',
-                                                    'direction' => 'asc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_price' && Request::get('direction') == 'asc' ? 'active' : '' }}"
-                                            >{{ __('Total line items price ascending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'total_line_items_price',
-                                                    'direction' => 'desc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_price' && Request::get('direction') == 'desc' ? 'active' : '' }}"
-                                            >{{ __('Total line items price descending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'total_price',
-                                                    'direction' => 'asc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'total_price' && Request::get('direction') == 'asc' ? 'active' : '' }}"
-                                            >{{ __('Total price ascending') }}</a>
-                                            <a
-                                                href="{{ Request::fullUrlWithQuery([
-                                                    'sort' => 'total_price',
-                                                    'direction' => 'desc',
-                                                ]) }}"
-                                                class="dropdown-item {{ Request::get('sort') == 'total_price' && Request::get('direction') == 'desc' ? 'active' : '' }}"
-                                            >{{ __('Total price descending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'order_number',
+                                                'direction' => 'asc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'order_number' && Request::get('direction') == 'asc' ? 'active' : '' }}">{{ __('Order number ascending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'order_number',
+                                                'direction' => 'desc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'order_number' && Request::get('direction') == 'desc' ? 'active' : '' }}">{{ __('Order number descending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'created_at',
+                                                'direction' => 'asc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'created_at' && Request::get('direction') == 'asc' ? 'active' : '' }}">{{ __('Date created ascending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'created_at',
+                                                'direction' => 'desc',
+                                            ]) }}"
+                                                class="dropdown-item {{ (Request::get('sort') == 'created_at' && Request::get('direction') == 'desc') || (!Request::filled('sort') && !Request::filled('direction')) ? 'active' : '' }}">{{ __('Date created descending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'percentage_discount',
+                                                'direction' => 'asc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'percentage_discount' && Request::get('direction') == 'asc' ? 'active' : '' }}">{{ __('Percentage discount ascending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'percentage_discount',
+                                                'direction' => 'desc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'percentage_discount' && Request::get('direction') == 'desc' ? 'active' : '' }}">{{ __('Percentage discount descending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'total_discount',
+                                                'direction' => 'asc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_discount' && Request::get('direction') == 'asc' ? 'active' : '' }}">{{ __('Total discount ascending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'total_discount',
+                                                'direction' => 'desc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_discount' && Request::get('direction') == 'desc' ? 'active' : '' }}">{{ __('Total discount descending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'total_line_items_quantity',
+                                                'direction' => 'asc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_quantity' && Request::get('direction') == 'asc' ? 'active' : '' }}">{{ __('Total line items quantity ascending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'total_line_items_quantity',
+                                                'direction' => 'desc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_quantity' && Request::get('direction') == 'desc' ? 'active' : '' }}">{{ __('Total line items quantity descending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'total_line_items_price',
+                                                'direction' => 'asc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_price' && Request::get('direction') == 'asc' ? 'active' : '' }}">{{ __('Total line items price ascending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'total_line_items_price',
+                                                'direction' => 'desc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_line_items_price' && Request::get('direction') == 'desc' ? 'active' : '' }}">{{ __('Total line items price descending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'total_price',
+                                                'direction' => 'asc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_price' && Request::get('direction') == 'asc' ? 'active' : '' }}">{{ __('Total price ascending') }}</a>
+                                            <a href="{{ Request::fullUrlWithQuery([
+                                                'sort' => 'total_price',
+                                                'direction' => 'desc',
+                                            ]) }}"
+                                                class="dropdown-item {{ Request::get('sort') == 'total_price' && Request::get('direction') == 'desc' ? 'active' : '' }}">{{ __('Total price descending') }}</a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <a
-                                        href="{{ Request::fullUrlWithQuery([
-                                            'action' => 'export',
-                                        ]) }}"
-                                        class="btn btn-default"
-                                    >
+                                    <a href="{{ Request::fullUrlWithQuery([
+                                        'action' => 'export',
+                                    ]) }}"
+                                        class="btn btn-default">
                                         <i class="fas fa-download"></i>
                                         <span>{{ __('Export') }}</span>
                                     </a>
@@ -543,10 +441,7 @@
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td
-                                                colspan="11"
-                                                class="text-center"
-                                            >{{ __('Data not found') }}</td>
+                                            <td colspan="11" class="text-center">{{ __('Data not found') }}</td>
                                         </tr>
                                     @endforelse
                                 </tbody>

@@ -6,6 +6,7 @@
 2. Composer 2 or higher
 3. MySQL
 
+
 #### Instalation Steps
 
 1. Open your terminal.

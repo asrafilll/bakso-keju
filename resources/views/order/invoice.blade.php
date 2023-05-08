@@ -66,10 +66,7 @@
     </table>
     <table style="font-size: 8px; padding: 4px 8px;">
         <tr style="background-color: #fee795;">
-            <td
-                width="20px"
-                style="text-align: center;"
-            >No</td>
+            <td width="20px" style="text-align: center;">No</td>
             <td style="text-align: center;">Item</td>
         </tr>
         @foreach ($order->orderLineItems as $orderLineItem)
@@ -83,6 +80,10 @@
                         <tr>
                             <td>{{ __('Price') }}</td>
                             <td style="text-align: right;">{{ $orderLineItem->idr_price }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ __('Discount') }}</td>
+                            <td style="text-align: right;">{{ $orderLineItem->discount }} %</td>
                         </tr>
                         <tr>
                             <td>{{ __('Qty') }}</td>

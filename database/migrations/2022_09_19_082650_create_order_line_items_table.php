@@ -22,6 +22,7 @@ class CreateOrderLineItemsTable extends Migration
             $table->string('product_name');
             $table->unsignedBigInteger('price');
             $table->unsignedInteger('quantity');
+            $table->unsignedInteger('discount');
             $table->unsignedBigInteger('total');
         });
     }
