@@ -26,7 +26,9 @@ class AddDiscountToOrderLineItemsTable extends Migration
     public function down()
     {
         Schema::table('order_line_items', function (Blueprint $table) {
-            //
+            $table->dropColumn([
+                'discount',
+            ]);
         });
     }
 }
